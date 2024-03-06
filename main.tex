@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass{report}
 
 \usepackage{amsmath, amsthm, amssymb, amsfonts}
 \usepackage{thmtools}
@@ -12,6 +12,7 @@
 \usepackage{framed}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{tcolorbox}
+\usepackage{multicol}
 
 \colorlet{LightGray}{White!90!Periwinkle}
 \colorlet{LightOrange}{Orange!15}
@@ -39,6 +40,24 @@
     headheight=12pt,
     headsep=25pt,
     footskip=30pt
+}
+
+% ------------------------------------------------------------------------------
+\tcbset{
+    sharp corners,
+    colback = white,
+    before skip = 0.2cm,    % add extra space before the box
+    after skip = 0.5cm      % add extra space after the box
+}                           % setting global options for tcolorbox
+
+\definecolor{main}{HTML}{5989cf}    % setting main color to be used
+\definecolor{sub}{HTML}{cde4ff}     % setting sub color to be used
+
+\newtcolorbox{boxH}{
+    colback = sub, 
+    colframe = main, 
+    boxrule = 0pt, 
+    leftrule = 6pt % left rule weight
 }
 
 % ------------------------------------------------------------------------------
@@ -84,5 +103,7 @@
 % Set style and colour later.
 
 % \newpage
-\include{chapters/digital_communication.tex}
+\part{Wireless}
+\input{chapters/digital communication}
+\part{Hardware}
 \end{document}
