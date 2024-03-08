@@ -156,7 +156,7 @@ message.
 
     Furthermore, by adjusting the coefficient, we are able to create a whole different signal using
     the same elementary signals.
-    \begin{subsubsection}{A common example: In Phase and Quadrature Representation}
+    \begin{subsubsection}{A common example: In Phase and Quadrature components representation}
       Lets consider a very simple basis, or a set of elementary signals, which is actually more 
       important that many other ones:
       \begin{itemize}
@@ -178,7 +178,8 @@ message.
       Each signal can be represented as a point in the complex plane, because the distance from the
       origin signal(\textit{axis}) is the amplitude of the signal.
       For example, choosing a point close to the x-axis, we are choosing a signal with a very low
-      quadrature component, and a very high in-phase component.\\
+      quadrature component, and a very high in-phase component.Furthermore, a set of those 
+      different points is called a \textit{constellation}\\
       \begin{figure}[h]
         \centering
         \includegraphics[width=0.5\textwidth]{img/iq representation.png}
@@ -188,14 +189,254 @@ message.
     \end{subsubsection}
   \end{subsection}
   \begin{subsection}{Fourier Analysis}
-    Lets consider a signal with bases the complex exponential functions 
+    Lets consider a signal with base the complex exponential functions 
     \begin{equation}
       e^{j2\pi \frac{n}{T} t} = cos(2\pi \frac{n}{T} t) + j sin(2\pi \frac{n}{T} t)
+      \label{euler formula}
     \end{equation}
     It is actually characterized by a frequency $f_n = \frac{n}{T}$, where T is the period of the
-    signal. The higher the frequency, the more oscillations we will have in the same time interval.\\
+    signal. The higher the frequency, the more oscillations we will have in the same time interval.
+    In this function they have both the same frequency.\\
 
-    We can use that function as a basis to decompose a signal, again.
+    We can use that function as a basis to decompose a signal, again. This is because it is 
+    possible to generate an infinite set of functions
+    \begin{equation}
+      w_n(t) = \frac{1}{\sqrt{T}} e^{j\frac{2\pi}{T} nt} 
+    \end{equation}
+    with $-T/2 \leq t \leq T/2$, each associated with a frequency.
+    That can be used ad a complete basis for all the signals limited in $[-T/2, T/2]$ or periodic.\\
+    For example, we can write a signal as a linear combination of these functions:
+    \begin{equation}
+      x(t) = \frac{1}{\sqrt{T}} \sum_{n=-\infty}^{\infty} c_n e^{j\frac{2\pi}{T} nt}
+      \label{Fourier Series}
+    \end{equation}
+    where $c_n$ are the coefficients of the linear combination $c_n = \langle x(t), w_n(t) \rangle$.\\
+    Each one of those coefficients is a measure of how much each frequency $f_n$, of the $n$-th
+    sinusoid(the shape of equation \ref{euler formula}) is present in the signal $x(t)$.\\
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.7\textwidth]{img/euler plot.png}
+      \caption{Plot of the coefficients of equation \ref{Fourier Series}}
+      \label{fig:Fourier Analysis}
+    \end{figure}
+    Lets now take a look at picture \ref{fig:Fourier Analysis}. We can see that the coefficients
+    are higher when the frequence is very small, so the signal \ref{Fourier Series} is mostly
+    composed by large components of low frequency.\\
+    This whole concept is called \textbf{Fourier Analysis}, or frequency analysis, which allows
+    to decompose a signal into a set of frequencies.
+    \begin{boxH}
+    TLDR: I can build a signal trough a combination of frequency components. \\
+    The coefficients of this frequency components are the measure of how much each frequency is 
+    present in the signal.
+    \end{boxH}
+    Now we just need to expand it to any signal and any frequency( a continuous frequency domain).
+    By doing so we can derive the definition of the \textbf{Fourier Transform} of a signal $x(t)$:
+    \begin{equation}
+      X(f) = \int_{-\infty}^{\infty} x(t) e^{-j2\pi ft} dt
+      \label{Fourier Transform}
+    \end{equation}
+    where $X(f)$ is the Fourier Transform of the signal $x(t)$, and $f$ is the frequency.\\
+    The Fourier transform is equivalent to a scalar product between the signal and the complex
+    exponential function at a given frequency $f$. This means that each of the values of the
+    Fourier Transform is a measure of how much the frequency $f$ is present in the signal $x(t)$.\\
+    Furthermore, trough the inverse of equation \ref{Fourier Transform}
+    \begin{equation}
+      x(t) = \int_{-\infty}^{\infty} X(f) e^{j2\pi ft} df
+      \label{Inverse Fourier Transform}
+    \end{equation}
+    we can write again a signal $x(t)$ as a linear combination of the complex exponential functions
+    , which represents the frequency components of the signal, weighted by the Fourier Transform.\\
+      
+    \begin{boxH}
+      The Fourier Transform $X(F)$ indicates the "weight" of each frequency component( sinusoidal
+      component at a given frequency $f$) in the signal $x(t)$.\\
+      The inverse Fourier Transform $x(t)$ tells us we can decompose any signal into frequency 
+      components( sinusoidal components at a given frequency $f$).
+    \end{boxH}
+    
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.9\textwidth]{img/fourier square function.png}
+      \caption{Fourier Transform of a square function}
+      \label{fig:Fourier Transform}
+    \end{figure}
+
+    With that in mind, take a look at figure \ref{fig:Fourier Transform}. It represents a rectangular
+    signal (a signal that is 1 for a certain time, and 0 for the rest of the time), and its Fourier
+    Transform, which tells us the frequency components of the signal.\\
+    From that, we can see that the Fourier Transform is mostly composed by low frequency components,
+    because values closer to zero are higher. That is because in the constant part of the signal
+    has a sinusoidal component that constant.
+
+    \begin{boxH}
+      To wrap it up, for each signal we have a \textbf{spectral representation}. And for each operation
+      over a signal, there are equivalents effects in the frequency domain.\\
+      Furthermore, a signal that has finite duration in time, has a infinite support in the frequency
+      domain.
+    \end{boxH}
   \end{subsection}
+  \begin{subsection}{Bandwidth}
+    The bandwidth is the \textbf{interval of frequencies} that a signal occupies.\\
+    If we consider a signal $x(t)$, we can define the bandwidth as the interval of frequencies
+    where the Fourier Transform $X(f)$ is different from zero. \\ 
+    Signals have often infinite support over the frequency domain over a finite duration, but many 
+    of them are characterized by a quasi-null(finite) spectrum outside a certain interval of 
+    frequencies( the main lobes of the spectrum).\\
+    For this reason, we usually consider the bandwidth around half of the frequency spectrum of the
+    signal, as shown in figure \ref{fig:Bandwidth}(for example 3dB bandwidth, or half power 
+    bandwidth).\\
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.8\textwidth]{img/bandwidth.png}
+      \caption{Bandwidth of a signal}
+      \label{fig:Bandwidth}
+    \end{figure}
+    \begin{subsubsection}{Bandwidth in linear systems}
+      A \textbf{system} is a set of operations applied to signals.\\
+      The relationship between the bandwidth of the input signal and the bandwidth of a system is
+      usually very important. In fact, when a system is used to pass or remove particular 
+      frequencies of a signal, it can be regarded as a system.\\
+      We can associate a bandwidth to a system, specifically a \textbf{linear-time invariant} system,
+      with a \textbf{frequency response} $H(f)$.This mean that we can associate a bandwidth to a
+      system, making us able to compute a new bandwidth $Y(f)$ by combining together the bandwidth 
+      $X(f)$ of the input signal and the frequency response $H(f)$ of the system($Y(f) = X(f)H(f)$
+      in formulas).\\
+      This concept can be represented graphically very easily, like in figure 
+      \ref{fig:Bandwidth System}. If the result of the combination of the input signal and the
+      sequence of operation of the system is a signal with a bandwidth $Y(f)$. If the bandwidth of 
+      the linear system is larger than the origin signal, the signal pass trough smoothly($Y(f) \approx X(f)$).\\
+      However, if the bandwidth of the signal is larger than the bandwidth of the system, the signal
+      will be cutted off($Y(f) \ne H(f)$).\\
+
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/bandwidth system.png}
+        \caption{Bandwidth of a system}
+        \label{fig:Bandwidth System}
+      \end{figure}
+    \end{subsubsection}
+  \end{subsection}
+
+  \begin{subsection}{Filters}
+    A filter is a system used to model desired and undesired effects over a signal.\\
+    It is usually used to remove undesired frequency components from a signal, but overall can be
+    used to:
+    \begin{itemize}
+      \item share the wireless medium
+      \item model the spectrum of a signal over the channel
+      \item mitigate undesired effects over a signal trough equalizers
+    \end{itemize}
+    \end{subsection}
+    \begin{subsection}{Signal modulation}
+      Signal modulation is the process of multiplying a signal by a sinusoidal function, resulting
+      in a \textbf{frequency shift}.
+      \begin{equation}
+        y(t) = x(t) \cdot cos(2\pi f_0 t)
+      \end{equation}
+      This is possible because
+      \begin{equation}
+        F(x(t) \cdot cos(2\pi f_0 t)) = \frac{1}{2}[X(f-f_0) + X(f+f_0)]
+      \end{equation}
+      where $X$ is the frequency domain representation.\\ 
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/signal modulation.png}
+        \caption{Graphical representation of the modulation}
+        \label{fig:Modulation}
+      \end{figure}
+      We can see that as a result of the modulation, the spectrum of the signal is shifted around
+      the frequency $f_0$, as shown in figure \ref{fig:Modulation}.\\
+
+    \end{subsection}
+    \begin{subsection}{Signal demodulation}
+      When modulating a signal, we alter it a bit, centering it around the frequency $f_0$, shifting
+      the spectrum of the signal. The effect of this operation is not trivial.\\
+      To recover the original signal, we need to multiply the modulated signal by a sinusoidal
+      function at the same frequency $f_0$ as the one used for the modulation. This allows us to
+      shift the spectrum back to the original position.\\
+      This operation is called \textbf{demodulation}.\\
+      A given modulated signal $Y(f)$
+      \begin{equation}
+        Y(f) = \frac{A}{2}[X(f-f_0) + X(f+f_0)]
+      \end{equation}
+      shown in figure \ref{fig:Demodulation1}
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/demodulation1.png}
+        \caption{A modulated signal at frequency $f_0$}
+        \label{fig:Demodulation1}
+      \end{figure}
+      can be demodulated by multiplying it by the same sinusoidal function used for the modulation
+      \begin{equation}
+        Y'(f) = Y(f) \cdot cos(2\pi f_0 t)= \frac{A}{2}X(f)+\frac{A}{4}[X(f-2f_0)+X(f+2f_0)]
+      \end{equation}
+      shown in figure \ref{fig:Demodulation2}\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/demodulation2.png}
+        \caption{A demodulated signal at frequency $f_0$}
+        \label{fig:Demodulation2}
+      \end{figure}
+      This doesn't allow us to recover the original spectrum of the signal.
+      That's why we need to use a \textbf{low-pass filter} to remove the frequency components at
+      $2f_0$ and its symmetrical counterpart, as shown in figure \ref{fig:Demodulation3}.\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/demodulation3.png}
+        \caption{A demodulated signal at frequency $f_0$ after a low-pass filter}
+        \label{fig:Demodulation3}
+      \end{figure}
+
+    \end{subsection}
+    \begin{subsection}{Frequency Multiplexing(FDM)}
+      Modulation and demodulation allows multiple wireless communication systems to coexist at different
+      frequencies.\\
+      For example, if i want to transmit different signals with overlapping bandwidths, i can simply
+      modulate each signal at a different frequency, and then transmit them all together, as shown in
+      figure \ref{fig:FDM}.\\
+      Once received the signal, each of those signals can be demodulated by multiplying it by the 
+      same function at the same frequency used for the modulation.\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/FDM.png}
+        \caption{Frequency Multiplexing}
+        \label{fig:FDM}
+      \end{figure}
+    \end{subsection}
+    \begin{subsection}{Analog-to-Digital Conversion}
+      We can now deal with signals, but we still have to convey information.\\
+      The informations can be both \textbf{analog} or \textbf{digital}. Usually, transmitting digital
+      information is ideal, because it has some advantages, such as error detection and correction,
+      and the possibility to compress the information. On the other hand, we still have to convert
+      digital information to analog information to be transmitted over the channel, after converting
+      it to a stream of bits.\\
+      Once the signal is received, it has to be converted back to digital information. To do so,
+      first of all the signal it has to be sampled, which can be a lossless operation if the sampling
+      frequency is high enough.\\
+      After the sampling, the sample has to be quantized, which is the process of converting the
+      amplitude of the sample to a digital value at discrete times( because it is a continuous
+      time function, which would require an infinite number of digits to represent). Each of those 
+      values is associated with a given amplitude, which is associated to a number, which 
+      eventually is converted into binary digits. We can also observe that quantization is a lossy
+      operation by definition.\\
+      At the end of the fair, a sequence of bits is obtained, which can be transmitted over the
+      channel.\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=\textwidth]{img/analog to digital.png}
+        \caption{Analog-to-Digital Conversion}
+        \label{fig:ADC}
+      \end{figure}
+      \begin{subsubsection}{Sampling theorem}
+        As previously stated, the sampling operation can be lossless if the sampling frequency is
+        high enough. This is because of the \textbf{Nyquist sampling theorem}, which states
+        that a signal can be perfectly reconstructed from its samples if the sampling frequency is
+        at least twice the bandwidth of the signal.\\
+        \begin{equation}
+          f_c=\frac{1}{T_c}>2B\to T_c<\frac{1}{2B}
+        \end{equation}
+        where $f_c$ is the sampling frequency, $T_c$ is the sampling period, and $B$ is the bandwidth.
+        \end{subsubsection}
+    \end{subsection}
 
 \end{section}
