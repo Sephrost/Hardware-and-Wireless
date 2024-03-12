@@ -44,7 +44,7 @@ The digital communication system in characterized by three sections:
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.7\textwidth]{img/digital communication schema.png}
+  \includegraphics[width=0.7\textwidth]{img/wireless/digital communication schema.png}
   \caption{Digital Communication System}
   \label{fig:Digital Communication System}
 \end{figure}
@@ -104,7 +104,7 @@ message.
     squared modulus.\\
     \begin{figure}[h]
       \centering
-      \includegraphics[width=0.7\textwidth]{img/energy signal.png}
+      \includegraphics[width=0.7\textwidth]{img/wireless/energy signal.png}
       \caption{Energy of a signal}
       \label{fig:Energy of a signal}
     \end{figure}
@@ -157,11 +157,12 @@ message.
     Furthermore, by adjusting the coefficient, we are able to create a whole different signal using
     the same elementary signals.
     \begin{subsubsection}{A common example: In Phase and Quadrature components representation}
+      \label{sub:IQ representation}
       Lets consider a very simple basis, or a set of elementary signals, which is actually more 
       important that many other ones:
       \begin{itemize}
-        \item the \textbf{in-phase} signal, which is a cosine function $w_1(t) = cos(2\pi f_o t)$
-        \item the \textbf{quadrature} signal, which is a sine function $w_2(t) = sin(2\pi f_o t)$
+        \item the \textbf{in-phase} signal, which, in this case, is a cosine function $w_1(t) = cos(2\pi f_o t)$
+        \item the \textbf{quadrature} signal, which, in this case, is a sine function $w_2(t) = sin(2\pi f_o t)$
       \end{itemize}
       where $f_o$ is the frequency, in Hz, of the signal.\\
       We can write any signal as a linear combination of these two signals, just by adjusting the
@@ -176,13 +177,15 @@ message.
       as an axes in a complex plane, for example in figure \ref{fig:Complex Plane} the x-axis 
       is the in-phase signal, and the y-axis is the quadrature signal.\\
       Each signal can be represented as a point in the complex plane, because the distance from the
-      origin signal(\textit{axis}) is the amplitude of the signal.
+      origin signal(\textit{axis}) is the amplitude of the signal.\\
+      This kind of representation is called the \textbf{In-phase and Quadrature} representation, or
+      \textbf{I/Q} representation.\\
       For example, choosing a point close to the x-axis, we are choosing a signal with a very low
       quadrature component, and a very high in-phase component.Furthermore, a set of those 
       different points is called a \textit{constellation}\\
       \begin{figure}[h]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/iq representation.png}
+        \includegraphics[width=0.5\textwidth]{img/wireless/iq representation.png}
         \caption{Some points that represent some signals in the I/Q representation}
         \label{fig:Complex Plane}
       \end{figure}
@@ -215,7 +218,7 @@ message.
     sinusoid(the shape of equation \ref{euler formula}) is present in the signal $x(t)$.\\
     \begin{figure}[h]
       \centering
-      \includegraphics[width=0.7\textwidth]{img/euler plot.png}
+      \includegraphics[width=0.7\textwidth]{img/wireless/euler plot.png}
       \caption{Plot of the coefficients of equation \ref{Fourier Series}}
       \label{fig:Fourier Analysis}
     \end{figure}
@@ -256,7 +259,7 @@ message.
     
     \begin{figure}[h]
       \centering
-      \includegraphics[width=0.9\textwidth]{img/fourier square function.png}
+      \includegraphics[width=0.9\textwidth]{img/wireless/fourier square function.png}
       \caption{Fourier Transform of a square function}
       \label{fig:Fourier Transform}
     \end{figure}
@@ -287,7 +290,7 @@ message.
     bandwidth).\\
     \begin{figure}[h]
       \centering
-      \includegraphics[width=0.8\textwidth]{img/bandwidth.png}
+      \includegraphics[width=0.8\textwidth]{img/wireless/bandwidth.png}
       \caption{Bandwidth of a signal}
       \label{fig:Bandwidth}
     \end{figure}
@@ -310,7 +313,7 @@ message.
 
       \begin{figure}[h]
         \centering
-        \includegraphics[width=0.8\textwidth]{img/bandwidth system.png}
+        \includegraphics[width=0.8\textwidth]{img/wireless/bandwidth system.png}
         \caption{Bandwidth of a system}
         \label{fig:Bandwidth System}
       \end{figure}
@@ -340,7 +343,7 @@ message.
       where $X$ is the frequency domain representation.\\ 
       \begin{figure}[h]
         \centering
-        \includegraphics[width=0.8\textwidth]{img/signal modulation.png}
+        \includegraphics[width=0.8\textwidth]{img/wireless/signal modulation.png}
         \caption{Graphical representation of the modulation}
         \label{fig:Modulation}
       \end{figure}
@@ -362,7 +365,7 @@ message.
       shown in figure \ref{fig:Demodulation1}
       \begin{figure}[h]
         \centering
-        \includegraphics[width=0.8\textwidth]{img/demodulation1.png}
+        \includegraphics[width=0.8\textwidth]{img/wireless/demodulation1.png}
         \caption{A modulated signal at frequency $f_0$}
         \label{fig:Demodulation1}
       \end{figure}
@@ -373,7 +376,7 @@ message.
       shown in figure \ref{fig:Demodulation2}\\
       \begin{figure}[h]
         \centering
-        \includegraphics[width=0.8\textwidth]{img/demodulation2.png}
+        \includegraphics[width=0.8\textwidth]{img/wireless/demodulation2.png}
         \caption{A demodulated signal at frequency $f_0$}
         \label{fig:Demodulation2}
       \end{figure}
@@ -382,7 +385,7 @@ message.
       $2f_0$ and its symmetrical counterpart, as shown in figure \ref{fig:Demodulation3}.\\
       \begin{figure}[h]
         \centering
-        \includegraphics[width=0.8\textwidth]{img/demodulation3.png}
+        \includegraphics[width=0.8\textwidth]{img/wireless/demodulation3.png}
         \caption{A demodulated signal at frequency $f_0$ after a low-pass filter}
         \label{fig:Demodulation3}
       \end{figure}
@@ -398,7 +401,7 @@ message.
       same function at the same frequency used for the modulation.\\
       \begin{figure}[h]
         \centering
-        \includegraphics[width=0.9\textwidth]{img/FDM.png}
+        \includegraphics[width=0.9\textwidth]{img/wireless/FDM.png}
         \caption{Frequency Multiplexing}
         \label{fig:FDM}
       \end{figure}
@@ -423,7 +426,7 @@ message.
       channel.\\
       \begin{figure}[h]
         \centering
-        \includegraphics[width=\textwidth]{img/analog to digital.png}
+        \includegraphics[width=\textwidth]{img/wireless/analog to digital.png}
         \caption{Analog-to-Digital Conversion}
         \label{fig:ADC}
       \end{figure}
@@ -464,6 +467,9 @@ message.
       \item \textbf{Frequency Modulation(FM)}, which changes the frequency of the carrier
       \item \textbf{Phase Modulation(PM)}, which changes the phase of the carrier
     \end{itemize}
+
+    This kind of modulation is necessary to convey information to the receiver, assigning to each
+    possible value of the information signal a different amplitude, frequency or phase.
     \begin{subsubsection}{Amplitude Modulation(AM)}
       The amplitude modulation is the simplest form of modulation.\\
       The amplitude of an high-carrier signal(like a cosine signal) is varied according to the 
@@ -477,7 +483,7 @@ message.
       frequency of the carrier signal increases as well.\\
       \begin{figure}[h]
         \centering
-        \includegraphics[width=0.4\textwidth]{img/AM-FM.png}
+        \includegraphics[width=0.4\textwidth]{img/wireless/AM-FM.png}
         \caption{An example of a signal modulated in amplitude and frequency}
         \label{fig:AM-FM}
       \end{figure}
@@ -493,7 +499,7 @@ message.
       correspondingly.\\
       \begin{figure}[h]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/PM.png}
+        \includegraphics[width=0.5\textwidth]{img/wireless/PM.png}
         \caption{An example of a signal modulated in phase. The modulating wave(in blue) is modulating
           the phase of the carrier wave(in red), resulting in the PM signal(in green)}
         \label{fig:PM}
@@ -510,7 +516,7 @@ message.
       digital information.\\
       \begin{figure}[h]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/modulation encoding.png}
+        \includegraphics[width=0.5\textwidth]{img/wireless/modulation encoding.png}
         \caption{Some example of modulations used to represent digital information. From top to bottom:
           Amplitude Shift Keying, Frequency Shift Keying, Phase Shift Keying}
         \label{fig:DigitalModulation}
@@ -541,7 +547,7 @@ message.
       where $g(t)$ is the basic pulse shape.\\
       \begin{figure}[h]
         \centering
-        \includegraphics[width=0.4\textwidth]{img/2-PAM.png}
+        \includegraphics[width=0.4\textwidth]{img/wireless/2-PAM.png}
         \caption{An example of a 2-PAM signal representation}
         \label{fig:PAM}
       \end{figure}
@@ -565,7 +571,7 @@ message.
       allowing to represent $log_2(M)$ bits of information.\\
       \begin{figure}[h]
         \centering
-        \includegraphics[width=0.4\textwidth]{img/M-PAM.png}
+        \includegraphics[width=0.4\textwidth]{img/wireless/M-PAM.png}
         \caption{An example of a 4-PAM signal representation}
         \label{fig:4-PAM}
       \end{figure}
@@ -583,13 +589,13 @@ message.
       affect 1 bit of the message with a high probability.\\
       \begin{figure}[h]
         \centering
-        \includegraphics[width=0.8\textwidth]{img/gray coding.png}
+        \includegraphics[width=0.8\textwidth]{img/wireless/gray coding.png}
         \caption{An example of a 4-PAM signal representation using Gray coding}
         \label{fig:GrayCode}
       \end{figure}
     \end{subsubsection}
     \begin{subsubsection}{Energy per bit}
-      A measure of the energy efficiency of a modulation can be obtained by calculating the avarage
+      A measure of the energy efficiency of a modulation can be obtained by calculating the average
       energy per bit.\\
       The energy per bit can be defined as 
       \begin{equation}
@@ -598,6 +604,10 @@ message.
       where $E_s$ is the energy of the signal, and $M$ is the number of symbols, or in a more
       discursive way, the average energy per symbol divided by the number of bits carried by 
       each symbol.\\
+      This concept can also be visualized graphically, as the distance of a symbol from the origin
+      in the signal space(as in figure \ref{fig:4-PAM}), because it is proportional to 
+      energy of the symbol.\\
+
       The energy per symbol can be calculated as
       \begin{equation}
         E_s=\int_{0}^{T} (S_m(t))^2 dt= (A_m)^2 \int_{0}^{T} (g(t))^2 dt= (A_m)^2 E_g
@@ -609,16 +619,107 @@ message.
       \begin{equation}
         E_s=\frac{3^2T+1^2T+1^2T+3^2T}{4}=5T
       \end{equation}
-      \begin{subsubsection}{Bandpass Signals}
-        As previously stated, to transmit a baseband signal $s(t)$ trough a passband channel, we 
-        have to modulate it at a certain frequency $f_c$, by multiplying it by a sinusoidal carrier
-        signal with that frequency, otherwise it will be centered around zero frequency.\\
-      \end{subsubsection}
-      \begin{subsubsection}{Bandwidth Occupancy}
-        \end{subsubsection}
-
+      Generally, the larger the energy, the larger the distance between the symbols, and the lower
+      the probability of error(mistaking one symbol for another). On the other hand, the larger the
+      number of symbols over the same bandwidth, the less energy is required to transmit each bit(
+      because each symbol is closer and carries more bits).\\
     \end{subsubsection}
 
+    \begin{subsubsection}{Bandpass Signals}
+      As previously stated, to transmit a baseband signal $s(t)$ trough a passband channel, we 
+      have to modulate it at a certain frequency $f_c$, by multiplying it by a sinusoidal carrier
+      signal with that frequency, otherwise it will be centered around zero frequency.\\
+    \end{subsubsection}
+
+    \begin{subsubsection}{Bandwidth Occupancy and efficiency}
+      The shape of a signal determine the bandwidth it occupies.\\
+      For example, a rectangular function has a pulse spectrum that is a sinc function, shown in
+      figure \ref{fig:rectangular pulse spectrum}, which has a symbol rate of $1/T$(the amount of 
+      symbols per second).
+
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/wireless/rectangular pulse spectrum.png}
+        \caption{The spectrum of a rectangular pulse}
+        \label{fig:rectangular pulse spectrum}
+      \end{figure}
+
+      Usually, a smaller base pulse will require less energy to transmit, but will occupy more
+      bandwidth. A longer basic pulse will require more energy to transmit, but will occupy less
+      bandwidth and have a lower bit rate.\\
+
+      With that in mind, ideally, we would like to choose a pulse shape $g(t)$ that minimizes the
+      bandwidth occupancy, putting more energy in the lower frequencies, resulting in a smaller
+      bandwidth.\\
+
+      For a pulse duration $T$, we can define the \textbf{symbol rate} as $R_s=1/T$, and the
+      \textbf{bit rate} as $R_b=R_s log_2(M)$(recall that $log_2(M)$ is the number of bits per
+      symbol).\\
+      The bit rate efficiency can be defined as
+      \begin{equation}
+        \eta=\frac{R_b}{BW}=\frac{log_2(M)}{T} \times (\frac{T}{2})=\frac{log_2(M)}{2}\text{bps/Hz}
+      \end{equation}
+      where $BW$ is the two sided bandwidth of the signal $BW=2R_2=\frac{2}{T}$.\\
+      As we can see, the bit rate efficiency is proportional to the number of bits per symbol
+      ($\eta \propto M$) and inversely proportional to the pulse duration. The duration of the 
+      pulse is uninfluent.\\
+
+      We can also consider some examples:
+      \begin{itemize}
+        \item 2-PAM: $\eta=\frac{1}{2}\text{bps/Hz}$
+        \item 4-PAM: $\eta=\frac{2}{2}\text{bps/Hz}$
+        \item 8-PAM: $\eta=\frac{3}{2}\text{bps/Hz}$
+      \end{itemize}
+      As we can see, the bandwidth efficiency increases with the number of bits per symbol, because
+      we are fitting more bits in the same bandwidth.\\
+      This also means that our signal will be more susceptible to noise, because the symbols are
+      closer to each other, making it easier to mistake one for another. To reduce the probability
+      of errors, we have to increase the energy per symbol, which will increase the bandwidth
+      occupancy. For those reasons, there's a trade-off between bandwidth occupancy and energy
+      efficiency.\\
+
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/wireless/energy efficiency vs bandwidth occupancy.png}
+        \caption{Trade-off between energy efficiency and bandwidth occupancy}
+        \label{fig:energy efficiency vs bandwidth occupancy}
+      \end{figure}
+
+    \end{subsubsection}
+    \begin{subsubsection}{Two-dimensional Modulation}
+      As introduced in subsection \ref{sub:IQ representation}, signals can be represented over two 
+      orthonormal basis. This means that we can represent a signal in a 2D plane, with the
+      in-phase and quadrature components as the x and y axis.\\
+      This representation allows to represent the set of signals $s_i$(also called \textit{constellation}
+      over two orthonormal basis. A large constellation will allow to represent more bits per symbol,
+      which results in a higher bit rate(bandwidth efficiency), but also a higher probability of 
+      error.\\
+
+      The shape of the constellation is important, because it can be used to minimize the probability
+      of error, by choosing a constellation that minimizes the distance between the symbols.\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/wireless/iq representation.png}
+        \caption{A constellation of 4-PAM signals}
+      \end{figure}
+      Furthermore, there are some common constellations that are used in practice, such as:
+      \begin{itemize}
+        \item \textbf{QAM}: Quadrature Amplitude Modulation, which is a PAM signal over two
+          dimensions.
+        \item \textbf{PSK}: Phase Shift Keying, which is a PAM signal over the phase of a signal, 
+          meaning that the amplitude is constant.
+      \end{itemize}
+    \end{subsubsection}
+
+    \begin{subsection}{M-QAM}
+      \begin{boxH}
+        With M-QAM we refer to a modulation that uses $M$ symbols, and is represented over two
+        orthonormal basis.
+      \end{boxH}
+      This means that we can represent $\sqrt{M}$ symbols over each axis, and the total number of
+      symbols is $M$.\\
+
+    \end{subsection}
 
     
   \end{subsection}
