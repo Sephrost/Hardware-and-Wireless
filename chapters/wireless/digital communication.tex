@@ -58,7 +58,9 @@ errors(\textit{channel encoding}).\\
 The second one is the \textbf{modulator}, which is the part of the system that takes the digital
 signal and converts it to an analog one to transmit it over the channel.
 \end{subsection}
+
 \begin{subsection}{The channel}
+  \label{subsec:channel}
 The channel is the physical medium that transfers bits from interface to interface, from the sender
 to the receiver.
 Its operation is affected by different types of disturbances such as:
@@ -695,8 +697,10 @@ message.
       which results in a higher bit rate(bandwidth efficiency), but also a higher probability of 
       error.\\
 
-      The shape of the constellation is important, because it can be used to minimize the probability
-      of error, by choosing a constellation that minimizes the distance between the symbols.\\
+      \begin{boxH}
+        The shape of the constellation is important, because it can be used to minimize the probability
+        of error, by choosing a constellation that minimizes the distance between the symbols.
+      \end{boxH}
       \begin{figure}[h]
         \centering
         \includegraphics[width=0.5\textwidth]{img/wireless/iq representation.png}
@@ -711,16 +715,258 @@ message.
       \end{itemize}
     \end{subsubsection}
 
-    \begin{subsection}{M-QAM}
+    \begin{subsubsection}{M-QAM}
       \begin{boxH}
-        With M-QAM we refer to a modulation that uses $M$ symbols, and is represented over two
-        orthonormal basis.
+        M-QAM is a modulation that represents the signal as the sum of two signals, represented over
+        two orthonormal basis. This means that we can have $M$ symbols to modulate out signal.
       \end{boxH}
-      This means that we can represent $\sqrt{M}$ symbols over each axis, and the total number of
+      Thus, we can represent $\sqrt{M}$ symbols over each axis, and the total number of
       symbols is $M$.\\
+      This means that a symbol, represented over two orthonormal basis, can be described as 
+      \begin{equation*}
+        S_m=(A^x_m,A^y_m),A^x_m,A^y_m \in \{+/-1,\dots,+/-(\sqrt{M}-1)\}
+      \end{equation*}
+      for example:
+      \begin{itemize}
+        \item 4-QAM: $A^x_m,A^y_m \in \{+/-1\}$
+        \item 16-QAM: $A^x_m,A^y_m \in \{+/-1,+/-3\}$
+      \end{itemize}
 
-    \end{subsection}
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.4\textwidth]{img/wireless/16 QAM.png}
+        \caption{A 16-QAM constellation}
+      \end{figure}
 
-    
+      We recall that with QAM, the amplitude and phase of the signal are modulated. This means that
+      by using the same pulse shape $g(t)$, the bandwidth efficiency is the same of a M-PAM, because
+      the number of bits per symbol is the same, but with a larger energy efficiency, thanks to the
+      presence of another dimension.\\
+
+      By entering in the details, the in-phase and quadrature components of the signal are modulated
+      by multiplying the components to orthogonal carriers, meaning that we can separate them 
+      easily afterwards. This operation also transform the signal to a bandpass one.\\
+      This is accomplished by multiplying the $A^x$ component by Cosine and the $A^y$ component by
+      Sine, and then summing the two signals.\\
+
+      The transmitted signal can thus be described as
+      \begin{equation}
+        U_m(t)= A_m^xg(t)cos(2\pi f_c t)+A_m^yg(t)sin(2\pi f_c t),m=1,\dots,M
+      \end{equation}
+      or in a more discursive way, each component of the signal is the amplitude value over one axis
+      multiplied by the base pulse(the basis), and then multiplied by a carrier signal at a 
+      given frequency.\\
+    \end{subsubsection}
+    \begin{subsubsection}{M-QAM modulation and demodulation}
+      The general schema of M-QAM modulation is shown in figure \ref{fig:MQAM modulation}.\\
+      We receive in input a series of bits, which are associated with the corresponding symbols, 
+      one for each axis. The symbols used to modulate the pulse signal are then multiplied by the
+      pulse shape, and then by the carrier signal. The two signals are then summed and transmitted.\\
+
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.7\textwidth]{img/wireless/MQAM modulation.png}
+        \caption{General schema of M-QAM modulation}
+        \label{fig:MQAM modulation}
+      \end{figure}
+
+      As for what concerns the demodulation, we want to understand correctly the symbols that we
+      receive, so we don't really care about the carrier signal. 
+      We can notice that the sin and cosine components of the signal are orthogonal, meaning that
+      we are able to separate them easily: the cosine component disappears after filtering when multiplied
+      by the sine component, and viceversa.\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/wireless/MQAM demodulation.png}
+        \caption{General schema of M-QAM demodulation}
+        \label{fig:MQAM demodulation}
+      \end{figure}
+    \end{subsubsection}
+    \begin{subsubsection}{Phase Shift Keying}
+      \begin{boxH}
+        \textbf{Phase Shift Keying}(PSK) is a PAM signal over the phase of a signal.\\
+        In a PSK constellation, the amplitude of the signal is constant, meaning that
+        all the signals have the same energy.
+      \end{boxH}
+
+      This means that the symbols are equally spaced across a circle of radius $\sqrt{E_S}$, where
+      $E_S$ is the energy of the signal.\\
+      Symbols are thus equally spaced to minimize the probability of error.\\
+
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.7\textwidth]{img/wireless/MPSK modulation.png}
+        \caption{General schema of M-PSK modulation}
+        \label{fig:MPSK modulation}
+      \end{figure}
+      The modulation process is similar to the one of M-QAM. We can notice that, because all the 
+      amplitude values are so similar, resulting the waveforms have the same energy.
+    \end{subsubsection}
+
+    \begin{subsubsection}{Power amplifiers}
+      After modulation, the signal is usually amplified by a \textbf{power amplifier} to increase
+      the power of the signal.\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/wireless/power amplifier.png}
+        \caption{General schema of a power amplifier}
+        \label{fig:power amplifier}
+      \end{figure}
+      Because we cannot have infinite energy, we can only amplify the signal to a certain level, 
+      which is called \textbf{saturation level}.\\
+      This has some effect on the constellations of a signals:
+      \begin{itemize}
+        \item when working with \textbf{PSK} signals, the constellation in amplified uniformly
+          even when working in saturation.
+        \item when working with \textbf{QAM} signals, the constellation is scaled differently, 
+          making the probability of error higher.
+      \end{itemize}
+
+      \begin{figure}[h]
+        \centering
+        \subfloat[PSK constellation after amplification]{
+          \includegraphics[width=0.4\textwidth]{img/wireless/PSK amplification.png}
+          \label{fig:PSK amplification}
+      }
+        \hfill
+        \subfloat[QAM constellation after amplification]{
+          \includegraphics[width=0.4\textwidth]{img/wireless/QAM amplification.png}
+          \label{fig:QAM amplification}
+      }
+        \caption{Effect of power amplification on a signal}
+        \label{fig:constellation after amplification}
+      \end{figure}
+      When working under the saturation level, the power amplifier is linear, meaning that the
+      output signal is proportional to the input signal, and no distortion occurs, but the 
+      amplifier is underexploited.\\
+      Thus, there is a trade-off between transmitted power and signal quality.\\
+      
+    \end{subsubsection}
+  \end{subsection}
+
+  \begin{subsection}{AWGN channel and equalization}
+    Recall that to transmit information, we need to send a signal over a channel, in our case a 
+    wireless one.\\
+    We already briefly discussed the disturbance of a signals in subsection \ref{subsec:channel}, but the 
+    main challenges can be summarized as:
+    \begin{itemize}
+      \item share the medium via \textbf{multiplexing}
+      \item fight \textbf{noise} and \textbf{channel impairments}
+    \end{itemize}
+    The major sources of errors in the channel are essentualy two:
+    \begin{itemize}
+      \item \textbf{Termal noise}(AWGN), which is the result of the thermal agitation of the electrons
+        in the receiver. It disturbs the signal in an additive fashion and occupies all the
+        frequency band. Is also modelled by a Gaussian random process.
+      \item \textbf{Inter-Symbol Interference}(ISI), which is the result of the signal being reflected
+        by obstacles, and thus arriving at the receiver with a different phase and amplitude.
+    \end{itemize}
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.8\textwidth]{img/wireless/channel effect.png}
+      \caption{Effects of the channel on a signal, $h(t)$ is a filter that models the channel with it impusle response,
+        and $n(t)$ is the noise}
+      \label{fig:channel effects}
+    \end{figure}
+    We can say that the channel ruin the signal. This is evident when looking at the spectrum of the
+    signal, which is spread by the channel, shown in figure \ref{fig:channel effect on the spectrum}.\\
+    \begin{figure}[h]
+      \
+      \centering
+      \subfloat[Effect of the noise on the signal]{
+        \includegraphics[width=0.4\textwidth]{img/wireless/signal AWGN effect.png}
+        \label{fig:signal AWGN effect}
+      }
+      \hfill
+      \subfloat[Signal spectrum distorted by inter-symbol interference, modelled by $h_c(t)$]{
+        \includegraphics[width=0.4\textwidth]{img/wireless/signal filter effect.png}
+        \label{fig:signal spectrum after channel}
+      }
+      \caption{Effect of the channel on the spectrum of a signal}
+      \label{fig:channel effect on the spectrum}
+    \end{figure}
+    \begin{subsubsection}{Receiver Task}
+      We want to design a receiver that can mitigate (or even revert) those two effects, to be 
+      able to correctly understand the signal.\\
+      To do so, we have to \textbf{demodulate} the signal and \textbf{equalize} it.\\
+      This process can be carried out in 3 steps:
+      \begin{enumerate}
+        \item Improve the signal-to-noise ratio(SNR) using a \textbf{matched filter}
+        \item Reduce Inter-Symbol Interference(ISI) using an \textbf{equalizer}
+        \item Sample the recovered waveform and guess the transmitted symbol
+      \end{enumerate}
+      After those steps, we still have an imperfect signal wave, so we need to \textbf{detect} the
+      transmitted symbol, thresholding the signals to remove outliers introduced in the channel 
+      and decide with symbol was transmitted.\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/wireless/receiver steps.png}
+        \caption{General steps that a receiver has to carry out}
+        \label{fig:receiver task}
+      \end{figure}
+    \end{subsubsection}
+
+    \begin{subsubsection}{Maximize SNR}
+      \begin{boxH}
+        To maximize the signal-to-noise ratio, we can use a \textbf{matched filter} $h(t)=g(T-t)$
+      \end{boxH}
+      Turns out that the input response of the optimal filter is the time-reversed version of the
+      pulse shape.\\
+      The receiver must know the basic pulse shape to be able to use the matched filter.\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/wireless/matched filter.png}
+        \caption{Effect of the matched filter on the signal. They are kind of the same because
+        the function is symmetrical}
+        \label{fig:matched filter}
+      \end{figure}
+    \end{subsubsection}
+
+    \begin{subsubsection}{Minimize ISI}
+      Inter-Symbol Interference is the result  of the filtering effect of the channel, and can be
+      defined as 
+      \begin{equation}
+        H_c(f)=|H_c(f)|e^{j\phi_c(f)}
+      \end{equation}
+      where $|H_c(f)|$ is the amplitude response of the channel, which is non-constant meaning 
+      that it distorts the amplitude of the signal, and $\phi_c(f)$ is the phase response of the
+      channel, which is non-linear, meaning that it distorts the phase of the signal.\\
+
+      To revert those effects, we can use an \textbf{equalizer} to compensate for the distortion
+      of the channel, which ideally would be the inverse of the channel($H_e(f)=\frac{1}{H_c(f)}$).\\
+      Applying it to the signal allows us to get an approximation of the original symbol that was
+      transmitted $\hat{S_i}(t)$.\\
+
+      To build the equalizer we still need to know the frequency response of the channel.
+      To do that, we can try to estimate the channel based on known characteristics of the signal.
+      Usually we don't know them, so we introduce \textbf{pilot symbols} in the signal, which are
+      known signals to the receiver, and can be used to estimate the channel.
+    \end{subsubsection}
+
+    \begin{subsubsection}{Fading}
+      Depending on the channel, its impulse response can vary very slowly or very quickly.\\
+      When the impulse response varies slowly, we talk about \textbf{slow fading}, and when it
+      varies quickly, we talk about \textbf{fast fading}.\\
+      Depending on this, pilots symbols may need to be transmitted more or less frequently.\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/wireless/pilot transmission scheme.png}
+        \caption{Pilot transmission scheme}
+        \label{fig:pilot transmission}
+      \end{figure}
+    \end{subsubsection}
+  \end{subsection}
+  \begin{subsection}{Received symbols and decision regions}
+    After equalizing the signal, we would like to decide which symbol was transmitted.\\
+    As previously stated, we get a set of possible symbols $S_m\in\{S_1,S_2,...,S_M\}$, and we
+    want to decide which one was transmitted, adopting a statistical approach.\\
+    \begin{subsubsection}{Symbol Detection}
+      Mathematically speaking, we have an hypothesis testing problem, which wants to minimize the
+      probability of decision error, meaning that we want to choose the symbol that maximizes the
+      probability of the received signal given the transmitted symbol.\\
+      
+      This is known as the \textbf{Maximum a posteriori probability} (MAP) decision rule, which
+      do just that.
+    \end{subsubsection}
   \end{subsection}
 \end{section}
