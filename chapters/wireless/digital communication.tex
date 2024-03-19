@@ -966,7 +966,98 @@ message.
       probability of the received signal given the transmitted symbol.\\
       
       This is known as the \textbf{Maximum a posteriori probability} (MAP) decision rule, which
-      do just that.
+      simplify that rule. In fact, turns out that maximizing the probability of the received signal
+      given the transmitted symbol is equivalent to minimizing the distance between the received
+      signal and the transmitted symbol, under certain conditions.\\
+      This is also known as \textbf{Minimum distance decoding} $d_{rS_m}=(r-S_m)^2$, where $r$ is the
+      received signal(actual value of the signal plus the noise).\\
+
+      Take for example the case of a 2-PAM signal, shown in figure \ref{fig:signal detection example}.
+      The noise alter the received signal, so we can define it as $r=S_m+n$, where $n$ is the noise.
+      We also know that the noise is a Gaussian random process, so we can suppose that the noise is
+      more likely will be zero, and its less likely will be far from it.\\
+      This means that it is possible to assume that the received signal $r$ is more likely to be the
+      symbol $S_m$ that is actually closer to it.\\
+      So, in this case, we can define the decision region as the interval $[-\infty,0)$ and $(0,\infty]$,
+      and the decision rule as
+      \begin{equation}
+        \hat{S_m}=\begin{cases}
+          S_1 & \text{if } r<0\\
+          S_2 & \text{if } r\geq 0
+        \end{cases}
+      \end{equation}
+      This can also be generalized to the case of M-PAM signals, because the general idea is still valid.
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/wireless/signal detection example.png}
+        \caption{Example of signal detection}
+        \label{fig:signal detection example}
+      \end{figure}
+    \end{subsubsection}
+    \begin{subsubsection}{Probability of error}
+      The Minimum Distance Decoding rule adopts a statistical approach to decide which symbol was
+      transmitted, so it is possible to make errors.\\
+      In general, the probability of error $P_e$ between two symbols separated by a distance $d$ is
+      \begin{equation}
+        P_e=Q\left(\frac{d}{2\sigma}\right)
+      \end{equation}
+      where $Q$ is a complex function, and $N_0$ is the noise density.\\
+      The probability of error can be minimized by increasing the distance between the symbols.
+
+      Based on that we can compute the probability of error per bit, or Bit Error Rate(BER), for 
+      each modulation scheme.\\
+      Under certain condition, for example grey coding, the BER can be approximated as
+      \begin{equation}
+        BER=\frac{P_e}{\log_2(M)}
+      \end{equation}
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=\textwidth]{img/wireless/BER plots.png}
+        \caption{Examples of BER plots for different modulation schemes. The BER is higher at the same 
+        SNR for denser modulation schemes}
+        \label{fig:BER plots}
+      \end{figure}
     \end{subsubsection}
   \end{subsection}
+  \begin{subsection}{Signal Attenuation and Link Budget}
+    During the propagation of a signal, especially in wireless medium, it suffers from an 
+    attenuation $L$, which is the loss of power of the signal.\\
+    In general, it depends on many environmental factors, such as the distance between the
+    transmitter and the receiver, the frequency of the signal, the presence of obstacles, and so on.\\
+
+    The relationship between transmission and reception power is given by the $P_{R}=P_{T}/L$, where
+    $P_{R}$ is the received power, $P_{T}$ is the transmitted power, and $L$ is the attenuation.\\
+    Given this relationship, we can define the Signal-to-Noise Ratio(SNR) perceived by the receiver
+    as
+    \begin{equation}
+      SNR=\frac{E_b}{N_0}
+    \end{equation}
+    where $E_b$ the ratio between the Received Power and the Bit Rate, and $N_0$ is the noise density.\\
+    In general, to deal with this problem, we use antennas and amplifiers to increase the power of the
+    signal and compensate for the attenuation. The shape of the antenna allows to modulate the
+    rate of the signal: for example a wider antenna allows to spread the signal in a isotropic way
+    and reach a wider area, while a more focused antenna allows to reach a more specific one.\\
+    This is measure by the \textbf{beamwidth} of the antenna $\theta_B$, which is a measure of the 
+    directivity of the antenna.\\
+
+    \boxH{
+      The smaller the beamwidth, the more focused the antenna is, hence we yield a higher gain, but
+      we also have a smaller area of coverage.\\
+      The larger the beamwidth, the more isotropic the antenna is, hence we yield a lower gain, but
+      we also have a larger area of coverage.\\
+    }
+    For example, a parabolic antenna has a very small beamwidth, so $\theta_B \approx 70\gamma/D$
+    where $D$ is the diameter of the antenna.\\
+    In general, the gain $G_T$ is proportional to the area of the antenna, so $G_T\propto 1/D^2$.
+    Doubling the diameter of the antenna, we get a 4 times increase in the gain.\\
+
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.6\textwidth]{img/wireless/signal attenuation.png}
+      \caption{Example of signal attenuation over a wireless medium}
+      \label{fig:antenna gain}
+    \end{figure}
+  \end{subsection}
+  \begin{subsection}{Multiple Access Schemes}
+    \end{subsection}
 \end{section}
