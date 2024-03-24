@@ -1,1 +1,362 @@
 \chapter{GNSS and positioning}
+  Global Navigation Satellite Systems (GNSS) are satellite-based systems that provide positioning, 
+  navigation, and timing (PNT) services to users worldwide. The most well-known GNSS is the Global 
+  Positioning System (GPS).\\
+  The use of GPS and other GNSSs has become quite common in several civil application fields, (e.g.,
+  transports and personal mobility, agriculture, ICT, ...), so Location Based Services (LBS) are
+  becoming more and more important.\\
+
+  In this chapter we will that GNSS users are particularly sensitive to some kinds of attacks, because
+  those signals are very weak: for example Replaying broadcast GNSS signals with some delay 
+  (meaconing), is enough to trick a user into a wrong position.\\
+  \begin{section}{The positioning Problem}
+    First of all, we need to define what is a position.\\
+    \begin{boxH}
+      A position is a set of coordinates, one for each dimension, associated with a reference 
+      system.
+    \end{boxH}
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.8\textwidth]{img/wireless/GNSS position.png}
+      \caption{Positioning in a 3D space}
+      \label{fig:GNSS position}
+    \end{figure}
+    As shown in picture \ref{fig:GNSS position}, ideally we would like to have a system that can
+    get a precise point positioning over a space, but in reality what we get is a cloud of points
+    around the real position, from which the real position is estimated, withing a certain confidence
+    interval.\\
+
+    That being said, how is a position estimated?\\
+    The information needed to estimate a position is provided by a set of sensors installed on 
+    a terminal, such as a smartphone or a GPS receiver.\\
+    Some of the most common sensors used are:
+    \begin{itemize}
+      \item \textbf{Satellite Navigation Chipset}, such as a GPS sensor, which tracks the signals
+        from the satellites.
+      \item \textbf{Inertial systems}, such as accelerometers and gyroscopes that measure the 
+        acceleration and the angular velocity of the terminal.
+      \item \textbf{Electronic Compasses}, which provide the orientation of the terminal.
+      \item \textbf{Barometers}, which measure the atmospheric pressure.
+      \item $\dots$
+    \end{itemize}
+
+    Because using all that sensors together to estimate a position is ideal but quite complex,
+    a \textbf{data fusion algorithm} is used to combine the information from the sensors and estimate
+    the position.\\
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.3\textwidth]{img/wireless/data fusion algorithms.png}
+      \caption{Representation of a data fusion algorithm}
+      \label{fig:GNSS data fusion}
+    \end{figure}
+    In some cases using only the information provides is not enough to estimate a position, so
+    some \textit{tricks} are used to improve the accuracy of the position estimation.\\
+    For example google maps, when it gets an off road position, uses the information provided and
+    maps the position to a point between some landmarks positioned on the road, as shown in picture
+    \ref{fig:maps example}.\\
+
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.6\textwidth]{img/wireless/maps example.png}
+      \caption{Example of position estimation using landmarks}
+      \label{fig:maps example}
+    \end{figure}
+  \end{section}
+
+  \begin{section}{Satellite Navigation Systems and Segments}
+    A little of history: the first satellite navigation system was put in space by the US Department
+    of Defense in 1978. But it was only in the early 2000s that the system was opened to civil users.\\
+    The european counterpart of the GPS is the Galileo system, which was put in space in 2017.\\
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.9\textwidth]{img/wireless/GNSS history.png}
+      \caption{History of GNSS systems}
+      \label{fig:GNSS systems history}
+    \end{figure}
+    To provide a global coverage, a GNSS system is composed of a constellation of satellites, which
+    are positioned in such a way that at least 4 satellites are visible from any point on the Earth.\\
+
+    There are 4 main GNSS systems nowadays:
+    \begin{itemize}
+      \item \textbf{GPS} (USA)
+      \item \textbf{Galileo} (Europe)
+      \item \textbf{GLONASS} (Russia)
+      \item \textbf{Beidou} (China)
+    \end{itemize}
+    which orbits at different altitudes and inclinations.\\
+    Each of those systems  continuously transmit navigation signals in different frequencies in $L$ 
+    band, as shown in picture \ref{fig:GNSS band}.\\
+
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.8\textwidth]{img/wireless/GNSS band.png}
+      \caption{Division of the $L$ band for GNSS systems}
+      \label{fig:GNSS band}
+    \end{figure}
+
+    All those system are composed of 3 main segments:
+    \begin{itemize}
+      \item \textbf{Space Segment}, which is composed of the satellites, which continuously transmit
+        the signals.
+      \item \textbf{Control Segment}, which is composed of the ground stations that monitor the 
+        satellites and send them the corrections.
+      \item \textbf{User Segment}, which is composed of the users that receive the signals from the
+        satellites and estimate their position. It performs 3 core functions:
+        \subitem - Identification of the satellites in view
+        \subitem - Measurement of the user-satellite distance
+        \subitem - Run a PVT(Position, Velocity, Time) estimation algorithm
+    \end{itemize}
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.2\textwidth]{img/wireless/GNSS segments.png}
+      \caption{Schema of the GNSS segments}
+      \label{fig:GNSS segments}
+    \end{figure}
+    \begin{subsection}{GNSS signals}
+      The GNSS satellites continuously transmit navigation signals in different frequencies in $L$ 
+      band.\\
+      Those signals are made up of different components, as shown in picture \ref{fig:GNSS signals}.\\
+      The carrier modulate the data at the right frequency, the spreading code to perform multiple
+      access, allowing to distinguish information from different satellites and demultiplexing the
+      signals from the same satellite, , and the navigation data that contains the information 
+      about the satellite position and the time.\\
+
+      The navigation data allow the user to compute the travelling time from the satellite to the receiver,
+      and the satellite position at any time.\\
+      Using both the satellite position and the travelling time, the user can estimate its position
+      , velocity and time(PVT).\\
+
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/wireless/GNSS signal scheme.png}
+        \caption{Scheme of the signals that make up the GNSS signal}
+        \label{fig:GNSS signals}
+      \end{figure}
+    \end{subsection}
+
+  \end{section}
+  \begin{section}{Multilateration}
+    Lets take a look at figure \ref{fig:GNSS multilateration problem}.\\
+    We have a satellite that sends a signal $R_i$ to a user $x$, which would like to estimate 
+    three coordinates $\langle x, y, z \rangle$.\\
+    The signal contains the position of the satellite and the departure time of the message
+    $T_{TX}$.\\
+    The receiver measures the arrival time of the signal $T_{RX}$, and computes the distance
+    between the receiver and the satellite $R_i$ as follows:
+    \begin{equation}
+      R_i = c\cdot \tau = c(T_{RX} - T_{TX})
+      \label{eq:GNSS distance}
+    \end{equation}
+    where $c$ is the speed of light, which is the propagation speed of the signal, and $\tau$ is the
+    \textit{time of flight} of the signal.\\
+    In other words, the distance is the traveling time of the signal multiplied by propagation time
+    in the free space.\\
+
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.8\textwidth]{img/wireless/GNSS multilateration problem.png}
+      \caption{Multilateration problem}
+      \label{fig:GNSS multilateration problem}
+    \end{figure}
+
+    One measurement is not enough to estimate the position of the receiver, so at least 3 measurements
+    are needed.\\
+    \begin{boxH}
+      We call this procedure \textbf{multilateration}, or the process of determining the position of an object
+      by measuring the time of arrival of the signals from multiple sources.
+    \end{boxH}
+
+    But knowing the distance only tells us that the receiver is on a sphere centered on the satellite
+    with radius $R_i$. It can be at any point on the sphere.\\
+    If we have 2 satellites, we have 2 spheres, and the receiver is at the intersection of the two
+    spheres.\\
+    If we have 3 satellites, we have 3 spheres, and the receiver is at the intersection of the 3
+    spheres.\\
+    Unfortunately things are never that simple, but it gives the rough idea of how multilateration
+    works.\\
+
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=\textwidth]{img/wireless/multilateration comparison.png}
+      \caption{Multilateration with 1, 2 and 3 satellites}
+      \label{fig:Multilateration comparison}
+    \end{figure}
+  \end{section}
+  \begin{section}{GNSS Functional basics}
+    Lets add more detail to multilateration.\\
+    If a satellite trasmit a pulse at time $t_0$, the receiver will receive it at time $t_0+\tau$,
+    where $\tau$ is the time it takes for the signal to travel from the satellite to the receiver.\\
+    We already saw in equation \ref{eq:GNSS distance} that the distance between the satellite and the
+    receiver is equal to the time of flight of the signal multiplied by the speed of light.\\
+
+    To get the distance, we only need to timestamp correctly the time of arrival of the signal.
+    Yet, calculating the time of flight is not that simple, because the satellite and the receiver
+    must be \textbf{synchronized} to allow the transmission time and the reception time to be on the 
+    same time scale, and to be precise. Otherwise the distance estimation would be very off: 
+    a signal that travels at the speed of light for 1 second travels 300000 km.\\
+    In fact, the satellite host an \textbf{atomic clock}, which is a very precise clock that allows
+    the satellite to timestamp the signal with a very high precision. They are also synchronized thanks
+    to the control segment.\\
+    The receiver also has a clock, but it is most likely not as precise as the atomic clock. 
+    For this reason, the bias of the user torward the GNSS time scale $\delta t_u$ is unknown.\\
+    The measured distance is then different from the geometric range and it is referred
+    to as \textbf{pseudorange}, which is defined as:
+    \begin{equation}
+      \rho = c \cdot \tau + c \cdot \delta t_u
+      \label{eq:GNSS pseudorange}
+    \end{equation}
+
+    There's also the bias of the satellite toward the scale $\delta t_u$. 
+    This value is usually small and stable over time. The ground segment computes a bias $\delta t^S$
+    that is uploaded to the satellite, and that the receiver can use to compute the right time of 
+    flight.\\
+    For those reason, we consider it to be zero, because it can be corrected.\\
+    On the other hand, $\delta t_u$ cannot, the only thing we can do is keep it, so the position 
+    is estimated by measuring the different pseudoranges from 4 different satellites, the minimum
+    number of satellites in Line of Sight to estimate the position.\\
+    f a larger number of satellites is in view a better estimation is possible.\\
+
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.8\textwidth]{img/wireless/GNSS bias.png}
+      \caption{Graphical representation of the bias $\delta t_u$ on the GNSS timescale}
+      \label{fig:GNSS pseudorange}
+    \end{figure}
+
+    To sum it up, in GNSSs the user position is obtained through:
+    \begin{itemize}
+      \item \textbf{satellites} that broadcast that transmits timestamps.
+      \item \textbf{Pseudoranges}, estimated trough one-way-arrival measurements
+        receiver, plus the bias of the user toward the GNSS time scale.
+      \item \textbf{Multilateration} based on the measurements
+    \end{itemize}
+
+    \begin{subsection}{The estimation problem}
+      We have the measurements, but we need to estimate the position of the receiver.\\
+      The relationship between the pseudoranges can be written as:
+      \begin{equation}
+        \begin{cases}
+          \rho_1 = \sqrt{(x_1 - x_u)^2 + (y_1 - y_u)^2 + (z_1 - z_u)^2} + c\delta t_u\\
+          \rho_2 = \sqrt{(x_2 - x_u)^2 + (y_2 - y_u)^2 + (z_2 - z_u)^2} + c\delta t_u\\
+          \rho_3 = \sqrt{(x_3 - x_u)^2 + (y_3 - y_u)^2 + (z_3 - z_u)^2} + c\delta t_u\\
+          \rho_4 = \sqrt{(x_4 - x_u)^2 + (y_4 - y_u)^2 + (z_4 - z_u)^2} + c\delta t_u\\
+        \end{cases}
+        \label{eq:GNSS pseudorange relationship}
+      \end{equation}
+      where $\langle x_i, y_i, z_i \rangle$ are the coordinates of the satellites(which are known),
+      and $\langle x_u, y_u, z_u \rangle$ are the coordinates of the user(which are unknown as the bias).
+
+      The goal is to invert the relationship and find the user coordinates and the bias given the
+      pseudoranges.\\
+      It is a non-linear estimation problem which is linearized through Taylor expansion 
+      And solved through Least Mean Square Solutions or Bayesian Filters (e.g. Kalman).\\
+
+      The generic pseudorange, which is a nonlinear relationship,
+      \begin{equation*}
+        \rho_i = \sqrt{(x_i - x_u)^2 + (y_i - y_u)^2 + (z_i - z_u)^2} + c\delta t_u
+      \end{equation*}
+      can be approximated through the Taylor expansion around a known location used as a linearization point
+      (a point that is close to the real solution) $\langle \hat{x}_u, \hat{y}_u, \hat{z}_u, \hat{\delta t}_u \rangle$:
+      \begin{equation*}
+        \hat{\rho}_i = \sqrt{(x_i - \hat{x}_u)^2 + (y_i - \hat{y}_u)^2 + (z_i - \hat{z}_u)^2} + c\hat{\delta t}_u
+        \label{eq:GNSS linearization}
+      \end{equation*}
+      To put it into a graphical prospective, take a look at figure \ref{fig:GNSS linearization}.\\
+      If we choose a linearization point, we need to know the difference $\Delta x_u$ between the real
+      position and the linearization point. If we can estimate it, which is easier because it is a 
+      linear problem, we can estimate the user position.\\
+
+
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/wireless/linearization scenario.png}
+        \caption{Graphical representation of the linearization of the pseudorange in one dimension}
+        \label{fig:GNSS linearization}
+      \end{figure}
+      We can expand this concept to the general formula \ref{eq:GNSS linearization} as the difference 
+      between the real position and the linearization point:
+      \begin{equation}
+        \begin{cases}
+          \Delta x_u = x_u - \hat{x}_u\\
+          \Delta y_u = y_u - \hat{y}_u\\
+          \Delta z_u = z_u - \hat{z}_u\\
+          \Delta \delta t_u = \delta t_u - \hat{\delta t}_u\\
+        \end{cases}
+        \label{eq:GNSS linearization difference}
+      \end{equation}
+      The linearized pseudorange can be written as:
+      \begin{equation}
+        \delta \rho_j = \hat{\rho}_j - \rho_j = a_{xj}\Delta x_u + a_{yj}\Delta y_u + a_{zj}\Delta z_u + a_{tj}\Delta \delta t_u
+        \label{eq:GNSS linearized pseudorange}
+      \end{equation}
+      The coefficients $a_{ij}$ are the partial derivatives of the pseudorange with respect to the
+      user position and the bias, obtained through the Taylor expansion.\\
+      They can be written as:
+      \begin{equation}
+        \begin{cases}
+          a_{xj} = \frac{x_j - \hat{x}_u}{\hat{\rho}_j}\\
+          a_{yj} = \frac{y_j - \hat{y}_u}{\hat{\rho}_j}\\
+          a_{zj} = \frac{z_j - \hat{z}_u}{\hat{\rho}_j}\\
+          a_{tj} = \frac{c}{\hat{\rho}_j}
+        \end{cases}
+        \label{eq:GNSS linearized coefficients}
+      \end{equation}
+      where 
+      \begin{equation*}
+        \hat{\rho}_j = \sqrt{(x_j - \hat{x}_u)^2 + (y_j - \hat{y}_u)^2 + (z_j - \hat{z}_u)^2} + c\hat{\delta t}_u
+      \end{equation*}
+      that being the geometrical distance between the linearization point and the satellite.\\
+      This allows us to write our relationship as:
+      \begin{equation}
+        \begin{cases}
+          \delta \rho_1 = a_{x1}\Delta x_u + a_{y1}\Delta y_u + a_{z1}\Delta z_u + a_{t1}\Delta \delta t_u\\
+          \delta \rho_2 = a_{x2}\Delta x_u + a_{y2}\Delta y_u + a_{z2}\Delta z_u + a_{t2}\Delta \delta t_u\\
+          \delta \rho_3 = a_{x3}\Delta x_u + a_{y3}\Delta y_u + a_{z3}\Delta z_u + a_{t3}\Delta \delta t_u\\
+          \delta \rho_4 = a_{x4}\Delta x_u + a_{y4}\Delta y_u + a_{z4}\Delta z_u + a_{t4}\Delta \delta t_u\\
+        \end{cases}
+        \end{equation}
+        that can be also rewrited in a matrix form as:
+        \begin{equation}
+        \begin{bmatrix}
+          \delta \rho_1\\
+          \delta \rho_2\\
+          \delta \rho_3\\
+          \delta \rho_4\\
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+          a_{x1} & a_{y1} & a_{z1} & a_{t1}\\
+          a_{x2} & a_{y2} & a_{z2} & a_{t2}\\
+          a_{x3} & a_{y3} & a_{z3} & a_{t3}\\
+          a_{x4} & a_{y4} & a_{z4} & a_{t4}\\
+        \end{bmatrix}
+        \begin{bmatrix}
+          \Delta x_u\\
+          \Delta y_u\\
+          \Delta z_u\\
+          \Delta \delta t_u\\
+        \end{bmatrix}
+        \label{eq:GNSS linearized matrix}
+      \end{equation}
+      where $a_{tj}$ can be approximated as $1$ because the bias is usually small.\\
+      This matrix representation is easier to invert, in fact 
+      \begin{equation*}
+        \delta x= H^{-1}\delta \rho
+      \end{equation*}
+      which is our solution: the user position.\\
+      \begin{subsubsection}{The Least Squares Solution}
+        The method above can only be used if the number of satellites is small(4 or less), because 
+        otherwise the matrix $H$ would be non-square and non-invertible.\\
+        If the number of satellites is larger, it is possible to use the Least Squares Solution.\\
+        The solution would be 
+        \begin{equation}
+          \Delta x = (H^TH)^{-1}H^T\delta \rho
+          \label{eq:GNSS least squares}
+        \end{equation}
+        where $H^T$ is the transpose of the matrix $H$.\\
+      \end{subsubsection}
+
+      \end{subsection}
+
+    \end{section}
+

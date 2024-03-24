@@ -14,6 +14,7 @@
 \usepackage{tcolorbox}
 \usepackage{multicol}
 \usepackage{subfig}
+\usepackage{wrapfig}
 
 \colorlet{LightGray}{White!90!Periwinkle}
 \colorlet{LightOrange}{Orange!15}
@@ -59,6 +60,10 @@
     colframe = main, 
     boxrule = 0pt, 
     leftrule = 6pt % left rule weight
+}
+
+\newcommand{\SubItem}[1]{
+    {\setlength\itemindent{15pt} \item[-] #1}
 }
 
 % ------------------------------------------------------------------------------
