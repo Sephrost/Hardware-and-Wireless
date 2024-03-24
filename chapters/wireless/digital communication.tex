@@ -394,6 +394,7 @@ message.
 
     \end{subsection}
     \begin{subsection}{Frequency Multiplexing(FDM)}
+      \label{subsec:FDM}
       Modulation and demodulation allows multiple wireless communication systems to coexist at different
       frequencies.\\
       For example, if i want to transmit different signals with overlapping bandwidths, i can simply
@@ -1040,18 +1041,18 @@ message.
     This is measure by the \textbf{beamwidth} of the antenna $\theta_B$, which is a measure of the 
     directivity of the antenna.\\
 
-    \boxH{
+    \begin{boxH}
       The smaller the beamwidth, the more focused the antenna is, hence we yield a higher gain, but
       we also have a smaller area of coverage.\\
       The larger the beamwidth, the more isotropic the antenna is, hence we yield a lower gain, but
       we also have a larger area of coverage.\\
-    }
+    \end{boxH}
     For example, a parabolic antenna has a very small beamwidth, so $\theta_B \approx 70\gamma/D$
     where $D$ is the diameter of the antenna.\\
     In general, the gain $G_T$ is proportional to the area of the antenna, so $G_T\propto 1/D^2$.
     Doubling the diameter of the antenna, we get a 4 times increase in the gain.\\
 
-    \begin{figure}[h]
+    \begin{figure}[H]
       \centering
       \includegraphics[width=0.6\textwidth]{img/wireless/signal attenuation.png}
       \caption{Example of signal attenuation over a wireless medium}
@@ -1059,5 +1060,210 @@ message.
     \end{figure}
   \end{subsection}
   \begin{subsection}{Multiple Access Schemes}
+    \begin{boxH}
+      As previously discussed in section \ref{subsec:FDM}, we to trasmitt multiple signals over the same
+      same shared medium, we have to use a method called \textbf{multiplexing}.
+    \end{boxH}
+    Multiplexing allows to divide the available bandwidth over multiple logical channels.\\
+    The multiplexed signals are then transmitted over the same medium, and then demultiplexed at the
+    receiver.\\
+
+    Multiplexing on itself is not enough to allow multiple users to transmit over the same medium.
+    We also need to use a method called \textbf{Multiple Access}, which allows multiple users to
+    transmit over the same medium.\\
+    \begin{boxH}
+      \textbf{Multiplexing} deals with \textbf{combining signals}, while \textbf{multiple access} 
+      deals with allowing \textbf{multiple users} to access and share a communication medium.
+    \end{boxH}
+    \begin{subsubsection}{Frequency Division Multiplexing/Multiple Access}
+      As previously discussed, FDM allows to divide the available bandwidth over multiple logical
+      channels.\\
+      In the case of multiple access, we can use FDM to divide the available bandwidth over multiple
+      users, and then modulating each user's signal over a different carrier frequency.\\
+      This is done by assigning a different frequency band to each user, so that they can transmit
+      over the same medium without interfering with each other.\\
+      This is the case of \textbf{Frequency Division Multiple Access} (FDM/FDMA).\\
+      With this schema, each user get access to the full bandwidth for the whole time, being able to
+      completely avoid interference, but if the user is not transmitting, the channel is wasted.\\
+      Furthermore, it is necessary to have a guard band between the channels to avoid interference.\\
+      \textit{ All wireless systems use this scheme}.
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.4\textwidth]{img/wireless/FDMA.png}
+        \caption{Example of FDMA}
+        \label{fig:FDMA}
+      \end{figure}
+    \end{subsubsection}
+    \begin{subsubsection}{Time Division Multiplexing/Multiple Access}
+      TDM is a method that allows to divide the available bandwidth over multiple logical channels,
+      by assigning a different time slot to each user.\\
+      This slot is allocated to the user even if it has no data to transmitt. For this method to 
+      work correctly some kind of synchronization is needed, but each communication channel has
+      access to the full bandwidth, even if it is only for a fraction of the time.\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.4\textwidth]{img/wireless/TDMA.png}
+        \caption{Example of TDMA}
+        \label{fig:TDMA}
+      \end{figure}
+    In syncronous TDMA, many slots are wasted. There is a \textbf{statiscal version} of TDMA, called
+    \textbf{STDM}, which reassigns the slots to the users that need them.\\
+    This is done by scanning the input lines an collecting data until the frame is full, and then
+    transmitting the frame.\\
+    This method allows to avoid wasting slots, but it is more complex to implement, requiring 
+    scheduling algorithms.\\
+    \end{subsubsection}
+    \begin{subsubsection}{Code Division Multiple Access}
+      CDMA is a method that allows to divide the available bandwidth over multiple logical channels,
+      by assigning a different code to each user.\\
+      This method allows to exploit orthogonality between signals(allowing to separate them). Each
+      channel has an unique code, while sharing the same spectrum(all of it) at the same time.\\
+      Each channel is assigned a different code, and the receiver uses the unique binary code $c_i$
+      of a sender to separate the signal from the others.\\
+
+      For example a multiplexed signal
+      \begin{equation*}
+        s_{mux}(t)=s_1(t)c_1+s_2(t)c_2+s_3(t)c_3
+      \end{equation*}
+      is demultiplexed by the receiver using the code $c_1$ of the first sender
+      \begin{equation*}
+        \langle s_{mux}(t),c_1\rangle=s_1(t)
+      \end{equation*}
+      In this way, we are able to achieve a great bandwidth efficiency, with no need for coordination
+      or synchronization while also getting a good degree of protection against interference.\\
+      There are also some drawbacks: we have lower user data rates, and the system is more complex
+      because the signals are more complex to regenerate.\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.4\textwidth]{img/wireless/CDMA.png}
+        \caption{Example of CDMA}
+        \label{fig:CDMA}
+      \end{figure}
+    \end{subsubsection}
+    \begin{subsubsection}{TDM/A + FDM/A}
+      It is also possible to combine the two methods.
+      We can combine the time and frequency division multiplexing, allowing to divide the available
+      bandwidth over multiple logical channels, by assigning a different time slot and frequency band
+      to each user.\\
+      With this solution, we are able to achieve a better degree of protection against tapping
+      and frequency selective interference, at the cost of higher data rates(compared to CDMA).\\
+      This method also requires a precise coordination between the users.\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.4\textwidth]{img/wireless/TFDM.png}
+        \caption{Example of TDMA/FDMA}
+        \label{fig:TDMA/FDMA}
+      \end{figure}
+    \end{subsubsection}
+  \end{subsection}
+
+  \begin{section}{Source and channel coding}
+    A brief overview: we have a source that generates a message, which is then encoded by the source
+    encoder, to limit the amount of bits transmitted and the effects of noise.\\
+    Those bits are then transformed into waveforms, which are altered by the channel, and then
+    transformed back into bits by the channel decoder, after inverting the effects of the channel.\\
+
+    Part of this operation are carried out in two steps:
+    \begin{itemize}
+      \item \textbf{Encoding}: which aims to produce a compressed representation $Y$ of the original
+        message $X$. Usually encoding is simply a function $f$ that maps $X$ to $Y$.
+      \item \textbf{Decoding}: which aims to recover the original message $X$ from the representation
+        $Y$. Usually decoding is simply a function $f^{-1}$ that maps $Y$ to $X$.
+    \end{itemize}
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.2\textwidth]{img/wireless/encoding and decoding.png}
+      \caption{General schema of encoding and decoding}
+      \label{fig:encoding and decoding}
+    \end{figure}
+
+    \begin{subsection}{Source Coding}
+      We would like to choose a encoding function $f$ that can be reverted while also \textbf{reducing
+        redundancy} in the message.\\
+        \begin{boxH}
+          \textbf{Source coding}, also known as data compression, aims to represent information or
+          data in a more compact form to reduce redundancy and save storage space or transmission 
+          bandwidth.
+        \end{boxH}
+        This is possible because many real-world datasets exhibit patterns or repetitions that can 
+        be efficiently encoded
+
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=\textwidth]{img/wireless/source coding.png}
+          \caption{Example of source coding}
+          \label{fig:source coding}
+        \end{figure}
+
+        Figure \ref{fig:source coding} shows an example of source coding. The example supposes that
+        a sequence of letters is being transmitted. A possible uncompressed representation of the 
+        letters would be assigning a two bit code to each letter(fixed length code).\\
+        An alternative strategy exploits the fact that some letters are more frequent than others,
+        assigning shorter codes to the most frequent letters(variable length code). With this
+        solution, we are able to reduce the number of bits needed to transmit the message.\\
+        \begin{subsubsection}{Compression Types}
+          There are two main compression classes:
+          \begin{itemize}
+            \item \textbf{Lossless Compression}: the original data can be perfectly reconstructed
+              from the compressed data($\hat{X}=X$). This is useful when the original data must be 
+              preserved exactly, such as in text or executable files. Some examples of lossless
+              compression includes ZIP, RAR, and PNG.
+            \item \textbf{Lossy Compression}: the original data cannot be perfectly reconstructed
+              from the compressed data($\hat{X}\approx X$). This is useful when the original data 
+              can be approximated or when some loss of quality is acceptable, such as in images 
+              or audio files.
+          \end{itemize}
+          As there are no officials compression formats, the specifications are defined by the
+          fidelity requirements of the application. Generally, there is a trade-off between the
+          compression efficiency and the computational complexity of the algorithm.
+        \end{subsubsection}
     \end{subsection}
+
+    \begin{subsection}{Error Detection and Correction}
+      After compression, all the redundancy of the message has been possibly removed, and the bits
+      that make up the message are the ones to be transmitted.\\
+      Ideally, the message should be received unaltered, but we know that the channel can introduce
+      errors in the message.\\
+      Error detection techniques allow detecting such errors, while error correction enables 
+      reconstruction of the original data. But those schemes add some redundancy to the message.\\
+      For doing this, there are two main approaches:
+      \begin{itemize}
+        \item \textbf{Automatic Repeat request(ARQ)}: it implements acknowledgements and timeouts
+          to ensure that the message is correctly received. 
+        \item \textbf{Forward Error Correction(FEC)/Channel coding}: it adds redundancy to the 
+          message to allow
+          the receiver to correct errors without the need for retransmission.
+      \end{itemize}
+      \begin{subsubsection}{Channel Coding}
+        Channel coding aims to detect and correct errors that may occur during transmission.\\
+        It adds redundant bits to the original message, creating a coded message that contains 
+        extra information for error detection and correction.\\
+        The effectiveness of a channel code is often measured by its error correction capability,
+        indicating the maximum number of errors that can be corrected within a codeword.\\
+
+        There are two main types of channel coding:
+        \begin{itemize}
+          \item \textbf{Block Codes}: the message is divided into blocks of fixed length, and a 
+            fixed number of redundant bits are added to each block. The receiver uses the redundant
+            bits to detect and correct errors.
+          \item \textbf{Convolutional Codes}: the message is encoded using a convolutional encoder,
+            which adds redundant bits based on the current and previous bits of the message. The 
+            receiver uses a Viterbi decoder to detect and correct errors.
+        \end{itemize}
+      \end{subsubsection}
+      \begin{subsubsection}{Block Codes}
+        A block code acts on block of $k$ bits of input data to produce $n$ bits of output data.
+        This operation is carried out by the channel encoder.\\
+        It simply adds $n-k$ bits of redundancy to the original message, which can be used by the
+        receiver to detect and correct errors.\\
+
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=\textwidth]{img/wireless/block codes.png}
+          \caption{Example of block code}
+          \label{fig:block code}
+        \end{figure}
+      \end{subsubsection}
+    \end{subsection}
+  \end{section}
 \end{section}
