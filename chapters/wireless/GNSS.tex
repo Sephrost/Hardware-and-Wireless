@@ -211,10 +211,13 @@
     that is uploaded to the satellite, and that the receiver can use to compute the right time of 
     flight.\\
     For those reason, we consider it to be zero, because it can be corrected.\\
+
     On the other hand, $\delta t_u$ cannot, the only thing we can do is keep it, so the position 
     is estimated by measuring the different pseudoranges from 4 different satellites, the minimum
     number of satellites in Line of Sight to estimate the position.\\
-    f a larger number of satellites is in view a better estimation is possible.\\
+    This is because 3 satellites are needed to estimate the coordinates of a position, and the fourth
+    satellite is needed to estimate the bias $\delta t_u$.\\
+    If a larger number of satellites is in view a better estimation is possible.\\
 
     \begin{figure}[h]
       \centering
@@ -355,8 +358,190 @@
         \end{equation}
         where $H^T$ is the transpose of the matrix $H$.\\
       \end{subsubsection}
-
       \end{subsection}
 
+    \begin{section}{Positioning Errors}
+      We know that that channel is unpredictable, so the pseudorange is most likely affected by errors,
+      due to things such as noise and propagation.\\
+      We can redifine our pseudorange model as:
+      \begin{equation}
+        \rho_i = \sqrt{(x_i - x_u)^2 + (y_i - y_u)^2 + (z_i - z_u)^2} + b_{ut} + \epsilon
+        \label{eq:GNSS pseudorange error}
+      \end{equation}
+      where $b_{ut}$ is the bias of the user toward the GNSS time scale, and $\epsilon$ is the error.\\
+
+      We also need to modify the solution accordingly:
+      \begin{equation}
+        \Delta x = [(H^TH)^{-1}H^T]\delta \rho
+        \label{eq:GNSS least squares error}
+      \end{equation}
+      where $\delta \rho$ is the error in the pseudoranges.\\
+      Basically, we have a portion of the formula that depends on the geometry of the satellites(
+      $(H^TH)^{-1}H^T$) and a portion that depends on the errors in the pseudoranges which is
+      upredictable.\\
+      As it is possible to observe, the position of the satellite influence the error in the pseudorange,
+      fore example amplifying it.\\
+      
+      The causes of the errors in the pseudorange are shown in figure \ref{fig:GNSS errors}.\\
+      The relativistic effect on the clock, the fact that even if the clocks are synchronized, they
+      move at different speeds, can be corrected because it is predictable.\\
+      The atmoshpere too influences the signal, but it can be corrected because it is predictable.\\
+      Some of them cannot be corrected, such as the multipath effect, the fact that the signal can
+      bounce off buildings and arrive at the receiver later than expected.\\
+
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/wireless/GNSS errors.png}
+        \caption{Causes of the errors in the pseudorange}
+        \label{fig:GNSS errors}
+      \end{figure}
+
+      \begin{subsection}{User Equivalent Range Error}
+        The summary of the total error budget affecting a pseudorange from the user's point of view 
+        is called the \textbf{user equivalent range error} (UERE).\\
+        Thus, we can model the pseudorange error as a random variable with a mean of $0$ and a standard
+        deviation of $\sigma_{\text{UERE}}$.\\
+        After correcting known sistematic errors, the unknown ones can be modelled as a Gaussian 
+        distribution, with a mean of $0$ and a variance $\sigma_{\text{UERE}}^2$, obtained as the sum
+        of other residual contributions:
+        \begin{equation}
+          \sigma_{\text{UERE}} = \sqrt{\sum_{j} \sigma^2_j [m]}
+        \label{eq:GNSS UERE}
+      \end{equation}
+      \end{subsection}
+
+      \begin{subsection}{The Geometrical Factor}
+        Errors makes the solution more uncertain, but its not the only factor that influences the
+        accuracy of the solution.\\
+        The geometrical distribution of satellites affects the precision of estimated position too
+
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=0.7\textwidth]{img/wireless/satellite distibution.png}
+          \caption{Distrubution of the satellites ideally and in reality}
+          \label{fig:GNSS geometry}
+        \end{figure}
+
+        It can be proved that, under some conditions, this geometrical effect on the positioning 
+        error can be measured.
+        the standard deviation of the positioning error can be obtained as:
+        \begin{equation}
+          \sigma_{x} = \sqrt{\sigma^2_{x_u} + \sigma^2_{y_u} + \sigma^2_{z_u} + \sigma^2_{b_{ut}}}
+          =\text{GDOP} \cdot \sigma_{\text{UERE}}
+          \label{eq:GNSS PDOP}
+        \end{equation}
+        where GDOP is the \textbf{Geometric Dilution of Precision}:
+        \begin{equation}
+          \text{GDOP} = \sqrt{tr\{[H^TH]^{-1}\}}
+          \label{eq:GNSS GDOP}
+        \end{equation}
+        and $\sigma_{\text{UERE}}$ is the standard deviation of the pseudorange error.\\
+      \end{subsection}
     \end{section}
+
+    \end{section}
+
+    \begin{section}{GNSS threats}
+      GNSS is not that robust by itself, in fact the main source of signal degradation are:
+      \begin{itemize}
+        \item \textbf{evil waveforms}
+        \item \textbf{multipath}
+        \item \textbf{radio frequency interference}
+        \item \textbf{spoofing}
+      \end{itemize}
+      The robustness of GNSS signals derives from the \textbf{spread spectrum} nature of the 
+      transmitted signal (Direct Sequence Spread Spectrum), exploited also for CDMA purposes.\\
+      Despite the spread signal structure, navigation receivers are vulnerable to (strong) 
+      interfering signals, that might prevent the correct signal processing.\\
+
+      In fact, the typical signal to noise ration of a GNSS signal is around $-30dB$, which 
+      means that on normal conditions the signal is buried in the noise.\\
+      Fortunately, spread spectrum is robust to the presence of interfering signals, but we still
+      have to revert the spreading to recover the original signal.\\
+      The product with the PRN code spreads the power over a larger bandwidth, making the bandwidth
+      of a signal $B_x \simeq 50 - 250\text{Hz}$ much larger($B_{SS} \simeq 2-8\text{MHz}$).\\
+      If an interference signal of bandwidth $B_i$ affects the signal, only a portion of the power 
+      will be actually received as “additional noise”, because the rest of the power will be
+      spread over the whole bandwidth.\\
+
+      For this reason, the despreading operation made at the receiver spreads the power of the 
+      interfering signal over a wide bandwidth($B_{SS}$), making the interference power density
+      much lower than the signal power density.\\
+
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/wireless/signal despreading.png}
+        \caption{Effect of despreading over a signal bandwidth}
+        \label{fig:GNSS despreading}
+      \end{figure}
+      \begin{subsection}{Interference classification}
+        Because of the bandwidth size, we are actually able to classify interference, according to 
+        the spectral and time features with relation to the GNSS signal:
+        \begin{itemize}
+          \item \textbf{Narrowband Interference}: $B_i \ll B_{SS}$
+          \item \textbf{Wideband Interference}: $B_i \simeq B_{SS}$
+          \item \textbf{Continuous Wave Interference}: the interference is continuous in time
+            over a single frequency band, $B_i \to 0$
+          \item \textbf{Pulse Interference}: the interference is pulsed in time
+        \end{itemize}
+
+        We can also distinguish between \textbf{Out-of-band interference} and \textbf{In-band
+        interference}.\\
+        The first one is interference that is outside the GNSS band, while the second one is
+        interference that is inside the GNSS band. This means that OOB interference should not 
+        affect the GNSS signal, while IB interference can, buth both of them can be problematic.\\
+
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=0.7\textwidth]{img/wireless/in and out of band interference.png}
+          \caption{Classification of interference}
+          \label{fig:GNSS interference classification}
+        \end{figure}
+
+        A further distinction can be made between \textbf{Intentional Interference} and
+        \textbf{Unintentional Interference}.\\
+        The first one is interference that is intentionally generated to disrupt the GNSS signal,
+        while the second one is interference that is generated by other devices, but that can still
+        disrupt the GNSS signal, and is generally generated by OOB interference.\\
+      \end{subsection}
+
+      \begin{subsection}{Jamming}
+        \begin{boxH}
+          A jammer is a device that generates interference to disrupt the GNSS signal.\\
+          Jamming objective is the denial of navigation service by masking the GNSS signal with
+          noise.
+        \end{boxH}
+
+        Normally, signal radiation in the GNSSs bands is regulated by the ITU, and not legal.\\
+        Those devices can be a severe threat for  liability-critical mass-market applications, 
+        such as GNSS-based road tolling or fleet management.\\
+        In general, Mass-market jammers usually aim at disturbing a wide band by 
+        frequency-modulating a pure tone.\\
+
+        Lets now try to understand the effect of jamming on the GNSS signal.\\
+        In general, interference affect the receiver at different levels: at first we can observe 
+        a spike in the noise level after the signal has been received, or we can observe a
+        degradation of the signal quality.\\
+
+        The net effect is an error on the measured pseudorange $\rho$, and the effect depends on
+        \begin{itemize}
+          \item the receiver architecture(front-end filters, quantization bits, etc.)
+          \item the structure of the GNSS signal(modulation, spreading, etc.)
+        \end{itemize}
+
+        Therefore detection and mitigation of interference can act at different stages of the 
+        receiver itself:
+        \begin{itemize}
+          \item antenna shaping
+          \item front-end filtering
+          \item time domain blanking
+          \item other transformed domains
+        \end{itemize}
+        
+
+      \end{subsection}
+        
+
+    \end{section}
+
 
