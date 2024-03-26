@@ -507,7 +507,7 @@
 
       \begin{subsection}{Jamming}
         \begin{boxH}
-          A jammer is a device that generates interference to disrupt the GNSS signal.\\
+          A \textbf{jammer} is a \textbf{device} that generates \textbf{interference} to disrupt the GNSS signal.\\
           Jamming objective is the denial of navigation service by masking the GNSS signal with
           noise.
         \end{boxH}
@@ -522,13 +522,14 @@
         In general, interference affect the receiver at different levels: at first we can observe 
         a spike in the noise level after the signal has been received, or we can observe a
         degradation of the signal quality.\\
+        This means that we are able to understand if a signal is being jammed before the pseudorange
+        is computed.\\
 
         The net effect is an error on the measured pseudorange $\rho$, and the effect depends on
         \begin{itemize}
           \item the receiver architecture(front-end filters, quantization bits, etc.)
           \item the structure of the GNSS signal(modulation, spreading, etc.)
         \end{itemize}
-
         Therefore detection and mitigation of interference can act at different stages of the 
         receiver itself:
         \begin{itemize}
@@ -537,11 +538,176 @@
           \item time domain blanking
           \item other transformed domains
         \end{itemize}
+
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=0.7\textwidth]{img/wireless/jamming delay effect.png}
+          \caption{Effect of jamming on the delay of a GNSS signal. The delay is increased by the
+            jamming signal.}
+          \label{fig:GNSS jamming effect}
+        \end{figure}
+        \begin{subsubsection}{Signal-to-Noise Ratio Monitoring}
+          Aside from the spectrum, one other thing that can be monitored to detect jamming is the
+          Signal-to-Noise Ratio(SNR).\\
+          Strictly speaking, the interference is not noise, but from the user point of view it is
+          indistinguishable from it. The net effect is that the SNR is affected by interference,
+          contributing to the \textbf{noise variance}.\\
+
+          Observing the SNR in some scenarios may allow to define a \textbf{statistical threshold}: 
+          if the SNR is below a certain value, the signal may be jammed.\\
+
+          Generally speaking, The only available output common to any GNSS receiver is the 
+          carrier-to-noise-density ratio (C/N0) parameter, which is the ratio of the carrier power
+          to the noise power spectral density, an estimated value closely related to SNR.\\
+          The C/N0 is a good indicator of the signal quality, and it is used to detect jamming: in
+          case of jamming, the C/N0 will decrease.\\
+          \begin{figure}[h]
+            \centering
+            \includegraphics[width=0.3\textwidth]{img/wireless/c over n0.png}
+            \caption{Example of a C/N0 measurements}
+            \label{fig:GNSS CN0 monitoring}
+          \end{figure}
+
+        \end{subsubsection}
+        \begin{subsubsection}{Spectral analysis}
+          One of the most effective ways of detecting jamming is to perform a spectral analysis of the
+          received signal.\\
+
+          Figure \ref{fig:GNSS spectral analysis} shows the effect of interference on the spectrum
+          of a GNSS signal.\\
+          On the left is shown the effect of normal noise over the spectrum of the signal, while on
+          the right is shown the effect of jamming.\\
+          Is is evident when it is happening: you can clearly see it in the spectrum.\\
+
+          \begin{figure}[h]
+            \centering
+            \includegraphics[width=0.7\textwidth]{img/wireless/spectrum effect.png}
+            \caption{Effect of interference on the spectrum of a GNSS signal}
+            \label{fig:GNSS spectral analysis}
+          \end{figure}
+        \end{subsubsection}
+        \begin{subsubsection}{Automatic Gain Control Behavior}
+          Another important detection strategy is to monitor the behavior of the Automatic Gain Control
+          (AGC) of the receiver.\\
+
+          The AGC is a system that automatically controls the gain of the receiver, in order to
+          maintain the signal at a constant level, the optimal input range of the ADC(quantizer).\\
+          \begin{figure}[h]
+            \centering
+            \includegraphics[width=0.4\textwidth]{img/wireless/AGC.png}
+            \caption{Graphical representation of the AGC}
+            \label{fig:AGC}
+          \end{figure}
+        It can be used to detect jamming, because the AGC will try to increase the increase the gain
+        to maintain the signal at a constant level, but if the signal is jammed, the AGC will 
+        decrease the gain because the signal is stronger.\\
+
+        Because GNSS signals are weak, the AGC is usually set to a high gain, so if the AGC is
+        decreasing the gain, it is a sign that the signal is being jammed.\\
+        This is evident when looking at figure \ref{fig:AGC jamming}, which shows the gain level
+        of the AGC over the time.\\
+        n absence of interference the gain introduced by the AGC is constant over the time, or slowly
+        changing, but in a hostile environment the average gain level is lower and the AGC
+        gain is not constant.
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=0.6\textwidth]{img/wireless/AGC jamming.png}
+          \caption{Effect of jamming on the AGC}
+          \label{fig:AGC jamming}
+        \end{figure}
+        The AGC also have some kind of effect over the spectrum of the signal, decreasing the magnitude 
+        of the spectrum over the intermediate frequencies(IF), and which is variable over time.\\
         
+
+        \end{subsubsection}
+        \begin{subsubsection}{Goodness-of-Fit Test}
+          For interference detection purposes, the IF samples at the output of the ADC can be used 
+          to build the test statistic and make the decision.\\
+          The test performs the comparison of two Probability Density Functions (histograms),
+          allowing the decision between two hypotheses. The PDFs are approximated by the histograms of
+          the samples.
+          
+          If the thermal noise is dominating the samples distribution (nominal behavior), the 
+          histogram should exhibit a \textbf{Gaussian shape}.
+          On the other hand, In the case of the presence of an interference source, the histogram 
+          will modify its regular shape, enabling the test to detect such a distortion.\\
+          The bins needed for evaluating the discrete version of the PDF are directly arranged by 
+          the signal quantization levels.
+
+          \begin{boxH}
+            In the \textbf{interference free} case the noise dominates the GNSS signal and the statistic of 
+            samples is expected to be \textbf{Gaussian}.
+          \end{boxH}
+
+          \begin{figure}[h]
+            \centering
+            \includegraphics[width=0.8\textwidth]{img/wireless/good to fit test.png}
+            \caption{Goodness-of-Fit test}
+            \label{fig:GNSS goodness of fit}
+          \end{figure}
+
+
+        \end{subsubsection}
 
       \end{subsection}
-        
+      \begin{subsection}{Mitigation with domain techniques}
+        For mitigation, we want to identify our interference precisely, in the time domain
+        or frequency domain, depending on the nature of the interference.\\
+        A continuous wave interference can be easily detected in the frequency domain, unlike in the 
+        time domain, because the interference is occupying a single frequency band.\\
 
+        To do so we can use a \textbf{notch filter}, which is a filter that removes a certain
+        frequency band from the signal.\\
+
+        In the time domain, we can understand when the interference is happening, and we can
+        remove the interference by blanking the signal.\
+      \end{subsection}
+    \end{section}
+
+    \begin{section}{Spoofing}
+      \begin{boxH}
+         Spoofing refers to the transmission of fraudulent GNSS-like signals, that force the
+         victim receiver to compute erroneous positions
+      \end{boxH}
+      It is another big threat for GNSS. This kind of attack has been present in the military 
+      field, but with the extensive use of GNSS it may threat several applications.\\
+
+      Furthermore, while jamming is easily detectable, spoofing is not, because the signal is
+      not masked by noise, but it is a signal that is very similar to the GNSS signal.\\
+      For this reason, attacks can be very effective depending on the quality of the generated 
+      signal.\\
+
+      Denial of service is not the only possible attack, but by spoofing the signal, the attacker
+      can also manipulate the position of the receiver, for example to fraud a tolling system.\\
+      Such menaces also apply to safety-critical applications (e.g. Advanced Driver Assistance 
+      Systems(ADAS), eCall).\\
+
+      An ideal spoofer must be as much as possible consistent with the real signals, in fact it must
+      \begin{itemize}
+        \item Match the signals from expected visible satellite
+        \item be synchronized with the GNSS time scale
+        \item match the directing of arrival
+        \item be realistic terms of power an Doppler effect(velocity)
+      \end{itemize}
+      Even a reply attack is enough to trick a receiver into a wrong position.\\
+
+      \begin{subsection}{Meaconing}
+        \begin{boxH}
+          Meaconing is the reception and rebroadcasting of an entire block of RF spectrum 
+          containing an ensemble of received GNSS signals, without distinction between different 
+          satellite signals
+        \end{boxH}
+        Meaconing gets signals consistent with the real one and replay them with a variable delay
+        so its difficult to counteract because, at the receiver level, the signals are consistent
+        and must be \textbf{cross-checked}for detection.
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=0.4\textwidth]{img/wireless/meaconing.png}
+          \caption{Meaconing attack}
+          \label{fig:GNSS meaconing}
+        \end{figure}
+
+      \end{subsection}
     \end{section}
 
 
