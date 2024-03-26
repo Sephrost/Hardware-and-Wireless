@@ -645,12 +645,25 @@
             \caption{Goodness-of-Fit test}
             \label{fig:GNSS goodness of fit}
           \end{figure}
-
-
         \end{subsubsection}
 
-      \end{subsection}
-      \begin{subsection}{Mitigation with domain techniques}
+        \begin{subsubsection}{Machine learning on interference monitoring}
+          The interference detection is a typical classification task in supervised machine 
+          learning. The reason is to build a prediction model tp bredict the outcome based on 
+          a set of input variables.\\
+          The model is trained based on the detected jamming signals reported in literature.\\
+          This is done by extracting features from the signal, both in the time domain and in the
+          frequency domain, and then using these features to train a machine learning model.\\
+
+          \begin{figure}[h]
+            \centering
+            \includegraphics[width=0.8\textwidth]{img/wireless/training features.png}
+            \caption{Features extraction for machine learning}
+            \label{fig:GNSS machine learning}
+          \end{figure}
+        \end{subsubsection}
+
+      \begin{subsubsection}{Mitigation with domain techniques}
         For mitigation, we want to identify our interference precisely, in the time domain
         or frequency domain, depending on the nature of the interference.\\
         A continuous wave interference can be easily detected in the frequency domain, unlike in the 
@@ -659,12 +672,27 @@
         To do so we can use a \textbf{notch filter}, which is a filter that removes a certain
         frequency band from the signal.\\
 
-        In the time domain, we can understand when the interference is happening, and we can
-        remove the interference by blanking the signal.\
-      \end{subsection}
-    \end{section}
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=0.9\textwidth]{img/wireless/notch filter.png}
+          \caption{Notch filter}
+          \label{fig:GNSS notch filter}
+        \end{figure}
 
-    \begin{section}{Spoofing}
+        In the time domain, we can understand when the interference is happening, and we can
+        remove the interference by blanking the signal via \textbf{digital pulse blanking}, which 
+        blanks both the signal and the interference.\\
+
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=0.7\textwidth]{img/wireless/digital pulse blanking.png}
+          \caption{Pulse blanking}
+          \label{fig:GNSS pulse blanking}
+        \end{figure}
+      \end{subsubsection}
+    \end{subsection}
+
+    \begin{subsection}{Spoofing}
       \begin{boxH}
          Spoofing refers to the transmission of fraudulent GNSS-like signals, that force the
          victim receiver to compute erroneous positions
@@ -691,7 +719,7 @@
       \end{itemize}
       Even a reply attack is enough to trick a receiver into a wrong position.\\
 
-      \begin{subsection}{Meaconing}
+      \begin{subsubsection}{Meaconing}
         \begin{boxH}
           Meaconing is the reception and rebroadcasting of an entire block of RF spectrum 
           containing an ensemble of received GNSS signals, without distinction between different 
@@ -707,7 +735,19 @@
           \label{fig:GNSS meaconing}
         \end{figure}
 
-      \end{subsection}
-    \end{section}
+      \end{subsubsection}
+
+      \begin{subsubsection}{Anti-Spoofing techniques and countermeasures}
+        Anti-spoofing is based on the detection of signal features that are revealing the 
+        malicious nature of the signal, which can be similar to a genuine signal but not enough.\\
+        This is done by cross-checking the signals from different satellites, and by checking the
+        signal power, the Doppler effect, and the signal structure.\\
+
+        The countermeasures can be based either via cryptographic techniques, such as encrypting the
+        signal or digitallu signing it, or via non-cryptographic techniques.
+      \end{subsubsection}
+
+    \end{subsection}
+  \end{section}
 
 
