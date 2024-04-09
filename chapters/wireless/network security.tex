@@ -1,104 +1,166 @@
 % Basic security concepts
 \chapter{Network Security Concepts}
-First of all, lets try to define what is \textit{network security}. Well, of course it depends 
-on the context, but in general:
-\begin{boxH}
-  \textbf{Network security} is defined as the \textit{protection} of networks and their services from unauthorized
-  modification, destruction, or disclosure.
-\end{boxH}
-It provides assurance hat the network performs as expected and in a correct way, with no unexpected 
-side effects.\\
-Network security focuses mainly on networks, network protocols, and network applications, but it 
-also includes all the networks devices and the physical infrastructure.
-\begin{subsubsection}{Security Threats}
-  While traditional networks have no limitations on the coverage, wireless ones have, and its binded
-  to the broadcast radio channel.\\
-  Wireless networks require decentralized medium access mechanism in medium access
-  control (MAC) layer, while also including the means to deal with the mobility of the users.\\
-  For those issues, wireless networks make it up with the flexibility and mobility they provide.\\
-  Furthermore, the surface of attack is much larger, because the radio waves can be intercepted
-  from anywhere in range.\\
-  To sum it up, it has many advantages, but also many issues that need to be addressed.
-\end{subsubsection}
-\begin{section}{Security attacks}
-  Security is all about dealing with threats and risk, but ideally the system should be designed 
-  to address and prevent all possible attacks, but it is not always, or to be honest, almost never possible.\\
-  If prevention is not possible, a solution is to detect the attack and then recover from it.\\
-  Recall also that an attack is a deliberate action to exploit a vulnerability, which is a 
-  \textit{weakness} of a system.\\
-  Attacks are formally classified as \textbf{passive attacks} and \textbf{active attacks}:
+In this chapter we will go over the basic concepts of network and security, such as various kinds
+of networks and the possible attacks that can be performed on them.
+\begin{section}{Wireless Networks}
+  A wireless communication network is a \textbf{computer network} that uses wireless data connections
+  between network nodes. This means that most of the links are wireless.\\
+  Some of the most common wireless networks are:
   \begin{itemize}
-    \item Passive attack: the attacker can only read data/traffic
-      \subitem \textit{Example}: eavesdropping, can be countered with encryption
-      \subitem \textit{Example}: traffic analysis
-    \item Active attacker: the attacker can also modify, delete, or create data/traffic
-      \subitem \textit{Example}: masquerade, an attacker pretends to be some other entity, usually 
-      an authorized user. Can be countered with authentication.
-      \subitem \textit{Example}: replay, an attacker first captures a message, (encrypted or not),
-      then replays this message to its designated receiver, can be countered with serialization.
-      \subitem \textit{Example}: modification of messages, can be countered with integrity of the 
-      data, peer authentication, encryption, and serialization(?).
-      \subitem \textit{Example}: denial of service
+    \item Cellular networks
+    \item Wireless local area networks (WLAN), such as Wi-Fi ones
+    \item Wireless ad-hoc networks, such as bluetooth
+    \item Vehicular networks
+    \item Sensor networks
+    \item Satellite networks
   \end{itemize}
-  \begin{figure}[h]
+  Historically the whole network infrastructure was wired, having limited mobility and flexibility.
+  User equipment used to be directly connected to a network switch or a router through physical cables,
+  and this is still true for many networks, for example in a data center and the core of the network.\\
+  Nowadays, the situation is different, in fact the only wired component is the core of the network,
+  while the edge of the communication infrastructure deploys wireless components.
+  \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{img/wireless/attacks classification.png}
-    \caption{General classification if attacks}
+    \subfloat[Traditional wired network]{\includegraphics[width=0.5\textwidth]{img/wireless/wired network.png}}
+    \hfill
+    \subfloat[Modern wireless network]{\includegraphics[width=0.5\textwidth]{img/wireless/modern network.png}}
   \end{figure}
+  \begin{subsection}{Classification of wireless communication networks}
+    Wireless networks can be classified in many ways, but the most common classification is based on
+    the coverage area of the network.\\
+    They can be also classified by topology or by mobility, as shown in figure \ref{fig:network classification}.
+    We will now go over the classification by coverage.
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.7\textwidth]{img/wireless/network classification.png}
+      \caption{Classification of wireless networks}
+      \label{fig:network classification}
+    \end{figure}
+    \begin{subsubsection}{Wireless Personal Area Networks}
+      A WPAN can be used for communications among the personal devices themselves, adopting an ad-hoc 
+      topology.\\
+      There are two kinds of ad-hoc networks:
+      \begin{itemize}
+        \item Master-slave: one device is the master and the others are slaves
+        \item Mesh: Nodes are interconnected with wireless links without forming a specific cell
+      \end{itemize}
+      \begin{figure}
+        \centering
+        \includegraphics[width=0.7\textwidth]{img/wireless/wpan.png}
+        \caption{Wireless Personal Area Network}
+      \end{figure}
+    \end{subsubsection}
+    \begin{subsubsection}{Wireless Local Area Networks}
+      A WLAN is a network that covers a small area, such as a home, office, or a campus.\\
+      They are normally built on top of a wired local area network (LAN), forming a basic 
+      BSS(Basic Service Set), composed of one AP(Access Point) and one or more devices.\\
+      A WLAN may have extended service set (ESS) that supports multiple BSSs, similar to a 
+      traditional Ethernet based LAN.
+    \end{subsubsection}
 
-  Passive attacks are much harder to detect, because there is no data alteration or system
-  manipulation.
-
+  \end{subsection}
 \end{section}
-\begin{section}{Security Services and proprieties}
-  \begin{boxH}
-    \textbf{Security services} are the features in a system designed against possible attacks.
-  \end{boxH}
-  The National Institute of Standards and Technology (NIST) computer security handbook introduces 
-  three key security services: confidentiality, integrity, and availability.\\
-  We will go over them and some more in the following paragraphs.
-  \begin{paragraph}{Access Control}
-    Access control is the process of determining what permissions a user should have, and what 
-    resources they can access.\\
-    this is because the serve should only be accessed by authorized users, and the data should only
-    be accessed by authorized users.
-  \end{paragraph}
-  \begin{paragraph}{Authentication}
-    Authentication is the process of verifying the identity of a user.\\
-    The goal is to ensure that the user is who they claim to be.
-  \end{paragraph}
-  \begin{paragraph}{Confidentiality}
-    Confidentiality is the process of ensuring that data is only accessible to those who are authorized
-    to access it.\\
-    This is usually done by encrypting the data.
-  \end{paragraph}
-  \begin{paragraph}{Integrity}
-    Integrity is the process of ensuring that data is not altered in transit.\\
-    This is usually done by using checksums or digital signatures.
-  \end{paragraph}
-  \begin{paragraph}{Non-repudiation}
-    Non-repudiation is the process of ensuring that a user cannot deny that they performed a 
-    particular action.\\
-    This is usually done by using digital signatures.
-  \end{paragraph}
-  \begin{paragraph}{Availability}
-    Availability is the process of ensuring that a system is available when it is needed.\\
-    This is usually done by using redundancy and failover systems.
-  \end{paragraph}
 
-\end{section}
-\begin{section}{Security Mechanisms}
+\begin{section}{Basic security concepts}
+  First of all, lets try to define what is \textit{network security}. Well, of course it depends 
+  on the context, but in general:
   \begin{boxH}
-    Security mechanisms are methods to achieve security services in a system.\\
-    They can be implemented in hardware, software, or a combination of both.
+    \textbf{Network security} is defined as the \textit{protection} of networks and their services from unauthorized
+    modification, destruction, or disclosure.
   \end{boxH}
-  x.800 defines a set of security mechanisms that can be used to achieve the security services
-  we talked about before:
-  \begin{itemize}
-    \item Encryption
-    \item Authentication
-    \item Access Control
-    \item Digital Signatures
+  It provides assurance hat the network performs as expected and in a correct way, with no unexpected 
+  side effects.\\
+  Network security focuses mainly on networks, network protocols, and network applications, but it 
+  also includes all the networks devices and the physical infrastructure.
+  \begin{subsection}{Security Threats}
+    While traditional networks have no limitations on the coverage, wireless ones have, and its binded
+    to the broadcast radio channel.\\
+    Wireless networks require decentralized medium access mechanism in medium access
+    control (MAC) layer, while also including the means to deal with the mobility of the users.\\
+    For those issues, wireless networks make it up with the flexibility and mobility they provide.\\
+    Furthermore, the surface of attack is much larger, because the radio waves can be intercepted
+    from anywhere in range.\\
+    To sum it up, it has many advantages, but also many issues that need to be addressed.
+  \end{subsection}
+  \begin{subsection}{Security attacks}
+    Security is all about dealing with threats and risk, but ideally the system should be designed 
+    to address and prevent all possible attacks, but it is not always, or to be honest, almost never possible.\\
+    If prevention is not possible, a solution is to detect the attack and then recover from it.\\
+    Recall also that an attack is a deliberate action to exploit a vulnerability, which is a 
+    \textit{weakness} of a system.\\
+    Attacks are formally classified as \textbf{passive attacks} and \textbf{active attacks}:
+    \begin{itemize}
+      \item Passive attack: the attacker can only read data/traffic
+        \subitem \textit{Example}: eavesdropping, can be countered with encryption
+        \subitem \textit{Example}: traffic analysis
+      \item Active attacker: the attacker can also modify, delete, or create data/traffic
+        \subitem \textit{Example}: masquerade, an attacker pretends to be some other entity, usually 
+        an authorized user. Can be countered with authentication.
+        \subitem \textit{Example}: replay, an attacker first captures a message, (encrypted or not),
+        then replays this message to its designated receiver, can be countered with serialization.
+        \subitem \textit{Example}: modification of messages, can be countered with integrity of the 
+        data, peer authentication, encryption, and serialization(?).
+        \subitem \textit{Example}: denial of service
+    \end{itemize}
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.7\textwidth]{img/wireless/attacks classification.png}
+      \caption{General classification if attacks}
+    \end{figure}
+
+    Passive attacks are much harder to detect, because there is no data alteration or system
+    manipulation.
+
+  \end{subsection}
+  \begin{subsection}{Security Services and proprieties}
+    \begin{boxH}
+      \textbf{Security services} are the features in a system designed against possible attacks.
+    \end{boxH}
+    The National Institute of Standards and Technology (NIST) computer security handbook introduces 
+    three key security services: confidentiality, integrity, and availability.\\
+    We will go over them and some more in the following paragraphs.
+    \begin{paragraph}{Access Control}
+      Access control is the process of determining what permissions a user should have, and what 
+      resources they can access.\\
+      this is because the serve should only be accessed by authorized users, and the data should only
+      be accessed by authorized users.
+    \end{paragraph}
+    \begin{paragraph}{Authentication}
+      Authentication is the process of verifying the identity of a user.\\
+      The goal is to ensure that the user is who they claim to be.
+    \end{paragraph}
+    \begin{paragraph}{Confidentiality}
+      Confidentiality is the process of ensuring that data is only accessible to those who are authorized
+      to access it.\\
+      This is usually done by encrypting the data.
+    \end{paragraph}
+    \begin{paragraph}{Integrity}
+      Integrity is the process of ensuring that data is not altered in transit.\\
+      This is usually done by using checksums or digital signatures.
+    \end{paragraph}
+    \begin{paragraph}{Non-repudiation}
+      Non-repudiation is the process of ensuring that a user cannot deny that they performed a 
+      particular action.\\
+      This is usually done by using digital signatures.
+    \end{paragraph}
+    \begin{paragraph}{Availability}
+      Availability is the process of ensuring that a system is available when it is needed.\\
+      This is usually done by using redundancy and failover systems.
+    \end{paragraph}
+
+  \end{subsection}
+  \begin{subsection}{Security Mechanisms}
+    \begin{boxH}
+      Security mechanisms are methods to achieve security services in a system.\\
+      They can be implemented in hardware, software, or a combination of both.
+    \end{boxH}
+    x.800 defines a set of security mechanisms that can be used to achieve the security services
+    we talked about before:
+    \begin{itemize}
+      \item Encryption
+      \item Authentication
+      \item Access Control
+      \item Digital Signatures
     \item Data integrity
     \item Traffic Padding and Routing Control
     \item Notarization
@@ -125,13 +187,29 @@ also includes all the networks devices and the physical infrastructure.
   \begin{paragraph}{Notarization}
     It can be used to provide non-repudiation, and also certificate the destination.
   \end{paragraph}
-\end{section}
-\begin{section}{Levels of impact}
+\end{subsection}
+\begin{subsection}{Levels of impact}
   The impact of a security breach can be classified into three levels:
   \begin{itemize}
     \item Low impact: the breach has little or no effect on the assets, operations or individuals.
     \item Moderate impact: the breach has a noticeable effect on the system or the data.
     \item High impact: the breach has severe or catastrophic effects on the system or the data.
   \end{itemize}
+\end{subsection}
+\begin{boxH}
+  IMPORNTANT: After this section there was one of cryptography, but i refuse to explein them over and 
+  over again.\\
+  Anyway, here's what was explain in case you want to know(\textbf{not} in detail):
+  \begin{itemize}
+    \item Symmetric encryption
+    \item Kerchoff's principle
+    \item Adversary model(cipher text only, known plain text, chosen plain text, chosen cipher text)
+    \item Asymmetric-key encryption
+    \item Classical Ciphers(Ceasar's,Playfair,Vigenère)
+    \item monoalphabetic and polyalphabetic ciphers
+    \item Stream Cipher(RC4)
+    \item Block Cipher(Feistel, DES, 2DES, 3DES)
+    \item Steganography
+  \end{itemize}
+\end{boxH}
 \end{section}
-
