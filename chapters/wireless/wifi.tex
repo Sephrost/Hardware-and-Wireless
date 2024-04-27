@@ -239,5 +239,113 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
   \end{subsection}
 
 \end{section}
+\begin{section}{Performance evaluation of 802.11}
+  As seen in the previous sections, 802.11 has some features that can be used to improve the
+  performance of the network, and is also divided into different version with different 
+  throughput: 802.11b(up to 11Mbps), 802.11a(up to 54Mbps), 802.11g(up to 54Mbps), 802.11n(up to 600Mbps),
+  \dots\\
+  Event tough the throughput is high, the actual throughput is much lower, because of the overhead
+  introduced by the protocol, the hidden terminal problem, the collision avoidance, and the fading.\\
+  The throughput can be defined as the speed at which useful data is received at the application layer,
+  Given the capacity C at the physical layer, and can be calculated as follows:
+  \begin{equation}
+    T = \frac{\text{(Useful data at the application layer)}}{\text{(time to complete the tranfer)}<C}
+  \end{equation}
+  which will of course be lower than the capacity C.\\
+  Given this definition, we can observe that the throughput is reduced by each layer of the protocol stack,
+  because each of them adds control information that is useful to provide the service but is not part of
+  the useful data, and that the actual throughput is much lower than the theoretical throughput.\\
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/wireless/encapsulation overhead.png}
+    \caption{The overhead that each packet has to carry}
+  \end{figure}
+  Furthermore, several factors can reduce the throughput, for example:
+  \begin{itemize}
+    \item shared physical link with other protocols and transmissions
+    \item errors: bit error, congestion, packets drops, you name it
+    \item retransmissions: if a packet is lost, it has to be retransmitted
+    \item \dots 
+  \end{itemize}
+  This means that the actual throughput is always less than the protocol efficiency, which is the
+  ratio between the useful data and the total data sent per the capacity of the channel.\\
+
+  
+  \begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+      \hline
+      Protocol & Overhead \\
+      \hline
+      TCP & 20 bytes per segment\\
+      \hline
+      UDP & 8 bytes\\
+      \hline
+      IP & 20 bytes\\
+      \hline
+      Ethernet & 38 bytes(8 (trailer + SoF) + 6 (MAC) + 6(MAC) + 2 (Type) + 4 (CRC) + 12 (IPG))\\
+      \hline
+    \end{tabular}
+    \caption{Overhead introduced at each layer per packet}
+  \end{table}
+  % tabular 2 columns: protocol|overhead
+  \begin{subsubsection}{Efficiency of TCP/IPv4/Ethernet}
+    The efficiency of the TCP/IP/Ethernet stack can be calculated as follows: we know that the 
+    maximum MTU for ethernet is 1500 bytes, and that the maximum payload for an IP packet is 1500-20=1480
+    bytes, and that the maximum payload for a TCP segment is 1480-20=1460 bytes.\\
+    This overhead is applied to each segment, and because its more likely that the payload at application 
+    level is larger than the TCP MTU, there will probably be more segments.\\
+    So the efficiency of the TCP/IP/Ethernet stack is:
+    \begin{equation}
+      \eta_{TCP} = \frac{\text{L7 data}}{\text{Transmitted data}} = \frac{1460}{1460+20+20+20+38} = 94\%
+    \end{equation}
+    This was in case the channel if full-duplex, but if it is half-duplex, the efficiency is reduced, because
+    the ack packets have to be sent in the opposite direction, and the channel can't be used to send data
+    in that direction.\\
+    The efficiency of the TCP/IP/Ethernet stack in half-duplex is:
+    \begin{equation}
+      \eta_{TCP} = \frac{\text{L7 data}}{\text{Transmitted data}} = \frac{1460}{(1460+20+20+20)+(20+20+38)} = 90\%
+    \end{equation}
+    In general, To calculate the total efficiency, it is sufficient to make the product of the
+    individual efficiencies.
+  \end{subsubsection}
+  \begin{subsection}{Theoretical Maximum Throughput}
+    The theoretical maximum throughput is a difficult value to calculate, because different parts 
+    of the frame are transmitted at different rate: for example, the header is transmitted at a 
+    lower rate than the payload(1Mbps).\\
+    As such, the theoretical maximum throughput of an application which uses 802.11 is calculated as follows:
+    \begin{equation}
+      TMT_{APP} = \frac{\beta}{\alpha + \beta}\times TMT_{802.11}(\text{bps})
+    \end{equation}
+    where $\alpha$ is the total overhead above the MAC layer, and $\beta$ is the application layer
+    datagram size.\\
+    Computing $TMT_{802.11}$ is a bit more difficult, because some components of the protocol are variable
+    but we can approximate it when the scenario is ideal:
+    \begin{itemize}
+      \item the bit to error rate is 0
+      \item there are no losses due to collisions
+      \item no packet is lost at the receiving node
+      \item PCF mode is not used 
+      \item the sending node always has a sufficient number of packets to send
+      \item no fragmentation is used at level 2
+    \end{itemize}
+    but in general we need to consider the ratio between the time in which useful data is sent 
+    and the one needed for the overhead.\\
+    We can thus consider the TMT as:
+    \begin{equation}
+      TMT = \frac{\text{MSDU size}}{\text{Delay per MSDU}}
+    \end{equation}
+    where MSDU is MAC service data unit, which carries the actual data that needs to be transmitted,
+    and the delay per MSDU is the time needed to transmit the MSDU, which is overhead time + data time:
+    \begin{equation}
+      \text{Delay per MSDU} = (T_{DIFS} + T_{SIFS} + T_{BO} + T_{RTS} + T_{CTS} + T_{ACK} + T_{DATA}) \times 10^{-6}s
+    \end{equation}
+    All those values varies on the mode used:
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.7\textwidth]{img/wireless/delay components.png}
+    \end{figure}
+  \end{subsection}
+\end{section}
 
 
