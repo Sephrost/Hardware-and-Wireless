@@ -347,5 +347,45 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
     \end{figure}
   \end{subsection}
 \end{section}
+\begin{section}{Security issues of WLAN}
+  More and more security issues arise when using a wireless medium, and this is also true when using
+  802.11.
+  \begin{subsection}{Denial of Service}
+    Denial of Service is a quite common attack at layer 2, and also quite old, since it has been demonstrated in
+    2003, and it is still possible today.
+    \begin{boxH}
+      Denial of Service is a type of attack that aims to make a network service unavailable to 
+      a user, by overwhelming the client with more traffic that it can handle.
+    \end{boxH}
+    In fact, 802.11 is "more vulnerable" than ethernet, because it is a shared medium, and the attacker
+    can easily listen and transmit any frame.\\
+    A dos attack can be performed either:
+    \begin{itemize}
+      \item \textbf{at the physical layer}: by sending a jamming signal, the attacker can prevent the 
+        receiver from receiving the frame
+      \item \textbf{at the MAC layer}: which mostly rely on the identification problems of 802.11
+    \end{itemize}
+    With identification problems we refer to the fact that nodes are identified by their MAC address,
+    which can be easily spoofed, because there's no authentication at the MAC layer.\\
+    Based on this simple fact, there are several attacks that can be performed.
+    \begin{subsubsection}{Disassociation attack}
+      Before going over this kind of attack, a quick reminder that a client can authenticate with
+      multiple APs, but can only be associated with one of them.\\
+      There's also another kind of frame, the disassociation frame, which is used to terminate the
+      connection between a client and an AP, which is not authenticated, like the association one.\\
+      This meas that an attack can, at any point of the connection, send a disassociation frame to the
+      AP while spoofing the MAC address of the client, and the AP will terminate the connection with the
+      client.\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/wireless/disassociation attack.png}
+        \caption{Example of a disassociation attack}
+      \end{figure}
+
+    \end{subsubsection}
+
+  \end{subsection}
+
+\end{section}
 
 
