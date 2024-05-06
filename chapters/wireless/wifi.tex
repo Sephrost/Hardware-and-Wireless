@@ -387,5 +387,96 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
   \end{subsection}
 
 \end{section}
+\begin{section}{WLAN security}
+    As per the previous section, we also learned that:
+    \begin{itemize}
+      \item MAC authentication is useless, because is sent in broadcast, so can be sniffed and replayed
+      \item static IP addresses are useless, because can be easily sniffed from the packets
+      \item SSID hiding is useless, because even if we can suppress beacons frames, SSID are sent 
+        in clear text in probe request/response and association response
+      \item Smart antenna placement and hiding is useless, because the attacker can have more resources 
+        and this also impact the final users
+    \end{itemize}
+  \begin{subsection}{WEP}
+    \begin{boxH}
+      WEP stands for Wired Equivalent Privacy, and is a security protocol used in wireless networks.
+    \end{boxH}
+    It was first introduced in 1998, so it's a quite old standard, and was intended to protect 
+    wireless confidentiality comparable with that of a traditional wired network and intended to 
+    achieve the following security goals:
+    \begin{itemize}
+      \item \textbf{Confidentiality} via encryption 
+      \item \textbf{Access control} via shared password authentication
+      \item \textbf{Data integrity} via checksums
+    \end{itemize}
+    Actually WEP was never meant to achieve strong security, but it's better than nothing, even if 
+    it has some serious flaws, which make it fail to achieve the security goals, which were:
+    \begin{itemize}
+      \item To be reasonably strong, by changing frequently the \textit{IV} by to avoid statistical attacks
+      \item To be self-synchronizing, to be able to decrypt the messages, which is provided by the IV
+      \item To be efficient, by using a stream cipher
+      \item To be IP free
+      \item To be exportable, which is a requirement for the US government
+    \end{itemize}
+    \begin{subsubsection}{WEP access control}
+      WEP implements two different authentication methods:
+      \begin{itemize}
+        \item \textbf{Open system authentication}: which is the default one, and is used when the 
+          client wants to connect to the network
+        \item \textbf{Shared key authentication}: which is used when the client wants to connect to the 
+          network, and is based on a shared key
+      \end{itemize}
+      The shared key authentication is based on a challenge-response mechanism, where the AP sends a
+      challenge to the client, which has to respond with the correct response, which is based on the
+      shared key.\\
+      Once authenticated, the STA can send an association request and the AP will respond with an 
+      association response. If authentication fails, no association is possible.
+      The challenge is based on the RC4 algorithm, which is a stream cipher which is known to be not 
+      the most secure nowadays, but at the time was considered secure enough.\\
+      % TODO: ADD clear image
+      Furthermore, counterintuitively, the shared key authentication is less secure than the open system
+      authentication, because a bruteforce attack can be mounted on the challenge frame, because both 
+      the cyphertext and the algorithm are known.\\
+      If privacy is a primary concern, it is more advisable to use Open System authentication for WEP
+      authentication.
+
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/wireless/WEP security.png}
+        \caption{General overview of WEP security}
+      \end{figure}
+    \end{subsubsection}
+    \begin{subsubsection}{WEP integrity}
+      As for what concerns the integrity of the data, WEP uses a checksum, which is a CRC32(Cyclic
+      Redundancy Check) checksum of 32 bits, which is appended to the frame.
+    \end{subsubsection}
+    \begin{subsubsection}{WEP Key Management}
+      Two kind of keys are used in WEP:
+      \begin{itemize}
+        \item \textbf{Default key}, also called \textit{shared key}
+        \item \textbf{Key mapping keys}, also called \textit{individual keys}
+      \end{itemize}
+      but in practice, only the default key is used, because the key mapping keys are not used in the
+      standard. This has some serious implication, because each STA can decrypt the frames sent by
+      another STA, because they all use the same key.\\
+      Furthermore, the default key has to be changed if a member leaves the group, to make it's access
+      impossible, but this is also impossible, because the key has to be changed on every device 
+      simultaneously, which is quite difficult.\\
+      For those reasons, WEP supports multiple default keys, with only the active key used for encryption, 
+      and any of the keys can be used for decryption.\\
+      The message header contains a key ID that allows the receiver to find out which key should be used
+      to decrypt the message.
+
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/wireless/WEP key management.png}
+        \caption{WEP key management}
+      \end{figure}
+
+    \end{subsubsection}
+
+  \end{subsection}
+
+\end{section}
 
 
