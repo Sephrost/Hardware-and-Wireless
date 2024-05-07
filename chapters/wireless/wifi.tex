@@ -40,6 +40,7 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
   \end{itemize}
   Data exchange is only possible in the last case.
   \begin{paragraph}{Authentication}
+    \label{par:authentication}
     The 802.11 authentication is the first step to be performed. It requires the STA to prove its identity
     to the AP. During this step, no data encryption or security in general is provided.\\
     Usually the authentication is done with a shared key(WEP, WPA, WPA2, WP3), but it can also be 
@@ -123,6 +124,7 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
   \end{subsection}
   As previously said, 802.11 uses a half-duplex channel, so only one station can transmit at a time.
   \begin{subsection}{CSMA/CA}
+    \label{sub:CSMA/CA}
     Since the channel is shared, the 802.11 standard uses CSMA/CA to avoid collisions, which is a 
     random access protocol similar to the CSMA/CD used in Ethernet.\\
     It implements collision avoidance instead of detection for two reasons:
@@ -214,6 +216,7 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
     as the mobile station moves, and the SNR varies as a result.
   \end{subsection}
   \begin{subsection}{Power Management}
+    \label{sub:power management}
     Power is a precious resource in mobile devices, and thus the 802.11 standard provides 
     power-management capabilities that allow 802.11 nodes to minimize the amount of time that 
     their sense, transmit, and receive functions and other circuitry need to be "on".\\
@@ -376,6 +379,8 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
       This meas that an attack can, at any point of the connection, send a disassociation frame to the
       AP while spoofing the MAC address of the client, and the AP will terminate the connection with the
       client.\\
+      By repeating this process, the attacker can prevent the client from connecting to the network, and
+      thus from receiving any data, performing a denial of service attack.
       \begin{figure}[h]
         \centering
         \includegraphics[width=0.6\textwidth]{img/wireless/disassociation attack.png}
@@ -383,8 +388,89 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
       \end{figure}
 
     \end{subsubsection}
+    \begin{subsubsection}{Deauthentication attack}
+      The general principle of 802.11 authentication has already been explained in paragraph
+      \ref{par:authentication}, but it is worth mentioning that the deauthentication frame is used to
+      terminate the authentication process.\\
+      As such, it is possible to perform a deauthentication attack, in the same fashion as the
+      disassociation attack, by sending a deauthentication frame to the AP while spoofing the MAC address
+      of the client.\\
+      Doing so, the client must re-authenticate with the AP, and if the attack is repeated, the client
+      will be unable to connect to the network, and thus to receive any data, performing a denial of
+      service attack.\\
+      This kind of attack can be executed on individual clients, or on the whole network, by spoofing
+      the AP address, and sending the deauthentication frame to all the clients.
+
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/wireless/deauthentication attack.png}
+        \caption{Example of a deauthentication attack}
+      \end{figure}
+
+    \end{subsubsection}
+    \begin{subsubsection}{Protection against deauthentication attacks}
+      In general, it is better to implement a protection against deauthentication attacks, because 
+      after a deauthentication attack, the client will need 2RTTs to resume the communication,
+      while after a disassociation attack, the client will need only 1RTT.\\
+      A simple protection against deauthentication attacks that as been proposed is based on the 
+      observation that legitimate nodes do not deauthenticate themselves and then send data.
+      As such, an AP can delay the honoring of a deauthentication frame for a short period of time,
+      and if any frames are sent by the client, the deauthentication frame is ignored.\\
+      This solution is quite good because it requires no modification to the protocol and its 
+      backward compatible.\\
+      Another solution is to use the SNR of the signal as a "signature" of the client, and if the
+      SNR doesn't match the signature, the deauthentication frame is ignored.
+    \end{subsubsection}
+    \begin{subsubsection}{Attacks on CSMA-CD}
+      The general principle of CSMA-CD has already been explained in paragraph \ref{sub:CSMA/CA},
+      but it is worth mentioning that it is possible to perform a denial of service attack by
+      sending a signal before every SIFS slot, which will prevent the other nodes from transmitting
+      the frame, because they will sense the channel as busy.\\
+      So just by sending 50000 frames per second, which is roughly one tenth of the capacity of the
+      channel, the attacker can shut down the channel.\\
+      The attack that has been just explained only works if RTS/CTS is not used, but its also possible
+      to perform an attack even in the opposite case. In fact, in a RTS request it is possible to 
+      specify the reservation time, with a 2 byte field, and by setting it to a large value,
+      the attacker can prevent the other nodes from transmitting. 
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/wireless/RTS attack.png}
+        \caption{Example of a CSMA-CD/RTS attack, the attacker sets a large value in the RTS request}
+      \end{figure}
+      To prevent this kind of attack it is possible to set a reasonable limit on the reservation time,
+      because all legitimate traffic use relatively small values. 
+    \end{subsubsection}
+    \begin{subsubsection}{Attack on power saving}
+      As seen in in subsection \ref{sub:power management}, 802.11 has a power saving mode, which allows
+      the client to go to sleep, and wake up only when it is needed.\\
+      To signal that a station is going to sleep, it sends a Null data frame with the power management
+      bit set.\\
+      Multiple attacks can be performed on this mechanism:
+      \begin{itemize}
+        \item An attacker can spoof on behalf of AP the TIM message, which is used to signal the clients
+          that there are packets waiting for them, making the clients think that there are no packets
+          waiting for them, and thus go to sleep
+        \item An attacker forge management sync packets, causing them to fall out of sync with the AP
+        \item An attacker spoof on behalf of the client, making the AP send data while the client is 
+          sleeping
+      \end{itemize}
+      Let's now describe the latter scenario: of course an attacker can impersonate the victim STA,
+      because he just needs to know the MAC addresses of the AP and the victim. The attacker can 
+      keep injecting \textbf{false power management frames} to the AP, which will make the AP think
+      that the victim is going to sleep, and thus it will buffer the packets.\\
+      The AP sends a Beacon frame with the TIM (Traffic Indication Map) to signal the victim to 
+      wake-up, but the victim will ignore those, because it's not in power management mode.\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.7\textwidth]{img/wireless/power saving attack.png}
+        \caption{Example of a power saving attack}
+      \end{figure}
+
+    \end{subsubsection}
 
   \end{subsection}
+  Although all those issues were published in 2003, the threats are still present today, making DoS 
+  an deauthentication attacks still possible today.
 
 \end{section}
 \begin{section}{WLAN security}
