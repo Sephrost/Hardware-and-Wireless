@@ -16,7 +16,7 @@ vulnerable to different kind of attacks, such as reverse engineering, piracy, an
 The watermark must not:
 \begin{itemize}
   \item be easy to remove
-  \item alter the functionalities of the IP(duh)
+  \item alter the functionalities of the IP
   \item degrade performance
   \item leak informations
 \end{itemize}
@@ -134,6 +134,73 @@ For ICs, there are two main families of watermarking: \textbf{static} and \textb
     If we want a FPGA design, we can use the unused blocks as a signature. In case of ASIC, we can watermark
     the layout of certain cells for a subset of the core.
   \end{subsection}
+\end{section}
 
+\begin{section}{Dynamic watermarking}
+  As just seen, adding a signature at design time can be both very intrusive and expensive to verify.\\
+  Dynamic watermarking is another approach, where the signatura is added at runtime and can be easily
+  veryfied by the user at runtime. In this case too, there are different ways to embed the watermark,
+  which alters its observability.
+  \begin{subsection}{FSM based watermarking}
+    A quick reminder of what a FSM is: a deterministic FSN is basically a machine with a finite set 
+    of states from which it can transit to another state, given an input and the output of its transition
+    function.\\
+    There are two kinds of FSM: \textbf{Mealy} and \textbf{Moore}. In the Mealy FSM, the output is a
+    function of the current state and the input, while in the Moore FSM the output is a function of the
+    current state only.\\
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.7\textwidth]{img/hardware/fsm differencew.png}
+      \caption{The two kinds of FSM.}
+      \label{fig:FSM}
+    \end{figure}
+    The watermarking can be embedded in the FSM either on the states or in the transitions.\\
+    In the state-based FSM watermarking, some states are added only to embed a signature, but its not
+    very useful because its vulnerable to sta minimization/encoding and its very easy to understand
+    and remove.\\
+    In transition-based FSM watermarking, the watermark is embedded in the transitions, by exploiting
+    free inputs from the states in the STG(State Transition Graph) to generate extra transitions.
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.7\textwidth]{img/hardware/transition based watermarking.png}
+      \caption{The watermarking in the transitions of the FSM.}
+      \label{fig:FSMwm}
+    \end{figure}
+  \end{subsection}
 
+  \begin{subsection}{Testing based watermarking}
+    Test based watermarking exploits the fact that flip-flops usually provides both the output and the
+    negated output.\\
+    It is possible to implement some scan flip-flops and embedd the watermark in the fact that we can
+    connect eaither the output or the negated output to the scan flip-flop.\\
+    This is because, if some sequence of inputs is configured(some Q and some $\overline{Q}$), and we apply
+    a sequence of inputs, the circuit is reacting in a different way, depending on the configuration of the
+    flip-flop.\\
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.7\textwidth]{img/hardware/testing based watermarking.png}
+      \caption{The watermarking in the flip-flops.}
+      \label{fig:flipflopwm}
+    \end{figure}
+  \end{subsection}
+  
+  \begin{subsection}{Side-channel based watermarking}
+    With side-channel based watermarking, the signature is embedded in some information that is leaked
+    by the circuit in an unintended way, such as the power compsumption, which is usually used as 
+    a watermark. Of course, the signature should be below the noise floor, to be not easily detectable.
+    Measuring the power consumption  is not very easy, because its dynamic and depends the frequency 
+    of the clock and the energy dissipated by the circuit.\\
+    Two main approaches are used:
+    \begin{itemize}
+      \item \textbf{a ring oscillator}: by adding a odd number of invertes in a loop, we can generate
+        a signal that oscillates at a frequency that depends on the number of inverters and their delay.
+        By measuring the frequency of the signal, we can measure the power consumption.
+
+      \item \textbf{Leakage current}: the power consumption is also related to the leakage current, 
+        which is the current that flows between the source and the drain of a transistor when the 
+        transistor is off. This current is related to the temperature of the circuit, and can be 
+        measured by measuring the delay of the circuit.
+    \end{itemize}
+
+  \end{subsection}
 \end{section}
