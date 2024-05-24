@@ -483,6 +483,7 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
       \item Smart antenna placement and hiding is useless, because the attacker can have more resources 
         and this also impact the final users
     \end{itemize}
+    The only real solution is to use encryption, and a secure standard while we are at it.
   \begin{subsection}{WEP}
     \begin{boxH}
       WEP stands for Wired Equivalent Privacy, and is a security protocol used in wireless networks.
@@ -496,12 +497,16 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
       \item \textbf{Data integrity} via checksums
     \end{itemize}
     Actually WEP was never meant to achieve strong security, but it's better than nothing, even if 
-    it has some serious flaws, which make it fail to achieve the security goals, which were:
+    it has some serious flaws, which make it fail to achieve the security goals, or properties, 
+    which were:
     \begin{itemize}
-      \item To be reasonably strong, by changing frequently the \textit{IV} by to avoid statistical attacks
-      \item To be self-synchronizing, to be able to decrypt the messages, which is provided by the IV
+      \item To be reasonably strong, by changing frequently the \textit{IV}, and hence the key $k$,
+        to avoid statistical attacks, which are possible with a fixed key
+      \item To be self-synchronizing, otherwise it would be difficult to decrypt the messages.
+        This property is provided by the IV itself, as using a reliable data transmission protocol
+        would hinder the performance too much.
       \item To be efficient, by using a stream cipher
-      \item To be IP free
+      \item To be IP(Intellectual property) free
       \item To be exportable, which is a requirement for the US government
     \end{itemize}
     \begin{subsubsection}{WEP access control}
@@ -519,12 +524,18 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
       association response. If authentication fails, no association is possible.
       The challenge is based on the RC4 algorithm, which is a stream cipher which is known to be not 
       the most secure nowadays, but at the time was considered secure enough.\\
-      % TODO: ADD clear image
-      Furthermore, counterintuitively, the shared key authentication is less secure than the open system
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/wireless/WEP authentication.png}
+        \caption{The CRA authentication scheme of WEP}
+      \end{figure}
+      Counter intuitively, the shared key authentication is less secure than the open system
       authentication, because a bruteforce attack can be mounted on the challenge frame, because both 
-      the cyphertext and the algorithm are known.\\
+      the cyphertext(it's 128 bits long) and the algorithm(RC4) are known.\\
+      Thus, data can be more easily intercepted and decrypted with Shared Key authentication than 
+      with Open System authentication
       If privacy is a primary concern, it is more advisable to use Open System authentication for WEP
-      authentication.
+      authentication, but this schema doesn't allow WLAN clients to connect to the AP.
 
       \begin{figure}[h]
         \centering
@@ -532,9 +543,17 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
         \caption{General overview of WEP security}
       \end{figure}
     \end{subsubsection}
-    \begin{subsubsection}{WEP integrity}
+    \begin{subsubsection}{WEP integrity and confidentiality}
       As for what concerns the integrity of the data, WEP uses a checksum, which is a CRC32(Cyclic
       Redundancy Check) checksum of 32 bits, which is appended to the frame.
+      RC4 is initialized with the shared key between the STA and the AP and the IV, and for each 
+      message to be sent: 
+      \begin{itemize}
+        \item RC4 produces a pseudo-random sequence of bits
+        \item The sequence is XORed with the message
+      \end{itemize}
+      The reception is carried out in the same way. To guarantee the confidentiality of the message,
+      each frame have to be encrypted with a different key stream, using the RC4 algorithm.
     \end{subsubsection}
     \begin{subsubsection}{WEP Key Management}
       Two kind of keys are used in WEP:
@@ -543,12 +562,12 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
         \item \textbf{Key mapping keys}, also called \textit{individual keys}
       \end{itemize}
       but in practice, only the default key is used, because the key mapping keys are not used in the
-      standard. This has some serious implication, because each STA can decrypt the frames sent by
-      another STA, because they all use the same key.\\
-      Furthermore, the default key has to be changed if a member leaves the group, to make it's access
-      impossible, but this is also impossible, because the key has to be changed on every device 
-      simultaneously, which is quite difficult.\\
-      For those reasons, WEP supports multiple default keys, with only the active key used for encryption, 
+      standard. This has some serious implication, because the cey between the AP and all the STA 
+      is the same, each STA can decrypt the frames sent by another STA.\\
+      Furthermore, the default key has to be changed if a member leaves the group, to make it impossible
+      for it to get back in the network by itself, but this is quite impractical, because the 
+      key has to be changed on every device simultaneously, which is quite difficult.\\
+      For those reasons, WEP supports multiple default keys, with only the "active key" used for encryption, 
       and any of the keys can be used for decryption.\\
       The message header contains a key ID that allows the receiver to find out which key should be used
       to decrypt the message.
@@ -560,7 +579,44 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
       \end{figure}
 
     \end{subsubsection}
-
+    \begin{subsubsection}{Issues with authentication and access control}
+      As previously said, WEP authentication is based on challenge-response using RC4. Knowing that
+      the response is $E_k(r)=r\oplus L$, where $r$ is the challenge, an attacker that is listening 
+      to the conversation can easily recover the key $k$ by XORing the challenge with the response(
+      $K=r\oplus E_k(r)$). WEP doesn't provide AP authentication, so it's very easy for an attacker
+      to impersonate the AP, even if they don't know the key, by just broadcasting the same SSID as the
+      AP, but with an higher signal strength. It's also possible to do this for all the SSIDs(karma attack).
+    \end{subsubsection}
+    \begin{subsubsection}{Issues with integrity and replay}
+      First of all, WEP doesn't provide any protection against replay attacks, because the IV is
+      not changed after each message.\\
+      Furthermore, if a CRC-32 valid plaintext is XORed with a ciphertext, the modified message 
+      will pass the ICV check after decryption. In fact an attacker can observe $C=(M|CRC(M))\oplus K$
+      where $K$ is the output of RC4.\\ 
+      Then, for any $\Delta M'$ he can compute $CRC(\Delta M)$:
+      \begin{equation}
+        \begin{split}
+        &((M|CRC(M))\oplus K)\oplus (\Delta M|CRC(\Delta M)) =\\
+        &((M\oplus \Delta M)|(CRC(M)\oplus CRC(\Delta M)))\oplus K=\\
+        &((M\oplus \Delta M)|(CRC(M)\oplus CRC(\Delta M)))\oplus K
+        \end{split}
+      \end{equation}
+      Doing so, an attacker can arbitrarily modify the message, and the receiver will not be able to
+      detect it.
+    \end{subsubsection}
+    \begin{subsubsection}{Issues with confidentiality}
+      The ICR can be also attacked to retreive the content of the original message. In fact, if an
+      AP receives a packet that does not pass the ICV check, it will not be accepted and sent in the network,
+      so an attacker can create a corrupted packet, based on a captured one, and send it to the AP.
+      By changing one byte at the time, the attacker can find the correct byte, and thus decrypt the
+      message.\\
+      Another issue that can arise is that the IV is only 24 bits long, so after $2^{24}$ packets,
+      the same IV will be used again, and the key will be the same. An attacker can thus build a 
+      \textit{decryption table} to perform a statistical attack.\\
+      Furthermore, for some seed values (called weak key), the beginning of the RC4 output is
+      not random: if a weak key is used, the first few bytes of the output reveals a lot of 
+      information about the key, so breaking the key is a lot easier.
+    \end{subsubsection}
   \end{subsection}
 
 \end{section}
