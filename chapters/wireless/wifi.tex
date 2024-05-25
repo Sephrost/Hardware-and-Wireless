@@ -618,6 +618,237 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
       information about the key, so breaking the key is a lot easier.
     \end{subsubsection}
   \end{subsection}
+  
+  \begin{subsection}{WPA}
+    WEP is used only im the 802.11 vanilla, but is was soon replaced by 802.11 with the WPA(Wi-Fi
+    protected access) standard. It was introduced to replace WEP, but it has some serious flaws:
+    in fact, it dows not replace the chypher.\\
+    Starting from 802.11i, the WPA2 standard was introduced, which is based on the AES encryption
+    algorithm, which is much more secure than the RC4 used in WEP, and in 2018 the WPA3 standard
+    was introduced, which is even more secure than WPA2.\\
+    The main featured of the new standard were:
+    \begin{itemize}
+      \item improved integrity protection, by introducing Micheal 1 instead of CRC32
+      \item improving the encryption algorithm, by using AES
+      \item indroducing access control, by using 802.1x
+    \end{itemize}
+    but also had other killing features:
+    \begin{itemize}
+      \item flexible authentication framework (based on EAP – Extensible Authentication Protocol)
+      \item authentication can be based on strong protocols (e.g., TLS – Transport Layer Security)
+      \item authentication process results in a shared session key (which prevents session hijacking)
+      \item different functions (encryption, integrity) use different keys derived from the session key using a
+        one-way function
+    \end{itemize}
+    
+    \begin{subsubsection}{802.1X authentication model}
+      The authentication model of 802.1X is based on the following components:
+      \begin{itemize}
+        \item \textbf{Supplicant}: the client that wants to connect to the network
+        \item \textbf{Authenticator}: the device that controls the access to the network. In most 
+          cases, it is the AP
+        \item \textbf{Authentication server}: the server that authenticates the client
+      \end{itemize}
+      A supplicant to authenticate itself to the network, has to authenticate itself to the authenticator 
+      at first. If the authentication is successful, the authenticator will instructs the authenticator 
+      to switch the port on. The authentication server will then inform the supplicant that the 
+      access has been granted.\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/wireless/WPA authentication.png}
+        \caption{The general 802.1X authentication model}
+      \end{figure}
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/wireless/802.1X protocol stack.png}
+        \caption{The stack of protocols that can be used in 802.1X authentication}
+      \end{figure}
+      In 802.11i, after a successful authentication, the authenticator will generate a \textbf{session
+      key} between the supplicant and the authentication server, which is sent to the AP in a secure 
+      way. This assumes the use of a shared key between the AP and the authentication server, which is 
+      usually set up by the network administrator.\\
+    \end{subsubsection}
+    The IEEE 802.11i standard defines two security protocols:
+    \begin{itemize}
+      \item \textbf{WPA}: Wi-Fi Protected Access, an optional protocol Temporal Key Integrity 
+        Protocol (TKIP) to allow backward compatibility with WEP
+      \item \textbf{WPA2}: Wi-Fi Protected Access 2, which uses the Advanced Encryption Standard 
+        (AES) instead of RC4
+    \end{itemize}
+    \begin{subsubsection}{802.1X authentication protocols}
+      802.1X authentication uses the EAP protocol, which is a carrier protocol that can be used with
+      different authentication methods, like TLS, TTLS, PEAP, \dots. With this method, the
+      authenticator only understands the outcome of the authentication, and not the messages itself.
+      To transmitt its messages, EAP can use two protocols:
+      \begin{itemize}
+        \item \textbf{EAP over LAN(EAPOL)}: which is used to transmit the EAP messages over the 
+          network by encapsulating them in Ethernet frames, and is used to carry EAP messages between
+          the STA and the AP
+        \item \textbf{RADIUS}: which is used to carry the EAP messages between the AP and the 
+          authentication server
+      \end{itemize}
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/wireless/EAP authentication.png}
+        \caption{The general schema of the EAP authentication}
+      \end{figure}
+    \end{subsubsection}
+    \begin{subsubsection}{802.11i Access Control}
+      WPA supports two different kinds of authenticated key management protocols:
+      \begin{itemize}
+        \item \textbf{Pre-shared key(PSK)}: which is used in small networks, and is based on a 
+          shared key between the AP and the STA. Its also called \textbf{WPA-Personal}
+        \item \textbf{802.1X}: which is used in larger networks, and is based on a shared key between
+          the AP and the authentication server, which requires a RADIUS server. It's also called
+          \textbf{WPA-Enterprise}
+      \end{itemize}
+    \end{subsubsection}
+    \begin{subsubsection}{Key management}
+      A quick reminder that in WEP, all the STA share the same key. In WPA, this is not the case:
+      to derive multiple keys from the master key, a \textbf{Pairwise Master Key(PMK)} is used, which
+      is derived from the password, and is used to derive the PTK and the GTK.\\
+      This PKM is:
+      \begin{itemize}
+        \item pre-shared in WPA-Personal
+        \item derived from the EAP authentication in WPA-Enterprise
+      \end{itemize}
+      A different key between the AP and the STA is used, called the \textbf{Pairwise Transfer Key(PTK)},
+      and derived from :
+      \begin{itemize}
+        \item the PMK
+        \item the MAC addresses of the AP and the STA
+        \item the nonce of the AP and the STA
+      \end{itemize}
+      The PTK is transient because every time a client associates with the AP, a new PTK is derived
+      To allow confidentiality in broadcast communication, a \textbf{Group Transient Key(GTK)} is 
+      used, which is shared between all the STA and the AP, computed by it and sent to all the STA.
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.7\textwidth]{img/wireless/WPA key hierarchy.png}
+        \caption{Key hierarchy in WPA-802.1X}
+      \end{figure}
+    \end{subsubsection}
+    \begin{subsubsection}{Four-way handshake}
+      The four-way handshake is used to establish the PTK, and is used to authenticate the client
+      to the AP, because it is based on the PMK, which is the result of the authentication.\\
+      At first, the AP sends a nonce to the client in an unencrypted message and without any integrity
+      check.\\
+      The client receives message and derives the $PTK=f(\text{PMK},\text{AP}_{\text{nonce}},\text{STA}_{\text{nonce}}
+      ,\text{AP}_{\text{MAC}},\text{STA}_{\text{MAC}})$,
+      and proceeds to send the second message, which contains the $\text{STA}_{\text{nonce}}$ and an integrity
+      check, which is computed using half of the $PTK$ to protect the message and avoid brute force
+      attacks on the $PTK$. This message too is unencrypted.\\
+      Once this message is received, the AP computes the $PTK$ after having verified the integrity of the
+      message, and sends the third message, which contains the GTK and its associated MIC(message integrity
+      code), which is computed using the other half of the $PTK$. This message acts also as a request 
+      to install the key. After the client receives this message, it the MIC checks out, it means that
+      the AP and the client have the same $PTK$, and the GTK is installed.\\
+      One last message is sent by the client, which is an acknowledgment of the GTK installation, with 
+      its associated MIC. If the integrity check is successful, the AP installs the GTK and the PTK, and
+      the client is authenticated, concluding the four-way handshake.
+
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/wireless/4-way handshake.png}
+        \caption{The four-way handshake in WPA using EAPOL}
+      \end{figure}
+    \end{subsubsection}
+    \begin{subsubsection}{Bruteforce attack against WPA}
+      During the 4-way handshake, a lot of informations are sent in clear: the key(not directly, but
+      its there), the MAC addresses, the nonces, \dots\\
+      An attacker can capture the challenge and the result, try all possible combinations offline to
+      guess the key using a dictionary attack.\\
+      This kind of attack is possible only if the key is weak, this is because in WPA2 the PMK is 
+      derived from the password with PBKDF2, which is a key derivation function. This brings the
+      complexity of the attack to $2^{256}$ from $2^{48}$, which is quite impossible to perform.
+    \end{subsubsection}
+    \begin{subsubsection}{TKIP mode}
+      TKIP is a protocol that was introduced to allow WPA to be compatible with WEP, but correct some
+      of its flaws:
+      \begin{itemize}
+        \item the CRC32 is still applied as the ICV of the message, but a 64-bit MIC is added to the
+          message, which is computed using the Michael algorithm(keyed hash function)
+        \item the IV is extended to 48 bits
+        \item it applies \textbf{per-packet keys} instead of a pre-shared key. The per-packet key is
+          the hash of the PTK and the IV
+        \item it implements a key mixing function that combines the PTK with the initialization
+          vector before passing it to the RC4 cipher initialization (not just simple concatenation as done in WEP)
+
+      \end{itemize}
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/wireless/TKIP key generation.png}
+        \caption{TKIP generating RC4 keys}
+      \end{figure}
+      TKIP uses the same RC4 algorithm as WEP, but with a different key generation mechanism, but it 
+      is still vulnerable to similar attacks, in particular to a MIC key recovery attack that, if 
+      successfully executed, permits an attacker to transmit and decrypt arbitrary packets on the 
+      network being attacked.\\
+      The basis of the attack is an extension of the WEP chop-chop attack: because WEP uses a 
+      cryptographically insecure checksum mechanism (CRC32), an attacker can guess individual
+      bytes of a packet, and the wireless access point will confirm or deny whether or not the 
+      guess is correct. If the guess is correct, the attacker will be able to detect the guess 
+      is correct and continue to guess other bytes of the packet.\\
+      However, with TKIP, the attacker must wait for at least 60 seconds after an incorrect guess 
+      because if two incorrect Michael MIC codes are received within 60 seconds, the access point 
+      will implement countermeasures, meaning it will rekey the TKIP session key, thus changing 
+      future keystream.
+    \end{subsubsection}
+    
+    \begin{subsubsection}{KRACK attack}
+      The known weakness in WPA/TKIP is in the implementation of RC4, for this reason 
+      WPA is not intended to be a long-term secure solution and users are recommended to 
+      implement WPA2 whenever available.\\
+      The only major weakness found in WPA2 is the Key Reinstallation Attacks (KRACK) targeting 
+      the four-way handshake of the authentication protocol. In normal operation, when a client 
+      joins a network and triggers the four-way handshake, a key is installed after receiving 
+      message 3 for data confidentiality. However, if an attacker can intercept message 3 and
+      replay it, the client will install the same key, but will increment the nonce, because Its
+      tied to the packet number, and the replay counter used to prevent replay attacks.\\
+      An attacker can force nonce resets by collecting and replaying message 3, and by doing so,
+      he will ultimately be able to decrypt the packets.\\
+      This kind of attacks can also be launched against group keys on WPA2.
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/wireless/KRAC attack.png}
+        \caption{The KRACK attack}
+      \end{figure}
+    \end{subsubsection}
+
+    \begin{subsubsection}{Opportunistic Wireless Encryption}
+      OWE is a new standard that has been introduced in 2018, and is based on the Diffie-Hellman
+      key exchange and HKDF(HMAC-based Extract-and-Expand Key Derivation Function) to enstablish
+      the PKM that can be used for the encryption of the data. Its mainly used to protect open networks.
+      The general idea is to generate the symmetric encryption key from the Elliptic Curve Diffie-Hellman
+      key exchange, and then use the HKDF to derive the encryption key from the shared secret key 
+      during the association phase. OWE supports both elliptic curve and finite field DH key exchange.
+
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/wireless/owe.png}
+        \caption{The OWE message exchange}
+      \end{figure}
+
+    \end{subsubsection}
+    \begin{subsubsection}{Simultaneous Authentication of Equals}
+      ne of the major new features introduced in WPA3 is Simultaneous Authentication of Equals (SAE),
+      which provides more robust password-based authentication, even when using a strong one, while 
+      also providing protection against bruteforce attacks.\\
+      SAE replaces the four-way handshake method (PSK) used in WPA2, thus being robust against 
+      KRACK attack, because there's no need to know a PMK, but generates a PSK for the authentication
+      process only, granting perfect forward secrecy, using ellictic curve DH too.\\
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/wireless/sae.png}
+        \caption{The SAE message exchange}
+      \end{figure}
+
+
+    \end{subsubsection}
+
+
+
+  \end{subsection}
 
 \end{section}
 
