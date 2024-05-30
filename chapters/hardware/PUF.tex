@@ -1,0 +1,35 @@
+\chapter{Physical Unclonable Functions}
+\label{sec:PUF}
+
+\begin{boxH}
+  Physical Unclonable Functions (PUFs) have been introduced as the hardware equivalent of a one-way
+  function
+\end{boxH}
+
+Some examples of them are:
+\begin{itemize}
+  \item things that add some delay on some networks, like Ring Oscillators PUF and Arbiter PUF
+  \item the content of the SRAMs at boot time
+  \item the re
+\end{itemize}
+
+A PUF must be:
+\begin{itemize}
+  \item computable
+  \item unique
+  \item reproducible: $y\approx PUF(x)$
+  \item unclonable 
+  \item unpredictable
+  \item one-way, meaning that it is hard to invert the function, even with some errors
+\end{itemize}
+
+The PUF is a obviously a function, to which a challenge is provided and a response is obtained. In
+the case of a memory address as a input challenge, the response is surely unique.
+We still need to get reproducible results, because with the same input we expect the same outputs,
+so we expect some, small, errors, otherwise it would be a random function
+
+There are actually different kinds of PUFs, like silicon and non-silicon PUFs. 
+
+Ring oscillators PUF are produces a sequentiual output, with some stability in the circuit.
+There are also ways to know how many bits are neeed base on the number of needed output and the
+number of rings oscillators.
