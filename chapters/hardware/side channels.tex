@@ -1,0 +1,36 @@
+\section{Side Channels}
+At any given moment, in the system informations are constantly flowing, because
+it is an intrinsic phenomenon of computation. This is true both for a single computer system and a
+distributed one.\\
+Anyway, all those information flows use intended, specific and implemented channels, in which the
+data requires some security guarantees, such as integrity, availability, non-repudiation, \dots\\
+
+\begin{section}{Covert Channels}
+  \begin{boxH}
+    A covert channel is a path for an illegal flow of information within a system.
+  \end{boxH}
+  Any communication channel that a process can exploit to transfer information in a manner that
+  violates the system’s security policy.
+
+  There are many types of covert channels within a computing system, based on what the covert channel
+  actually is:
+  \begin{itemize}
+    \item Timing covert channels
+    \item Termination covert channels
+    \item Probability covert channels
+    \item Resource utilization covert channels
+    \item Power covert channels
+  \end{itemize}
+
+  Side channels are most flexible, because they can be used for a large variety of uses, both to
+  improve or undermine the security of a system.\\
+  Every side channel have some defining characteristics:
+  \begin{itemize}
+    \item the existent, or if the channel is a potential one
+    \item the bandwidth of the channel, or how much information can be transmitted
+    \item how noisy it is, because informations can be distorted or lost by it
+  \end{itemize}
+  It is usually infeasible for realistic systems to eliminate every potential covert
+  channel, so some usable techniques against them are to inject noise in the channel or monitor the
+  pattern used to exploit the channel.
+\end{section}
