@@ -252,6 +252,116 @@ additional radio controller placed between the BTS and the CN.\\
 
 \begin{section}{GSM network}
   The first network architecture of GSM was for circuit switched (CS) services only, and telephone
-  service in particular
+  service in particular. It was mainly divided into three parts( the UE, the RAN, and the CN), and 
+  the CN was divided into three parts: 
+  \begin{itemize}
+    \item \textbf{Mobile Switching Center(MSC)} is the equivalent of a telephone station for the
+      mobile network and includes all control and signalling functions for managing calls and
+      mobility
+    \item \textbf{Visitor Location Register(VLR)} is a database that contains information about all
+      the mobile terminals currently located in the area controlled by the MSC
+    \item \textbf{Home Location Register(HLR)} is a database that contains information about all the
+      mobile terminals that are registered in the network. It also includes an AuC (Authentication
+      Centre) for security procedures
+    \item \textbf{Gateway MSC(GMSC)} is the MSC connecting the mobile network to the external
+      telephone networks (PSTN) and that implements all signalling interworking functions
+  \end{itemize}
+  while the RAN was divided into two parts:
+  \begin{itemize}
+    \item \textbf{Base Transceiver Station(BTS)} is the GSM base station that manages physical layer
+      connections with the UEs and the BSC and executes resource allocation commands received by the
+      BSC
+    \item \textbf{Base Station Controller(BSC)} is the GSM controller that implements higher layer
+      protocols and manages all transmission resources of the connected BTSs
+  \end{itemize}
+  the UM radio intermace of GSM is based on the TDMA technology, but because it still uses the
+  classical telephone transport network, the achievable data rate is limited to 65 kbps, and 2048
+  Mbps while using E1 links.\\
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/wireless/gsm network.png}
+    \caption{An overview of the GSM architecture}
+    \label{fig:gsm-architecture}
+  \end{figure}
+  Of course, signalling is not very efficient, so schanging the infrastructure to a packet-switched
+  network is a good idea. The first step was to introduce the GPRS, which stands for General Packet
+  Radio Service, which is a packet-switched technology that allows the transmission of data over the
+  GSM network. The GPRS network adds some new elements to the GSM network:
+  \begin{itemize}
+    \item \textbf{Serving GPRS Support Node(SGSN)} is an IP router which plays the same role as the
+      MSC in the circuit- switched core, while also having additional functionalities for the
+      management of the interfaces and protocols towards the BSS
+    \item \textbf{Gateway GPRS Support Node(GGSN)}
+  \end{itemize}
+\end{section}
+
+\begin{section}{UMTS networks}
+  UMTS, or Universal Mobile Telecomunication System, focused on the introduction of better data
+  services, by defining a new achitecture, separating the signalling protocols and procedures
+  related to the radio access network and those related to the core network to allow future
+  evolutions of the core network independent from the access network.\\
+
+  Take a look at the figure \ref{fig:umts-architecture}, you can see that the radio part has been
+  modified:
+  \begin{itemize}
+    \item \textbf{Node B} is the UMTS base station responsible for all functions required for
+      sending and receiving data over the air interface( which is based on CDMA). Allocation
+      commands received by the RNC. Is also responsible for the power control of all connections
+    \item \textbf{Radio Network Controller(RNC)} is the main element of the UTRAN, responsible for
+      controlling radio resources of all Node-Bs and mobility. 
+  \end{itemize}
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/wireless/umts architecture.png}
+    \caption{An overview of the UMTS architecture}
+    \label{fig:umts-architecture}
+  \end{figure}
+  The architecture was also modified in the core network, which changed the circuit-switched
+  part even for voice calls. The switches became media gateways, which are ip based(VoIP), but
+  signalling is still needed.\\
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/wireless/umts 2.png}
+    \caption{The changes in the core network of UMTS}
+    \label{fig:umts-core}
+  \end{figure}
+  The result is that 2G and 3G networks are now fully integrated, and the same network can provide
+  both voice and data services.\\
+
+  \begin{subsection}{Implementational Details}
+    In GMS, multiple access is based on FDM or TDM, with channels of 200 kHz, while are further 
+    split into smaller channels of 45MHz, separating the uplink and downlink. A time slot is 577
+    $\mu$s long, and each device can transmit for 8 time slots, or 4.615 ms.\\
+    It implements frequency hopping to avoid interference, and power control to be power efficient.
+    One of the main issue is synchronization, because of TDMA, because of the delay and the slot
+    offsets. Signalling is also a problem, because of the need of a lot of messages to establish a
+    call. Its still based on SS7, but because now the network is packet-switched, support for mobile
+    signalling is added via a Mobile Application Part(MAP) protocol.\\
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.5\textwidth]{img/wireless/mobile ss7.png}
+      \caption{How MAP was added to the SS7 stack}
+      \label{fig:mobile-ss7}
+    \end{figure}
+  \end{subsection}
+
+\end{section}
+
+\begin{section}{4g}
+  In the 4th generation of mobile networks, everything is based on IP, even signalling, meaning that
+  signalling is now performed over the same network used for the voice and data traffic. The
+  architecture was simplified, being built from scratch, implementing a new "flat" architecture.
+  The radio interface was also modified, and the new radio interface supports different bandwidths
+  (from 1.25 to 20 MHz) and frequencies.
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/wireless/4g evolution.png}
+    \caption{The evolution of the mobile networks}
+  \end{figure}
+  \begin{subsection}{SAE}
+  \end{subsection}
 
 \end{section}
