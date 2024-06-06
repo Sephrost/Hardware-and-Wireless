@@ -1,0 +1,70 @@
+\begin{chapter}{Fault Attacks}
+  Fault attacks consist in injecting deliberate (malicious) faults into the target device, aimed at
+  bringing it into a set of states from which private internal information items (e.g., a key) can
+  be fraudulently extracted.\\
+  They idea is pretty simple: take the case of a encryption algorithm, if i run it and get a 1, by
+  running that again injecting a fault, we are able to understand what the original bit was. In a
+  more formal way, if $C_{OK}=E(P)$ and $C_{OK}'=E(P)$ while injecting a fault, if $C_{OK} \neq
+  C_{OK}'$, then the bit is 0, otherwise it is 1.\\
+
+  There are many ways to induce a fault in a system, some of them are:
+  \begin{itemize}
+    \item Underpowering or overvolting the device
+    \item altering the clock
+    \item changing the temperature
+    \item injecting a laser in the device, depackaging it beforehand and shining the laser on the
+      silicon
+    \item electromagnetic injections
+  \end{itemize}
+
+  By injecting the system with faults, it is possible to achieve many interesting results, like:
+  \begin{itemize}
+    \item bypassing the security checks
+    \item generate faulty outputs, like wrong encrypted messages
+    \item generate denial of service
+  \end{itemize}
+
+  A set of multiple injections with subsequent correlated analysis of the faulty behavior of the
+  target device
+  \begin{itemize}
+    \item The attackers (cryptanalysts) focus on the fault influences of specific hardware
+      implementations to collect some faulty outputs.
+    \item Later, this information is compared and analyzed with correct results to harvest some
+      partial or total compromise of the secret information.
+  \end{itemize}
+
+  \begin{section}{Fault Injections Countermeasures}
+    Several approaches have been proposed, including:
+    \begin{itemize}
+      \item Preventing the attack
+      \item Detecting the fault injection
+      \item Detecting the fault effect (error)
+      \item De-synchronization
+      \item Robust package, “hardened” technologies
+    \end{itemize}
+
+    \begin{subsection}{Fault Detection}
+      One basic defense system is to detect when the attack is happening, by using some kind of
+      sensors, and are ths connected to the root of trust. The problems is that they can generate
+      false positives in very soisy environments, and even in ideal conditions, attacks are still
+      pssible to some degree.
+    \end{subsection}
+
+    \begin{subsection}{Error Detection}
+      Another approach is still based on detection, but we introduce redundancy in the system to
+      detect when an error is happening. The redundancy can be multiple execution or inverting the
+      operation, for example. Detection is not a very effective mechanism because it is not possible
+      to tell which result is the faulty one, and which is the correct one.\\
+      Many standards cover fault, eg. fault tollerant systems, and thus they can be used to be a
+      valuable countermeasure against fault attacks.
+    \end{subsection}
+
+    \begin{subsection}{De-synchronization}
+
+    \end{subsection}
+    \begin{subsection}{Hardened IC Package}
+
+    \end{subsection}
+  \end{section}
+
+\end{chapter}
