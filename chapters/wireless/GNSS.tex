@@ -12,8 +12,8 @@
   \begin{section}{The positioning Problem}
     First of all, we need to define what is a position.\\
     \begin{boxH}
-      A position is a set of coordinates, one for each dimension, associated with a reference 
-      system.
+      A \textbf{position} is a \textbf{set of coordinates}, one for each
+      dimension, associated with a reference system.
     \end{boxH}
     \begin{figure}[h]
       \centering
@@ -40,9 +40,9 @@
       \item $\dots$
     \end{itemize}
 
-    Because using all that sensors together to estimate a position is ideal but quite complex,
-    a \textbf{data fusion algorithm} is used to combine the information from the sensors and estimate
-    the position.\\
+    Using all that sensors together to estimate a position would be ideal, but quite complex.
+    In reality a \textbf{data fusion algorithm} is used to combine the information from the sensors
+    and estimate the position.\\
     \begin{figure}[h]
       \centering
       \includegraphics[width=0.3\textwidth]{img/wireless/data fusion algorithms.png}
@@ -96,10 +96,10 @@
 
     All those system are composed of 3 main segments:
     \begin{itemize}
-      \item \textbf{Space Segment}, which is composed of the satellites, which continuously transmit
-        the signals.
-      \item \textbf{Control Segment}, which is composed of the ground stations that monitor the 
-        satellites and send them the corrections.
+      \item \textbf{Space Segment}, which is composed of the \textbf{satellites}, which continuously
+        transmit the signals.
+      \item \textbf{Control Segment}, which is composed of the \textbf{ground stations} that monitor
+        the satellites and send them the corrections.
       \item \textbf{User Segment}, which is composed of the users that receive the signals from the
         satellites and estimate their position. It performs 3 core functions:
         \subitem - Identification of the satellites in view
@@ -190,7 +190,7 @@
     receiver is equal to the time of flight of the signal multiplied by the speed of light.\\
 
     To get the distance, we only need to timestamp correctly the time of arrival of the signal.
-    Yet, calculating the time of flight is not that simple, because the satellite and the receiver
+    Yet, computing the time of flight is not that simple, because the satellite and the receiver
     must be \textbf{synchronized} to allow the transmission time and the reception time to be on the 
     same time scale, and to be precise. Otherwise the distance estimation would be very off: 
     a signal that travels at the speed of light for 1 second travels 300000 km.\\
@@ -206,8 +206,8 @@
       \label{eq:GNSS pseudorange}
     \end{equation}
 
-    There's also the bias of the satellite toward the scale $\delta t_u$. 
-    This value is usually small and stable over time. The ground segment computes a bias $\delta t^S$
+    There's also the bias of the satellite toward the scale $\delta t_S$. 
+    This value is usually small and stable over time. The ground segment computes a bias $\delta t_S$
     that is uploaded to the satellite, and that the receiver can use to compute the right time of 
     flight.\\
     For those reason, we consider it to be zero, because it can be corrected.\\
@@ -748,6 +748,38 @@
       \end{subsubsection}
 
     \end{subsection}
+  \end{section}
+  \begin{section}{Questions and answers}
+    \begin{subsubsection}{In a GNSS, what crucial pieces of information are the satellites
+      broadcasting to the users? How are they used by a receiver?}
+      The satellite are continuously broadcasting:
+      \begin{itemize}
+        \item the coordinates of their position
+        \item the bias of itself(the satellite) to the time scale $\delta t_S$
+        \item the transmission time of the signal
+        \item a spreading code
+      \end{itemize}
+      $\delta t_S$ is used to correct the bias of the satellite, while the other 2 tinformations are
+      used to compute a pseudorange $p=c\cdot \Delta t$, which is the measured distance between the
+      user and the transmitted position. By receiving 4 different signals, the user is able to
+      obtaint all the information he needs($x_u$,$y_u$,$x_u$ and $\delta t_u$) by linearizing the
+      problem trough taylor expansion to multilaterate the position.
+    \end{subsubsection}
+
+    \begin{subsubsection}{Describe the effect of pseudorange errors on the Position, Velocity, and
+        Time (PVT) solution and what is the role of the Dilution Of Precision factor (e.g. GDOP,
+      HDOP).}
+    \end{subsubsection}
+
+    \begin{subsubsection}{What are the effects of a spoofing attack on a GNSS receiver?}
+      First of all, we can define as spoofing thew fraudolent act of of transmitting gnss-like
+      signals. Spoofing causes to wrongly estimate a position, and this can be used to take control
+      of the victim device position, which will miss-estimate its position, either to a random one
+      or to a desired one. This can be an issue, as nowadays there are many different safety
+      critical applications that use position, suche as eCalls and ADAS. It is also possible to
+      achieve denial of service by spoofing the victim location.
+    \end{subsubsection}
+
   \end{section}
 
 
