@@ -171,7 +171,7 @@ of networks and the possible attacks that can be performed on them.
     in or complement several other security mechanisms
   \end{paragraph}
   \begin{paragraph}{Authentication}
-    In this context, authentication is applied to the message or a party of the communication.\\
+    In this context, authentication is applied to the message or a party of the communication.
   \end{paragraph}
   \begin{paragraph}{Access Control}
     It is applied to determine and enforce the access rights of the entity depending on the 
@@ -212,4 +212,113 @@ of networks and the possible attacks that can be performed on them.
     \item Steganography
   \end{itemize}
 \end{boxH}
+\end{section}
+
+\begin{section}{Questions and answers}
+  \begin{subsubsection}{Describe the difference between traditional wired and wireless networks.
+      List possible classifications for wireless communication systems, providing examples for each
+    category.}
+    The main difference between the two kinds of network is the link type, in the first one is a
+    wired one for all the devices, whereas in the second one it is wired only in the core of the
+    network, and wireless for the other nodes.\\
+    Wireless networks can be classified by: 
+    \begin{itemize}
+      \item coverage 
+        \begin{itemize}
+          \item wide area network
+          \item local area network 
+          \item personal area network
+        \end{itemize}
+      \item topology 
+        \begin{itemize}
+          \item ad-hoc 
+          \item infrastructure
+        \end{itemize}
+      \item mobility
+    \end{itemize}
+  \end{subsubsection}
+
+  \begin{subsubsection}{Describe the possible security attacks, distinguishing between i) passive
+      and ii) active attacks. Which of these are easier to carry out in a wireless network than in a
+    wired network? Why?}
+    \label{ssec:prev1}
+    Some possible security attacks are: 
+    \begin{itemize}
+      \item eavesdropping(passive): the attacker listen to the messages exchanged between two nodes
+      \item traffic analysis(passive):
+      \item man-in-the-middle(active): the attacker interposes itself between the two ends of a
+        communication and is able to read and manipulate the traffic
+      \item spoofing(active): the attacker pretends to be some other entity
+      \item denial-of-service(active): refers to the distruption of a service
+      \item replay(active): an attaker replays a captured message
+    \end{itemize}
+    Passive ones are the most simple to carry out, because they do not involve any traffic
+    alteration, but only to listen to the logical channel.
+  \end{subsubsection}
+
+  \begin{subsubsection}{Consider the confidentiality security service. Define it, and list which
+    security mechanisms can be used to provide confidentiality}
+    Confidentiality is a security property that refers to the ability to disclose confidential
+    information only to authorized users. It is usually carried out by encrypting the exchanged
+    data.
+  \end{subsubsection}
+
+  \begin{subsubsection}{What are the differences between the security services and the security
+    mechanisms?}
+    Security services are the set of features in a system which are designed to protect against
+    possible attacks, an exemple of this is confidentiality, whereas a security mechanism is a
+    method that is used to achieve a security service in a system, like encryption.
+  \end{subsubsection}
+
+  \begin{subsubsection}{Define the masquerade and the replay attack. Provide some examples of such
+    attacks in the context of wireless networks}
+    A masquerade attack consists in a user faking its identity, for exaple to elude address based
+    authentication.
+    A replay attack consists in sniffing a message and sending it again to the receiver, an example
+    of this is a disassociation attack in 802.11.
+  \end{subsubsection}
+
+  \begin{subsubsection}{Define the non-repudiation service and a possible mechanism to support it.}
+    Non-repudiation is a security property that provides undeniable evidence, usable in a law court,
+    of the creator of some data.
+    It is usually achieved by implementing a digital signature mechanism.
+  \end{subsubsection}
+
+  \begin{subsubsection}{Define the encipherment security mechanism. Provide a list of security
+    services it supports.}
+  \end{subsubsection}
+  \begin{subsubsection}{Define the data integrity security mechanism. Provide a list of security
+    services it supports.}
+  \end{subsubsection}
+  \begin{subsubsection}{Define the traffic padding and routing control security mechanism. Provide a
+    list of security services it supports.}
+  \end{subsubsection}
+  \begin{subsubsection}{What are the main differences between symmetric encryption and asymmetric
+    encryption?}
+  \end{subsubsection}
+  \begin{subsubsection}{Given an alphabet of N symbols, how many possible keys would a simple Caesar
+      cypher and a monoalphabetic cypher have? Which attack can an attacker mount to break these two
+    cyphers?}
+  \end{subsubsection}
+  \begin{subsubsection}{Define the polyalphabetic cypher. Given an alphabet of N symbols, how many
+    keys will it be possible to generate?}
+  \end{subsubsection}
+  \begin{subsubsection}{Put in order of security the following cyphers: Polyalphabetic cypher,
+    monoalphabetic cypher, Caesar cypher, one-time pad cypher. }
+  \end{subsubsection}
+  \begin{subsubsection}{Define the completeness, avalanche effect and statistical independence
+    properties of the block cypher design criteria}
+  \end{subsubsection}
+  \begin{subsubsection}{The key of the DES cypher is 56-bits long. What is the length of a
+    double-DES and triple-DES algorithms which use k1,k2,k3? Justify your answer.}
+  \end{subsubsection}
+  \begin{subsubsection}{What are the principles of the asymmetric-key encryption algorithms?}
+  \end{subsubsection}
+  \begin{subsubsection}{Provide at least two examples of hard problems that can be used to implement
+    an asymmetric cypher}
+  \end{subsubsection}
+  \begin{subsubsection}{Given a plaintext message M and its cyphertext C=Ek(M) obtained with a
+      public key encryption. How could an attacker obtain M knowing only C and the public key K? How
+    can salting prevent such an attack?}
+  \end{subsubsection}
 \end{section}

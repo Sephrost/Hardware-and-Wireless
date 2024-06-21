@@ -71,6 +71,11 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
   \end{enumerate}
   Authentication can be performed with multiple access points of the same network, but association can only
   be performed with one of them.
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/wireless/wireless auth-ass.png}
+    \caption{The authentication and association procedure in general}
+  \end{figure}
   \begin{subsection}{Scanning for Access Points}
     To access the network, the mobile station must first associate with an access point.\\
     The \textbf{scanning process} is used to find the APs in the area, and it can be:
@@ -100,6 +105,9 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
     This can happen, for example, when two stations are too far from each other, but they are close 
     to the AP, or there's an obstacle between them.\\
     This problem is illustrated in figure \ref{fig:hidden terminal problem}.
+    Issues can arise in this scenario: because the stations cant hear each other, they are unaware
+    of the interntions of the other, so they are able to transmit at the same time, generating
+    conflicts over the channel.
     \begin{figure}[h]
       \centering
       \includegraphics[width=0.5\textwidth]{img/wireless/hidden terminal problem.png}
@@ -156,7 +164,7 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
     \end{enumerate}
     The goal is thus avoiding collisions whenever possible, hoping that by choosing a random
     backoff value, the stations will not choose the same value, and thus will not transmit at the
-    same time.\\
+    same time.
     \begin{subsubsection}{RTS and CTS}
       802.11 also includes a optional reservation scheme, which is used to reserve the channel before
       transmitting a frame.\\
@@ -169,7 +177,7 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
       two purposes: It gives the sender explicit permission to send and also instructs the other 
       stations not to send for the reserved duration.\\
       This technique make other station refrain from sending, thus reducing the probability of
-      collisions, and solving the hidden terminal problem, at the cost of a higher overhead.\\
+      collisions, and solving the hidden terminal problem, at the cost of a higher overhead.
       \begin{figure}[h]
         \centering
         \includegraphics[width=0.5\textwidth]{img/wireless/cmsa with RTS.png}
@@ -220,13 +228,13 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
     Power is a precious resource in mobile devices, and thus the 802.11 standard provides 
     power-management capabilities that allow 802.11 nodes to minimize the amount of time that 
     their sense, transmit, and receive functions and other circuitry need to be "on".\\
-    A node is able to explicitly alternate between sleep and wake states. A node indicates to the 
+    A node is able to explicitly alternate between asleep and awake states. A node signals to the 
     access point that it will be going to sleep by setting the power-management bit in the header 
     of an frame. A timer in the node is then set to wake up the node just before the AP is 
     scheduled to send its beacon frame.\\
-    Since the AP knows from the set power-transmission bit that the node is going to sleep, it wont send any
-    , and will buffer any frames destined for the sleeping host for later transmission.\\
-    A node will wake up just before the AP sends a beacon frame, and quickly enter the fully active 
+    Since the AP knows from the set power-transmission bit that the node is going to sleep, it wont
+    send any, and will buffer any frames destined for the sleeping host for later transmission.\\ A
+    node will wake up just before the AP sends a beacon frame, and quickly enter the fully active
     state.
     The beacon frames sent out by the AP contain a list of nodes whose frames have been buffered 
     at the AP. If there are no buffered frames for the node, it can go back to sleep. Otherwise, 
@@ -247,30 +255,30 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
   performance of the network, and is also divided into different version with different 
   throughput: 802.11b(up to 11Mbps), 802.11a(up to 54Mbps), 802.11g(up to 54Mbps), 802.11n(up to 600Mbps),
   \dots\\
-  Event tough the throughput is high, the actual throughput is much lower, because of the overhead
+  Event tough the throughput is high, the actual goodput is much lower, because of the overhead
   introduced by the protocol, the hidden terminal problem, the collision avoidance, and the fading.\\
-  The throughput can be defined as the speed at which useful data is received at the application layer,
+  The goodput can be defined as the speed at which useful data is received at the application layer,
   Given the capacity C at the physical layer, and can be calculated as follows:
   \begin{equation}
-    T = \frac{\text{(Useful data at the application layer)}}{\text{(time to complete the tranfer)}<C}
+    G = \frac{\text{(Useful data at the application layer)}}{\text{(time to complete the tranfer)}<C}
   \end{equation}
   which will of course be lower than the capacity C.\\
-  Given this definition, we can observe that the throughput is reduced by each layer of the protocol stack,
+  Given this definition, we can observe that the goodput is reduced by each layer of the protocol stack,
   because each of them adds control information that is useful to provide the service but is not part of
-  the useful data, and that the actual throughput is much lower than the theoretical throughput.\\
+  the useful data, and that the actual goodput is much lower than the theoretical throughput.\\
   \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\textwidth]{img/wireless/encapsulation overhead.png}
     \caption{The overhead that each packet has to carry}
   \end{figure}
-  Furthermore, several factors can reduce the throughput, for example:
+  Furthermore, several factors can reduce the goodput, for example:
   \begin{itemize}
     \item shared physical link with other protocols and transmissions
     \item errors: bit error, congestion, packets drops, you name it
     \item retransmissions: if a packet is lost, it has to be retransmitted
     \item \dots 
   \end{itemize}
-  This means that the actual throughput is always less than the protocol efficiency, which is the
+  This means that the actual goodput is always less than the protocol efficiency, which is the
   ratio between the useful data and the total data sent per the capacity of the channel.\\
 
   
@@ -620,7 +628,7 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
   \end{subsection}
   
   \begin{subsection}{WPA}
-    WEP is used only im the 802.11 vanilla, but is was soon replaced by 802.11 with the WPA(Wi-Fi
+    WEP is used only in the 802.11 vanilla, but is was soon replaced by 802.11 with the WPA(Wi-Fi
     protected access) standard. It was introduced to replace WEP, but it has some serious flaws:
     in fact, it dows not replace the chypher.\\
     Starting from 802.11i, the WPA2 standard was introduced, which is based on the AES encryption
@@ -649,10 +657,10 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
           cases, it is the AP
         \item \textbf{Authentication server}: the server that authenticates the client
       \end{itemize}
-      A supplicant to authenticate itself to the network, has to authenticate itself to the authenticator 
-      at first. If the authentication is successful, the authenticator will instructs the authenticator 
-      to switch the port on. The authentication server will then inform the supplicant that the 
-      access has been granted.\\
+      A supplicant to get access to the network, has to authenticate itself to the authenticator 
+      at first. If the authentication is successful, the authenticator server will instructs the authenticator 
+      to let the device join the network, and thus access its services. The authentication server
+      will then inform the supplicant that the access has been granted.\\
       \begin{figure}[h]
         \centering
         \includegraphics[width=0.5\textwidth]{img/wireless/WPA authentication.png}
@@ -704,10 +712,12 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
       \end{itemize}
     \end{subsubsection}
     \begin{subsubsection}{Key management}
-      A quick reminder that in WEP, all the STA share the same key. In WPA, this is not the case:
-      to derive multiple keys from the master key, a \textbf{Pairwise Master Key(PMK)} is used, which
+      A quick reminder that in WEP, all the STA share the same key, whcih generate some issues: in
+      fact this application of confidentiality only protects the data from listeners outside from
+      the network, but not inside. In WPA, this is not the case, because multiple keys are used,
+      which are generated from the master key, \textbf{Pairwise Master Key(PMK)}, which
       is derived from the password, and is used to derive the PTK and the GTK.\\
-      This PKM is:
+      This PMK can be either:
       \begin{itemize}
         \item pre-shared in WPA-Personal
         \item derived from the EAP authentication in WPA-Enterprise
@@ -731,21 +741,24 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
     \begin{subsubsection}{Four-way handshake}
       The four-way handshake is used to establish the PTK, and is used to authenticate the client
       to the AP, because it is based on the PMK, which is the result of the authentication.\\
-      At first, the AP sends a nonce to the client in an unencrypted message and without any integrity
-      check.\\
-      The client receives message and derives the $PTK=f(\text{PMK},\text{AP}_{\text{nonce}},\text{STA}_{\text{nonce}}
+      At first, the \textbf{AP sends} a \textbf{nonce} to the client in a \textbf{plaintext} message
+      and without any integrity check.\\
+      The \textbf{client} receives message and \textbf{derives} the
+      $\text{PTK}=f(\text{PMK},\text{AP}_{\text{nonce}},\text{STA}_{\text{nonce}}
       ,\text{AP}_{\text{MAC}},\text{STA}_{\text{MAC}})$,
       and proceeds to send the second message, which contains the $\text{STA}_{\text{nonce}}$ and an integrity
-      check, which is computed using half of the $PTK$ to protect the message and avoid brute force
-      attacks on the $PTK$. This message too is unencrypted.\\
-      Once this message is received, the AP computes the $PTK$ after having verified the integrity of the
-      message, and sends the third message, which contains the GTK and its associated MIC(message integrity
-      code), which is computed using the other half of the $PTK$. This message acts also as a request 
-      to install the key. After the client receives this message, it the MIC checks out, it means that
-      the AP and the client have the same $PTK$, and the GTK is installed.\\
-      One last message is sent by the client, which is an acknowledgment of the GTK installation, with 
-      its associated MIC. If the integrity check is successful, the AP installs the GTK and the PTK, and
-      the client is authenticated, concluding the four-way handshake.
+      check, which is computed using \textbf{half} of the \textbf{PTK} to protect the message and
+      \textbf{avoid brute force} attacks on the PTK. This message too is sent in plain.\\
+      Once this message is received, the \textbf{AP computes} the \textbf{PTK} after having verified
+      the integrity of the message, and sends the \textbf{third message}, which contains the
+      \textbf{GTK} and its associated MIC(message integrity code), which is computed using the other
+      half of the PTK. This message acts also as a request to install the key. After the client
+      receives this message, it the MIC checks out, it means that the AP and the client have the
+      same $PTK$, and the GTK is installed.\\
+      One \textbf{last message} is sent by the client, which is an \textbf{acknowledgment} of the
+      \textbf{GTK installation}, with its associated MIC. If the integrity check is successful, the
+      AP installs the GTK and the PTK, and the client is authenticated, concluding the four-way
+      handshake.
 
       \begin{figure}[h]
         \centering
@@ -758,13 +771,14 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
       its there), the MAC addresses, the nonces, \dots\\
       An attacker can capture the challenge and the result, try all possible combinations offline to
       guess the key using a dictionary attack.\\
-      This kind of attack is possible only if the key is weak, this is because in WPA2 the PMK is 
-      derived from the password with PBKDF2, which is a key derivation function. This brings the
-      complexity of the attack to $2^{256}$ from $2^{48}$, which is quite impossible to perform.
+      This kind of attack is possible only if the key is weak, this is because in WPA2 the
+      \textbf{PMK} is derived from the password with \textbf{PBKDF2}, which is a key derivation
+      function. This brings the complexity of the attack to $2^{256}$ from $2^{48}$, which is quite
+      impossible to perform.
     \end{subsubsection}
     \begin{subsubsection}{TKIP mode}
-      TKIP is a protocol that was introduced to allow WPA to be compatible with WEP, but correct some
-      of its flaws:
+      TKIP is a \textbf{protocol} that was introduced to allow WPA to be \textbf{compatible with
+      WEP}, but correct some of its flaws:
       \begin{itemize}
         \item the CRC32 is still applied as the ICV of the message, but a 64-bit MIC is added to the
           message, which is computed using the Michael algorithm(keyed hash function)
@@ -831,7 +845,7 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
 
     \end{subsubsection}
     \begin{subsubsection}{Simultaneous Authentication of Equals}
-      ne of the major new features introduced in WPA3 is Simultaneous Authentication of Equals (SAE),
+      One of the major new features introduced in WPA3 is Simultaneous Authentication of Equals (SAE),
       which provides more robust password-based authentication, even when using a strong one, while 
       also providing protection against bruteforce attacks.\\
       SAE replaces the four-way handshake method (PSK) used in WPA2, thus being robust against 
