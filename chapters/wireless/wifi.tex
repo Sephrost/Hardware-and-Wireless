@@ -182,6 +182,7 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
         \centering
         \includegraphics[width=0.5\textwidth]{img/wireless/cmsa with RTS.png}
         \caption{Collision avoidance with RTS/CTS}
+        \label{fig:rts-cts}
       \end{figure}
 
     \end{subsubsection}
@@ -856,14 +857,147 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
         \includegraphics[width=0.5\textwidth]{img/wireless/sae.png}
         \caption{The SAE message exchange}
       \end{figure}
-
-
     \end{subsubsection}
-
-
 
   \end{subsection}
 
 \end{section}
 
+\begin{section}{Questions and answers}
+  \begin{subsubsection}{What is the difference between the
+    “infrastructure-based” and “ad-hoc” mode in a WLAN?}
+    In infrastructure mode, all the traffic must pass trough the access point before reaching its
+    destination, wheres in ad-hoc mode direct communication between nodes is possible(P2P).
+  \end{subsubsection}
+  \begin{subsubsection}{Why in infrastructure-based mode all traffic must go
+      through the AP? What are the consequences in terms of performance in case
+    two STA would like to exchange data?}
+    There are a few reasons:
+    \begin{itemize}
+      \item to perform access control to the services of the network.
+      \item to perform orchestration of the communications
+      \item to kind of extend the range of the communications in some instances
+    \end{itemize}
+    This has a few drawbacks. In fact, if no direct communcations between nodes is possible, all
+    traffic must pass trough the AP, which drasticaly reduce the trougput of data, because one
+    packet pass trough two times. It makes also the communication more complex, which adds some
+    overhead.
+  \end{subsubsection}
+  \begin{subsubsection}{How many independent channels are present in the 2.4GHz
+    ISM IEEE 802.11 standard?}
+    Over the 2.4GHz spectrum, 14 channels are available, but only 3 are indipendent.
+  \end{subsubsection}
+  \begin{subsubsection}{What are the maximum transmission rates for 802.11b?
+    And for 802.11g? And for 802.11n?}
+    For the 802.11b standard the MTR is 11Mbps, for 802.11g is 54Mbps, while for 802.11n is up to
+    600Mbps.
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the steps a STA has to follow to join a WLAN}
+    To joind a WLAN, a STA has first to find an AP to connect to, either via probing requests or
+    listening to beacon frames. To join the network and access its services it has to be both
+    authenticated and associated. During the authentication process, the STA proves its identity to
+    AP, and this is done either via open system authetication or a shared key trough a
+    challenge-response authentication schema. During this process no confidentiality and integrity
+    services are provided. Association is the next step, during which the STA and the selected AP
+    exchanges the informations necessary to gain access to the network. If this step is successful,
+    the STA joins the network, and is able to exchange data.
+  \end{subsubsection}
+  \begin{subsubsection}{What is the difference between Authentication and
+      Association? Depict the sequence of frames observed when a STA
+    successfully connects to a WLAN.}
+    Authentication is the process of proving the identity of the STA to the AP or an authenticator
+    in general, and is a step necessary to perform associaciation to an AP. association is the
+    process of exchanging the necessary data to gain access to the network.
+    Let's suppose that the station discovers an AP trough a probe request, the sequence of exchanged
+    messages is: 
+    \begin{itemize}
+      \item Probe request 
+      \item Probe response 
+      \item Authentication request 
+      \item Authetication response 
+      \item Association request 
+      \item Association response 
+    \end{itemize}
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the goals of the beacon frames. Which type of
+    node can send such beacons?}
+    Beacons are basically advertisement frames that an AP sends in broadcast to inform of its
+    presence and the parameters necessary to connects to it, such as the SSID, the mac
+    address,\dots The standard allows only the APs in infrastructure mode to send those
+    periodically, which is an option set by default by the standard, but it can be disabled.
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the goals of the probe frames. Which type of
+    node can send such beacons?}
+    Probes frames are messages sent by a STA in broadcast to discover which AP are in range. An AP
+    which receives a probe request responds to it with a probe request with the informations
+    necessary to connect to it, such as the SSID, the mac address, \dots Probe requests are sent by
+    STAs, while probe requests are sent by the APs.
+  \end{subsubsection}
+  \begin{subsubsection}{What type of authentication mechanisms as supported by
+    802.11?}
+    The base version of 802.11 supports two authentication mechanisms:
+    \begin{itemize}
+      \item open system authentication: every autentication request is accepted
+      \item shared key authentication, which is performed via challenge-response autentication 
+    \end{itemize}
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the problem of the hidden terminals. Provide
+    some example to illustrate it.}
+    The problem of the hidden terminal arises when two nodes connected to the same AP cant hear each
+    other, but the signal is strong enough that two communications can collide at the AP, generating
+    errors. This happens because the channel is half-duplex, so only one node can send and receive
+    at the time, but because the two STAs cant hear ech other, they think that the channel is free,
+    and can transmit data at the same time. This can be due to the distance between the two(fading)
+    or an obstacle between them.
+  \end{subsubsection}
+  \begin{subsubsection}{Why a WLAN station cannot perform collision detection?
+      What are the implications of this? Why in in 802.3 (ethernet) it is
+    possible to detect collision instead?}
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the CSMA/CA protocol in the case RTS/CTS are
+    disabled}
+    CMSA/CA, or carrier senses multiple access with collision avoidance, is a multiple access
+    protocol for shared medium, which works as follows:
+    \begin{enumerate}
+      \item when a STA whant to transmit a packet, it listens to the channel, if its idle it tries
+        to transmit after a short period of time(Distributed inter frame space, or DIFS). If the
+        channel is sensed busy, it chooses a random binary exponential backoff value, which
+        decreses while the channel is sensed free.
+      \item when the counter reaches zero, the frame is transmitted when the channel is idle, and
+        the STA waits for an ACK
+      \item If the ACK is correctly received, alls good, otherwise it reenters the previous phase
+        with another random counter with higher value. 
+    \end{enumerate}
+  \end{subsubsection}
 
+  \begin{subsubsection}{Describe the CSMA/CA protocol in the case RTS/CTS are enabled.}
+  \end{subsubsection}
+  \begin{subsubsection}{Depict the time-space plot in which station A sends to station B a data
+    frame with the support of the AP in case RTS/CTS is enabled or is disabled.}
+    See figure \ref{fig:rts-cts}.
+  \end{subsubsection}
+  \begin{subsubsection}{Does the probability of collision depend on the propagation time? Does the
+    probability of collision depend on the transmission time? How?}
+    With propagation time we refer to the time that a packet needs to reach the receiver while
+    travelling a wireless channel.
+  \end{subsubsection}
+  \begin{subsubsection}{Why does the receiver need to acknowledge the reception of a frame in
+    CSMA/CA? What could happen if the receiver does not transmit the ACK?}
+  \end{subsubsection}
+  \begin{subsubsection}{Why RTS/CTS can reduce the collision probability?}
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the sequence of frames that terminals will transmit when one STA
+    needs to send a frame to a second STA in the same WLAN in case RTS/CTS are disabled.}
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the sequence of frames that terminals will transmit when one STA
+    needs to send a frame to a second STA in the same WLAN in case RTS/CTS are enabled.}
+  \end{subsubsection}
+  \begin{subsubsection}{Why the control messages and the control part of a data frame must be
+      transmitted at the minimum data rate? What could happen if those messages were transmitted at
+    higher rates?}
+  \end{subsubsection}
+  \begin{subsubsection}{Assume an AP would like to transmit a frame destined to all STAs in the WLAN
+      (broadcast message). Depict the sequence of messages one would observe on the channel. At what
+    rate would it be possible to transmit such a message? Which STA will send the ACK?}
+  \end{subsubsection}
+\end{section}
