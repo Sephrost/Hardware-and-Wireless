@@ -971,6 +971,13 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
   \end{subsubsection}
 
   \begin{subsubsection}{Describe the CSMA/CA protocol in the case RTS/CTS are enabled.}
+    If the RTS/CTS mechanism is implemented, a STA that wants to transmitt, if the channel is sent
+    idle and the reservation time of a CTS message has expired, it can send a Request To Send
+    message to the access point, which is basically a request to reserve the channel for a certain
+    amount of time. The AP receives it, and proceeds to send in broadcast a Clear To Send message to
+    all the connected STA in range, which signals the other STAs to non send anything for the
+    specified time and allows the sender station to have exclusive access to the channel for the
+    time being. The RTS request is sent after a DIFS while between all other packets elapses a SIFS.
   \end{subsubsection}
   \begin{subsubsection}{Depict the time-space plot in which station A sends to station B a data
     frame with the support of the AP in case RTS/CTS is enabled or is disabled.}
@@ -979,25 +986,78 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
   \begin{subsubsection}{Does the probability of collision depend on the propagation time? Does the
     probability of collision depend on the transmission time? How?}
     With propagation time we refer to the time that a packet needs to reach the receiver while
-    travelling a wireless channel.
+    travelling a wireless channel. Of course it influences the probability of collision: if a packet
+    takes too long to reach a certain node in the network, it could assume that the channel is idle
+    and (assuming that no RTS/CTS mechanism is implemented and his EBT reaches zero and a DIFS has
+    elapsed) try to transmit one of its messages, generating a collision.\\
+    With transmission time we refer to the time needed to push the whole message on the channel. As
+    delay is cumulative, it will also influence the probability of collision for the same reasons as
+    before.
   \end{subsubsection}
   \begin{subsubsection}{Why does the receiver need to acknowledge the reception of a frame in
     CSMA/CA? What could happen if the receiver does not transmit the ACK?}
+    In wireless links interface is high and the medium is not reliable at all, so a mechanism to
+    ensure that the packet has correctly reached the destination is necessary. If its not
+    implemented, a collision on a transmission could occur, and the packet would reach the
+    destination damaged, without any way to notify to the sender that a collision has likely
+    occurred.
   \end{subsubsection}
   \begin{subsubsection}{Why RTS/CTS can reduce the collision probability?}
-  \end{subsubsection}
-  \begin{subsubsection}{Describe the sequence of frames that terminals will transmit when one STA
-    needs to send a frame to a second STA in the same WLAN in case RTS/CTS are disabled.}
-  \end{subsubsection}
-  \begin{subsubsection}{Describe the sequence of frames that terminals will transmit when one STA
-    needs to send a frame to a second STA in the same WLAN in case RTS/CTS are enabled.}
+    Having a reservation mechanism instead of multiple access detection one reduces drastically the
+    probability of collision, because STA dont rely on a timer and to sense if the channel is idle,
+    but will actually wait for the specified time to elapse. Still some collisions are possible, for
+    example if two RST requests are sent at the same time, but are still much more unlikely.
   \end{subsubsection}
   \begin{subsubsection}{Why the control messages and the control part of a data frame must be
       transmitted at the minimum data rate? What could happen if those messages were transmitted at
     higher rates?}
+    Control frames, or in general control data is used, as the name suggest, to handle changes or
+    data that is important that reaches its destination. If this data would be transmitted at a
+    higher data rate, the probability of error would also increase. Furthermore, an higher data rate
+    implies a lower coverage of the signal, meaning that some STAs could receive a damaged message
+    due to collisions, or not receive it at all. To sum it up, it for reliability and coverage
+    reasons.
   \end{subsubsection}
   \begin{subsubsection}{Assume an AP would like to transmit a frame destined to all STAs in the WLAN
       (broadcast message). Depict the sequence of messages one would observe on the channel. At what
     rate would it be possible to transmit such a message? Which STA will send the ACK?}
+    The AP, after detecting that the channel is idle, to avoid collisions, sends the packet with the
+    broadcast address after a short preamble and waiting a DIFS. The transmission rate depends on
+    the capabilities of each STA, as well as the AP, but it will be sent at the highest common data
+    rate supported. The STAs that have received the packet correctly will then proceed to send back
+    an ACKL packet at the basic data rate.
+  \end{subsubsection}
+  \begin{subsubsection}{In a 802.11 frames, how many MAC addresses are present? Why?}
+    In a 802.11 frame, 4 address are present:
+    \begin{itemize}
+      \item the mac address of the sender
+      \item the mac address of the receiver
+      \item the mac address of the AP(or the source in general)
+      \item mac address of the destination
+    \end{itemize}
+    The first two are obviously needed to indicate the two ends of the communication. The third one
+    is needed because in infrastructure mode all the traffic must pass trough the AP, whilst the
+    latter one is used in ad-hoc mode, being the mac destination address.
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the 802.11 power management capabilities. How can a STA tell the AP
+      it is going to sleep and for how long? How can the AP tell the STA that it has some buffered
+    frames waiting to be sent?}
+  \end{subsubsection}
+  \begin{subsubsection}{Define the goodput and compute the maximum efficiency one could expect in an
+    ethernet link where two nodes would like to exchange some traffic using UDP and IPv4.}
+  \end{subsubsection}
+  \begin{subsubsection}{Define the goodput and compute the maximum efficiency one could expect in an
+    ethernet link where two nodes would like to exchange some traffic using TCP and IPv4.}
+  \end{subsubsection}
+  \begin{subsubsection}{Given the IPv4 header is 20 bytes long and the IPv6 header 40 bytes long,
+    how would reduce the efficiency of a TCP file transfer in case the MTU is 1500 Bytes long?}
+  \end{subsubsection}
+  \begin{subsubsection}{In the case of a half-duplex channel, why does the maximum goodput reduce?
+    Provide an example.}
+  \end{subsubsection}
+  \begin{subsubsection}{The plot in the figure represents the efficiency of different IEEE 802.11
+      versions versus the payload size (MSDU). Identify the maximum efficiency of a transmission in
+      which the application at the sender side generates 1000 UDP messages of 500 bytes each.
+    Consider an ideal scenario and a MTU of 1500 bytes.}
   \end{subsubsection}
 \end{section}
