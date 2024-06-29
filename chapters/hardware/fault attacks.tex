@@ -2,10 +2,18 @@
   Fault attacks consist in injecting deliberate (malicious) faults into the target device, aimed at
   bringing it into a set of states from which private internal information items (e.g., a key) can
   be fraudulently extracted.\\
+  Faults can be temporary or permanent, by changing the state of a memory address or a register forever.\\
   They idea is pretty simple: take the case of a encryption algorithm, if i run it and get a 1, by
   running that again injecting a fault, we are able to understand what the original bit was. In a
-  more formal way, if $C_{OK}=E(P)$ and $C_{OK}'=E(P)$ while injecting a fault, if $C_{OK} \neq
-  C_{OK}'$, then the bit is 0, otherwise it is 1.\\
+  more formal way, if $C_{OK}=E(P)$ and $C_{OK}'=E(P)$ while injecting a fault, for example a '0',
+  if $C_{OK} \neq C_{OK}'$, then the bit is 0, otherwise it is 1.\\
+  This is because we know the memory configuration when the fault is injected, and we can compare 
+  the two results.\\
+
+  \begin{boxH}
+    Fault injections doesnt necessary require physical access to the chip, they can be performed
+    fully remotly.
+  \end{boxH}
 
   There are many ways to induce a fault in a system, some of them are:
   \begin{itemize}
@@ -56,13 +64,38 @@
       operation, for example. Detection is not a very effective mechanism because it is not possible
       to tell which result is the faulty one, and which is the correct one.\\
       Many standards cover fault, eg. fault tollerant systems, and thus they can be used to be a
-      valuable countermeasure against fault attacks.
+      valuable countermeasure against fault attacks.\\ 
+      In any case, eror detection techniques applies to the system some degree of overhead.\\
+      In the error detection schema is presented in the figure \ref{fig:error_detection}. The idea
+      is that the original staf is carrying out an operation, and the result is compared to a
+      prediction about the output, which can be a safe code. If the two results are different, then
+      the system is in error, and we should be able, in some case to recover from the error. This is
+      not always possible though, because the more we would like to be able to correct the bigger is
+      the code, and thus the overhead.
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{images/error_detection.png}
+        \caption{Error Detection}
+        \label{fig:error_detection}
     \end{subsection}
 
     \begin{subsection}{De-synchronization}
+      Most of the time fault injects require syncronization, because not all them are permanent. If
+      the attacker need a specific timing to inject the fault at the right location, we can jitter
+      at a different time, the fault would never appear because the memory has been overwritten, and
+      thus the fault would only appear on data that have been already used.
+      This is done trough different mechanisms:
+      \begin{itemize}
+        \item jitter clock
+        \item dummy instructions
+        \item random operation flow
+      \end{itemize}
 
     \end{subsection}
     \begin{subsection}{Hardened IC Package}
+      Another solution is to make an hardened package, because thats the portion that would be
+      removed to perform some kinds of injections, because its the component that would have
+      protected the chip from the environment.\\
 
     \end{subsection}
   \end{section}

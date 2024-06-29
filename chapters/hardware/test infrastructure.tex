@@ -1,0 +1,54 @@
+\chapter{Test Infrastructure based attacks}
+This kind of attacks can be performedjust after manifacturing, and thus before entering the market,
+or after the device are sold and are still unused.
+Tests are mandatory on an IC to guarantee the quality of the product, but during them little of the
+power and resources are used, to guaranty that the test is being performed correctly. To perform the
+tests some tests facilities are introduced, but those can be exploited to performs some kinds of
+attacks. Those infrastructure are kept on the final chip, because they could be needed later on, and
+the user connection is kind of hidden because its on the board directly. They are also kept because
+they can be used to test if the system has been compromised. They are there to stay, and no access
+liitatios are put up in place.\\
+Among the plethora of test infrastructures:
+\begin{itemize}
+  \item Scan chains
+  \item Standard IEEE 1149.1
+  \item JTAG infrastructures, that includes the pins
+  \item ATPG, the automatic test pattern generation, which is the physical and software facility
+    that is used to generate the test patterns(input and output configurations that, if the test is
+    wrong allows to retrieve where the error occured)
+\end{itemize}
+In scan-based devices, the scan chains could provide a natural way to access the content of ALL the
+storage devices (flip-flops and registers) connected to a scan chain.\\
+One of the attacks is to attack the scan-chain directly,we force the scan ch
+\begin{section}{Insigth on teaming}
+  There are 3 kinds of teams in cybersec.
+  \begin{subsection}{Red team}
+    The red team is the one that attacks the system, and tries to find vulnerabilities in the system.
+    In this context 
+    \begin{enumerate}
+      \item Identify the target FFs that contain the secret to be stolen
+      \item Identify the scan chain SC to which the target FFs belong
+      \item Identify the precise time instant T in which the target FFs contain the secret.
+      \item Run the circuit in Normal mode until the time T
+      \item Stop the circuit and switch it to Test mode
+      \item Scan out the content of the scan chain SC until the content of all the target FFs reach an output
+        point you can observe
+      \item If Test decompressors and compressors are present, you have to reverse them previously
+    \end{enumerate}
+
+  \end{subsection}
+
+  \begin{subsection}{Blue team}
+    The blue team is the one that defends the system, and tries to find the vulnerabilities before the
+    To protect the system from this kind of attacks, the blue team can use some countermeasures,
+    like:
+    \begin{itemize}
+      \item unbounding the chain, using a fuse in a way that the chain is unaccessible witout the
+        correct approach, because the fuse is blown and the chains became unaccessible
+      \item Add some noise to the scan chain
+      \item Add some fake FFs to the scan chain
+      \item Add some fake scan chains
+      \item Add some fake scan chain inputs
+
+  \end{subsection}
+\end{section}
