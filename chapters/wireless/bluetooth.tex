@@ -42,7 +42,7 @@ Nowadays, the standard has quite evolved and it is possible to have a Bluetooth 
     technology, in this case. It is meant to replace the cables between devices, like a wireless USB.\\
     It works in the 2.4-5 GHz frequency band and it is a low-power network, being able to transmit
     up to 3Mbps.\\
-    This kind of netawork is an ad-hoc one, with a master controller and many clients, meaning that 
+    This kind of network is an ad-hoc one, with a master controller and many clients, meaning that 
     it requires a polling mechanism to avoid collisions. It actually implements a TDM+FDM, with a 
     TDM slots of 625 ms and FDM over 79 channels in BT classic and 40 channels in BLE, while also 
     implmenting a frequency hopping mechanism.\\
@@ -64,18 +64,23 @@ Nowadays, the standard has quite evolved and it is possible to have a Bluetooth 
   We will mainly focus on the more recent versions of Bluetooth(Low Energy).
   In bluetooth LE, there are 3 main specifications:
   \begin{itemize}
-    \item the core specifications, which defines the architecture of the technology, the key features
-      and the formal procedures, as well ad the protocols. 
-    \item the profiles, which define the role of the device(client/server), its behavior and the
+    \item the \textbf{core specifications}, which defines the architecture of the technology, the
+      key features and the formal procedures, as well ad the protocols. 
+    \item the \textbf{profiles}, which define the role of the device(client/server), its behavior and the
       transmitted data.
-    \item the services, which define service group characteristics and descriptors, providing a 
-      formal description of the data exchanged between devices.
-    \begin{figure}[H]
-      \centering
-      \includegraphics[width=0.5\textwidth]{img/wireless/bluetooth services format.png}
-      \caption{An example of the data structure of some services}
-    \end{figure}
+    \item the \textbf{services}, which define service group characteristics and descriptors,
+      providing a formal description of the data exchanged between devices.
   \end{itemize}
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/wireless/bt specifivations.png}
+    \caption{The 3 main specifications of Bluetooth LE}
+  \end{figure}
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/wireless/bluetooth services format.png}
+    \caption{An example of the data structure of some services}
+  \end{figure}
   \begin{subsection}{The host stack}
     The host stack is the software stack that runs on the host device, which is the device that 
     controls the communication. 
@@ -592,4 +597,114 @@ Nowadays, the standard has quite evolved and it is possible to have a Bluetooth 
 
   \end{subsection}
 
+\end{section}
+
+\begin{section}{Questions and answers}
+  \begin{subsubsection}{Explain the main design goals for the Bluetooth technology and the technical
+    constraints that guided the design}
+    Origianlly, bluetooth was designed to be a "wireless cable", being short-ranged, low-power and
+    with a limited troughput. It didnt require an infrastructure and would have been
+    self-configuring.
+    Some technical constraint made some decisions necessary:
+    \begin{itemize}
+      \item in mobile devices energy is a precious resource, making the standard low-power 
+      \item bluetooth works on the 2.3Ghz spectrum, which is quite cramped, making the decision to
+        be short ranged to avoid interference and save power obvious. This made frequency hopping
+        necessary too.
+      \item the auto-configuring feature was made necessary by the fact that not all devices have
+        the i/o peripherals necessary to configure the infrastructure or connect to it 
+    \end{itemize}
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the Bluetooth network topologies and the role of nodes in each
+    scenario}
+    There are 3 main bt topologies:
+    \begin{itemize}
+      \item a piconet is a small bt network(up to 8 devices) in which a node acts as a master, while
+        all the others are the slave devices. The master orchestrate all the ommunications, which
+        are strictly between the master and a slave, one at the time.
+      \item a scatternets is a bt network made up of many piconets. A device can be master in one
+        and a slave in another one, but can't be a master in more than one. This allows nodes to
+        communicate across piconets.
+    \end{itemize}
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the physical layer communication mechanisms implemented in
+      Bluetooth BR/EDR and the differences since BLE was introduced: which frequency range does it
+    use, which multiple access scheme does it use, which FEC/ARQ mechanism it provides, etc.}
+  \end{subsubsection}
+  \begin{subsubsection}{Describe what are the profiles, the services and the core specifications in
+    Bluetooth}
+    The core specifications defines the architecture of the technology, it's features, the protocols
+    nad the formal procedures.\\
+    The profiles defines the role of the device in the communication(if its a client or a server) as
+    well as the transmitted data, while the services defines the service group characteristics,
+    providing a formal description of the exchanged data. 
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the Bluetooth device states (standby, advertiser, scanner,
+      initiator, master, slave) and provide an example considering two devices that would like to
+    interconnect}
+    The states in which a bt device can be are:
+    \begin{itemize}
+      \item standby: the device has just boot up 
+      \item advertiser: the device is advertising its presence to the neibouring devices, sending
+        frames to inform that it is a connectible device, with some iformations such as the device
+        address and its name
+      \item scanner, the device is looking for connectible devices, listening to the advertisement
+        packers and sending a scan request that will be responded to.
+      \item initiator: a device request to enstablish a link with an advertisement device 
+      \item slave and master: the devices are connected, and the initiator is the master
+    \end{itemize}
+  \end{subsubsection}
+  \begin{subsubsection}{What are the functionalities of the Logical Link Control and Adaptation
+    Layer Protocol (L2CAP) in Bluetooth?}
+    The L2CAP protocol encapsulates data from the higher leves for transmission according to the
+    link configuration. I multiplexes the higher level protocols, provides segmentaation and
+    reassembnlation features, a retransmission mechanism an control flow.
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the connection setting up process when there is a device in a
+    discoverable state}
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the CDMA mechanisms used in Bluetooth and compare it again simple
+    FDMA and TDMA schemes}
+  \end{subsubsection}
+  \begin{subsubsection}{Why it is important to implement FEC schemes in BT? Which FEC protocols does
+    the standard support? Does it support ARQ as well? Which type?}
+    BT works over the 2.4GHz frequency band, which is quite crowded as its unlicensed, this means
+    that a lot of interference is to be expected. A forward error correction schema is thus
+    necessary to ensure the reliability of the communication.\\
+    The standard supports 2 fec schemes:
+    \begin{itemize}
+      \item 1/3 FEC rate: each bit is send bit 3 times(1 data and 2 parity bits)
+      \item 2/3 FEC rate: each sequence of 10 bits have 5 parity bits which ises a shortened hamming
+        code 
+    \end{itemize}
+    BT supports arq but doesnt specify a standard to follow, it's up to the impelementation.
+  \end{subsubsection}
+  \begin{subsubsection}{Which security services does BT support? Which are the five distinct
+    security models implemented in the standard?}
+    BT supports as security services confidentiality, authentication and authorization. 
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the four association models of Bluetooth}
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the security levels and modes of BT}
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the three phases of the pairing process}
+  \end{subsubsection}
+  \begin{subsubsection}{What are the goals of the legacy pairing and what are the weaknesses that
+    make it a vulnerable protocol? How are these addressed in the Secure Simple Pairing protocol?}
+  \end{subsubsection}
+  \begin{subsubsection}{Detail the MITM attack that could be possible during the pair phase. How can
+    this be avoided?}
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the security features and the input/output capabilities exchanged
+    during phase 1 of the pairing process – the feature exchange}
+  \end{subsubsection}
+  \begin{subsubsection}{Sketch the Elliptic Curve Diffie-Hellman authentication implemented in BT
+    pairing}
+  \end{subsubsection}
+  \begin{subsubsection}{What are the privacy attacks one could build against a user with a BT
+      device? How is this problem addressed? Describe the different MAC address types and detail how
+    the resolvable private addresses work}
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the bluejacking and bluesnarfing attacks}
+  \end{subsubsection}
 \end{section}

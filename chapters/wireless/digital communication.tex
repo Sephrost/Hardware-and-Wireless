@@ -1,5 +1,5 @@
 \chapter{Digital Communication}
-This first section is all about how to convert and transmit some signal.\
+This first section is all about how to convert and transmit some signal.
 \begin{section}{Introduction}
 \label{sec:intro}
 The goal of communication is to transmit some kind of data form a sender to a receiver. In order 
@@ -8,8 +8,11 @@ physical data link, which connects those two nodes.\\
 Data is transmitted in the form of \textbf{signals}, which are a physical representation of the data.
 The signal is transmitted over a \textbf{channel}, which is the transmission medium that connects 
 the sender and receiver. This can be both wired or wireless.\\
-Whereas with wired channels, checking the device connected to the channel is easier to implement, 
-with wireless ones security is a major when travelling in the channel. This is for may reasons:
+% Whereas with wired channels, checking the device connected to the channel is easier to implement, 
+% with wireless ones security is a major when travelling in the channel. This is for may reasons:
+In wired channels, it is really easy to check which devices are connected to the channel, on the
+other hand, in wireless channels the communication is broadcast, and security becomes a major
+concern. This is for many reasons:
 \begin{itemize}
   \item No inherent protection is applied to the channel( it is replaced by a logical association)
      \subitem sending and receiving messages do not need physical access to the network 
@@ -113,7 +116,8 @@ message.
     \end{figure}
     A signal with a very large amplitude, over time, will have a very high energy, while a signal
     which assumes values close to zero will have a very low energy, being a very weak signal.\\
-    Furthermore, we can note that the more distant is the signal from the origin, the larger the energy.
+    Furthermore, we can notice that the higher the distance of the signal from the origin, the
+    larger the energy.
   \end{subsection}
   \begin{subsection}{Power of a signal}
     When we refer to power we can refer to the \textbf{instantaneous power} of a signal, which is just the 
@@ -1266,5 +1270,52 @@ message.
         \end{figure}
       \end{subsubsection}
     \end{subsection}
+  \end{section}
+  \begin{section}{Questions and answers}
+    \begin{subsubsection}{In a digital communication system, what is the role of source encoding and
+      decoding? What is its main goal? Describe the working principle(s)}
+      In a digital communication system, the communication is, as the name suggests, digital. The
+      thing is, the channel is only able to carry analog signals, meaning that we need an interface
+      to convert the digital signal into a an analog one, and vice versa. The user portion of the
+      interface section of a digital communication schema, at first apply source encoding, reducing
+      the number of bits to be stransmitted, and channel encoding, which makes the sequence more
+      robust, all this in a modulator, and the data is at last converted to analog by an encoder.
+      The receiver gets the analog signals and sample it with a decoder, from which a demodulator is
+      able to retreive the digital data, even perfectly if the sample frequence is high enough, by
+      doing channel and source decoding, which corrects errors and recovers the original message.
+    \end{subsubsection}
+
+    \begin{subsubsection}{Describe how different signals can coexist over the same wireless medium.}
+      Different signals can coexist over the same shared medium thanks to a method called
+      multiplexing, which allows to divide the available bandwidth over multiple logical channels.
+      There are different multiplexing schemes:
+      \begin{itemize}
+        \item Frequency division multiplexing: thanks to the modulation and demodulation of signals,
+          we can transmitt different signals with overlapping bandwidth, by modulating each signal
+          at a different frequency. This schema require a guard band between channels to avoid
+          interference, and it is basically used by all wireless systems, because each channel has
+          access to the full bandwidth for the whole time.
+        \item Time division multiplexing: the bandwidth is divided between the logical channels 
+          by assigning a time slot to each user, even if no data has to be transmitted.
+        \item Code division multiplexing allows to divide the available bandwidth over multiple
+          logical channels, by assigning a different code to each user, which is used to separate
+          the signal from the others, which share the same spectrum at the same time, by exploiting
+          the orthogonality between signals.
+      \end{itemize}
+    \end{subsubsection}
+
+    \begin{subsubsection}{Describe the tradeoff between bandwidth efficiency and energy efficiency
+      in digital modulations.}
+      We know that to achieve a higher bandwidth efficiency, one has to use a lower bandwidth. 
+      Symbols are distributed over the bandwidth, and the larger the energy, the larger
+      the bandwidth, and thus the distance between symbols. With a smaller bandwidth, those are
+      cramped in a smaller "space". But using a smaller bandwidth means that we are using a larger
+      base pulse, which occupies less bandwidth but require more energy. This means that if we
+      choose to occupy a smaller bandwidth, the transmitted sequence is more prone to errors,
+      because symbols are closer to each other, and require less energy to be transmitted. on the
+      other hand, if we add more space inbetween symbols, we will occupy a larger bandwidth, which
+      requires less energy to be transmitted and is less prine to errors.
+    \end{subsubsection}
+
   \end{section}
 \end{section}

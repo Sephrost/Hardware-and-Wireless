@@ -71,6 +71,11 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
   \end{enumerate}
   Authentication can be performed with multiple access points of the same network, but association can only
   be performed with one of them.
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/wireless/wireless auth-ass.png}
+    \caption{The authentication and association procedure in general}
+  \end{figure}
   \begin{subsection}{Scanning for Access Points}
     To access the network, the mobile station must first associate with an access point.\\
     The \textbf{scanning process} is used to find the APs in the area, and it can be:
@@ -100,6 +105,9 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
     This can happen, for example, when two stations are too far from each other, but they are close 
     to the AP, or there's an obstacle between them.\\
     This problem is illustrated in figure \ref{fig:hidden terminal problem}.
+    Issues can arise in this scenario: because the stations cant hear each other, they are unaware
+    of the interntions of the other, so they are able to transmit at the same time, generating
+    conflicts over the channel.
     \begin{figure}[h]
       \centering
       \includegraphics[width=0.5\textwidth]{img/wireless/hidden terminal problem.png}
@@ -156,7 +164,7 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
     \end{enumerate}
     The goal is thus avoiding collisions whenever possible, hoping that by choosing a random
     backoff value, the stations will not choose the same value, and thus will not transmit at the
-    same time.\\
+    same time.
     \begin{subsubsection}{RTS and CTS}
       802.11 also includes a optional reservation scheme, which is used to reserve the channel before
       transmitting a frame.\\
@@ -169,11 +177,12 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
       two purposes: It gives the sender explicit permission to send and also instructs the other 
       stations not to send for the reserved duration.\\
       This technique make other station refrain from sending, thus reducing the probability of
-      collisions, and solving the hidden terminal problem, at the cost of a higher overhead.\\
+      collisions, and solving the hidden terminal problem, at the cost of a higher overhead.
       \begin{figure}[h]
         \centering
         \includegraphics[width=0.5\textwidth]{img/wireless/cmsa with RTS.png}
         \caption{Collision avoidance with RTS/CTS}
+        \label{fig:rts-cts}
       \end{figure}
 
     \end{subsubsection}
@@ -220,13 +229,13 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
     Power is a precious resource in mobile devices, and thus the 802.11 standard provides 
     power-management capabilities that allow 802.11 nodes to minimize the amount of time that 
     their sense, transmit, and receive functions and other circuitry need to be "on".\\
-    A node is able to explicitly alternate between sleep and wake states. A node indicates to the 
+    A node is able to explicitly alternate between asleep and awake states. A node signals to the 
     access point that it will be going to sleep by setting the power-management bit in the header 
     of an frame. A timer in the node is then set to wake up the node just before the AP is 
     scheduled to send its beacon frame.\\
-    Since the AP knows from the set power-transmission bit that the node is going to sleep, it wont send any
-    , and will buffer any frames destined for the sleeping host for later transmission.\\
-    A node will wake up just before the AP sends a beacon frame, and quickly enter the fully active 
+    Since the AP knows from the set power-transmission bit that the node is going to sleep, it wont
+    send any, and will buffer any frames destined for the sleeping host for later transmission.\\ A
+    node will wake up just before the AP sends a beacon frame, and quickly enter the fully active
     state.
     The beacon frames sent out by the AP contain a list of nodes whose frames have been buffered 
     at the AP. If there are no buffered frames for the node, it can go back to sleep. Otherwise, 
@@ -247,30 +256,30 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
   performance of the network, and is also divided into different version with different 
   throughput: 802.11b(up to 11Mbps), 802.11a(up to 54Mbps), 802.11g(up to 54Mbps), 802.11n(up to 600Mbps),
   \dots\\
-  Event tough the throughput is high, the actual throughput is much lower, because of the overhead
+  Event tough the throughput is high, the actual goodput is much lower, because of the overhead
   introduced by the protocol, the hidden terminal problem, the collision avoidance, and the fading.\\
-  The throughput can be defined as the speed at which useful data is received at the application layer,
+  The goodput can be defined as the speed at which useful data is received at the application layer,
   Given the capacity C at the physical layer, and can be calculated as follows:
   \begin{equation}
-    T = \frac{\text{(Useful data at the application layer)}}{\text{(time to complete the tranfer)}<C}
+    G = \frac{\text{(Useful data at the application layer)}}{\text{(time to complete the tranfer)}<C}
   \end{equation}
   which will of course be lower than the capacity C.\\
-  Given this definition, we can observe that the throughput is reduced by each layer of the protocol stack,
+  Given this definition, we can observe that the goodput is reduced by each layer of the protocol stack,
   because each of them adds control information that is useful to provide the service but is not part of
-  the useful data, and that the actual throughput is much lower than the theoretical throughput.\\
+  the useful data, and that the actual goodput is much lower than the theoretical throughput.\\
   \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\textwidth]{img/wireless/encapsulation overhead.png}
     \caption{The overhead that each packet has to carry}
   \end{figure}
-  Furthermore, several factors can reduce the throughput, for example:
+  Furthermore, several factors can reduce the goodput, for example:
   \begin{itemize}
     \item shared physical link with other protocols and transmissions
     \item errors: bit error, congestion, packets drops, you name it
     \item retransmissions: if a packet is lost, it has to be retransmitted
     \item \dots 
   \end{itemize}
-  This means that the actual throughput is always less than the protocol efficiency, which is the
+  This means that the actual goodput is always less than the protocol efficiency, which is the
   ratio between the useful data and the total data sent per the capacity of the channel.\\
 
   
@@ -300,14 +309,14 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
     level is larger than the TCP MTU, there will probably be more segments.\\
     So the efficiency of the TCP/IP/Ethernet stack is:
     \begin{equation}
-      \eta_{TCP} = \frac{\text{L7 data}}{\text{Transmitted data}} = \frac{1460}{1460+20+20+20+38} = 94\%
+      \eta_{TCP} = \frac{\text{L7 data}}{\text{Transmitted data}} = \frac{1460}{1460+20+20+38} = 94\%
     \end{equation}
     This was in case the channel if full-duplex, but if it is half-duplex, the efficiency is reduced, because
     the ack packets have to be sent in the opposite direction, and the channel can't be used to send data
     in that direction.\\
     The efficiency of the TCP/IP/Ethernet stack in half-duplex is:
     \begin{equation}
-      \eta_{TCP} = \frac{\text{L7 data}}{\text{Transmitted data}} = \frac{1460}{(1460+20+20+20)+(20+20+38)} = 90\%
+      \eta_{TCP} = \frac{\text{L7 data}}{\text{Transmitted data}} = \frac{1460}{(1460+20+20+38)+(20+20+38)} = 90\%
     \end{equation}
     In general, To calculate the total efficiency, it is sufficient to make the product of the
     individual efficiencies.
@@ -620,7 +629,7 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
   \end{subsection}
   
   \begin{subsection}{WPA}
-    WEP is used only im the 802.11 vanilla, but is was soon replaced by 802.11 with the WPA(Wi-Fi
+    WEP is used only in the 802.11 vanilla, but is was soon replaced by 802.11 with the WPA(Wi-Fi
     protected access) standard. It was introduced to replace WEP, but it has some serious flaws:
     in fact, it dows not replace the chypher.\\
     Starting from 802.11i, the WPA2 standard was introduced, which is based on the AES encryption
@@ -649,10 +658,10 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
           cases, it is the AP
         \item \textbf{Authentication server}: the server that authenticates the client
       \end{itemize}
-      A supplicant to authenticate itself to the network, has to authenticate itself to the authenticator 
-      at first. If the authentication is successful, the authenticator will instructs the authenticator 
-      to switch the port on. The authentication server will then inform the supplicant that the 
-      access has been granted.\\
+      A supplicant to get access to the network, has to authenticate itself to the authenticator 
+      at first. If the authentication is successful, the authenticator server will instructs the authenticator 
+      to let the device join the network, and thus access its services. The authentication server
+      will then inform the supplicant that the access has been granted.\\
       \begin{figure}[h]
         \centering
         \includegraphics[width=0.5\textwidth]{img/wireless/WPA authentication.png}
@@ -704,10 +713,12 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
       \end{itemize}
     \end{subsubsection}
     \begin{subsubsection}{Key management}
-      A quick reminder that in WEP, all the STA share the same key. In WPA, this is not the case:
-      to derive multiple keys from the master key, a \textbf{Pairwise Master Key(PMK)} is used, which
+      A quick reminder that in WEP, all the STA share the same key, whcih generate some issues: in
+      fact this application of confidentiality only protects the data from listeners outside from
+      the network, but not inside. In WPA, this is not the case, because multiple keys are used,
+      which are generated from the master key, \textbf{Pairwise Master Key(PMK)}, which
       is derived from the password, and is used to derive the PTK and the GTK.\\
-      This PKM is:
+      This PMK can be either:
       \begin{itemize}
         \item pre-shared in WPA-Personal
         \item derived from the EAP authentication in WPA-Enterprise
@@ -731,21 +742,24 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
     \begin{subsubsection}{Four-way handshake}
       The four-way handshake is used to establish the PTK, and is used to authenticate the client
       to the AP, because it is based on the PMK, which is the result of the authentication.\\
-      At first, the AP sends a nonce to the client in an unencrypted message and without any integrity
-      check.\\
-      The client receives message and derives the $PTK=f(\text{PMK},\text{AP}_{\text{nonce}},\text{STA}_{\text{nonce}}
+      At first, the \textbf{AP sends} a \textbf{nonce} to the client in a \textbf{plaintext} message
+      and without any integrity check.\\
+      The \textbf{client} receives message and \textbf{derives} the
+      $\text{PTK}=f(\text{PMK},\text{AP}_{\text{nonce}},\text{STA}_{\text{nonce}}
       ,\text{AP}_{\text{MAC}},\text{STA}_{\text{MAC}})$,
       and proceeds to send the second message, which contains the $\text{STA}_{\text{nonce}}$ and an integrity
-      check, which is computed using half of the $PTK$ to protect the message and avoid brute force
-      attacks on the $PTK$. This message too is unencrypted.\\
-      Once this message is received, the AP computes the $PTK$ after having verified the integrity of the
-      message, and sends the third message, which contains the GTK and its associated MIC(message integrity
-      code), which is computed using the other half of the $PTK$. This message acts also as a request 
-      to install the key. After the client receives this message, it the MIC checks out, it means that
-      the AP and the client have the same $PTK$, and the GTK is installed.\\
-      One last message is sent by the client, which is an acknowledgment of the GTK installation, with 
-      its associated MIC. If the integrity check is successful, the AP installs the GTK and the PTK, and
-      the client is authenticated, concluding the four-way handshake.
+      check, which is computed using \textbf{half} of the \textbf{PTK} to protect the message and
+      \textbf{avoid brute force} attacks on the PTK. This message too is sent in plain.\\
+      Once this message is received, the \textbf{AP computes} the \textbf{PTK} after having verified
+      the integrity of the message, and sends the \textbf{third message}, which contains the
+      \textbf{GTK} and its associated MIC(message integrity code), which is computed using the other
+      half of the PTK. This message acts also as a request to install the key. After the client
+      receives this message, it the MIC checks out, it means that the AP and the client have the
+      same $PTK$, and the GTK is installed.\\
+      One \textbf{last message} is sent by the client, which is an \textbf{acknowledgment} of the
+      \textbf{GTK installation}, with its associated MIC. If the integrity check is successful, the
+      AP installs the GTK and the PTK, and the client is authenticated, concluding the four-way
+      handshake.
 
       \begin{figure}[h]
         \centering
@@ -758,13 +772,14 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
       its there), the MAC addresses, the nonces, \dots\\
       An attacker can capture the challenge and the result, try all possible combinations offline to
       guess the key using a dictionary attack.\\
-      This kind of attack is possible only if the key is weak, this is because in WPA2 the PMK is 
-      derived from the password with PBKDF2, which is a key derivation function. This brings the
-      complexity of the attack to $2^{256}$ from $2^{48}$, which is quite impossible to perform.
+      This kind of attack is possible only if the key is weak, this is because in WPA2 the
+      \textbf{PMK} is derived from the password with \textbf{PBKDF2}, which is a key derivation
+      function. This brings the complexity of the attack to $2^{256}$ from $2^{48}$, which is quite
+      impossible to perform.
     \end{subsubsection}
     \begin{subsubsection}{TKIP mode}
-      TKIP is a protocol that was introduced to allow WPA to be compatible with WEP, but correct some
-      of its flaws:
+      TKIP is a \textbf{protocol} that was introduced to allow WPA to be \textbf{compatible with
+      WEP}, but correct some of its flaws:
       \begin{itemize}
         \item the CRC32 is still applied as the ICV of the message, but a 64-bit MIC is added to the
           message, which is computed using the Michael algorithm(keyed hash function)
@@ -831,7 +846,7 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
 
     \end{subsubsection}
     \begin{subsubsection}{Simultaneous Authentication of Equals}
-      ne of the major new features introduced in WPA3 is Simultaneous Authentication of Equals (SAE),
+      One of the major new features introduced in WPA3 is Simultaneous Authentication of Equals (SAE),
       which provides more robust password-based authentication, even when using a strong one, while 
       also providing protection against bruteforce attacks.\\
       SAE replaces the four-way handshake method (PSK) used in WPA2, thus being robust against 
@@ -842,14 +857,317 @@ The 5GHz band has more channels, but it is less used because of the shorter rang
         \includegraphics[width=0.5\textwidth]{img/wireless/sae.png}
         \caption{The SAE message exchange}
       \end{figure}
-
-
     \end{subsubsection}
-
-
 
   \end{subsection}
 
 \end{section}
 
+\begin{section}{Questions and answers}
+  \begin{subsubsection}{What is the difference between the
+    “infrastructure-based” and “ad-hoc” mode in a WLAN?}
+    In infrastructure mode, all the traffic must pass trough the access point before reaching its
+    destination, wheres in ad-hoc mode direct communication between nodes is possible(P2P).
+  \end{subsubsection}
+  \begin{subsubsection}{Why in infrastructure-based mode all traffic must go
+      through the AP? What are the consequences in terms of performance in case
+    two STA would like to exchange data?}
+    There are a few reasons:
+    \begin{itemize}
+      \item to perform access control to the services of the network.
+      \item to perform orchestration of the communications
+      \item to kind of extend the range of the communications in some instances
+    \end{itemize}
+    This has a few drawbacks. In fact, if no direct communcations between nodes is possible, all
+    traffic must pass trough the AP, which drasticaly reduce the trougput of data, because one
+    packet pass trough two times. It makes also the communication more complex, which adds some
+    overhead.
+  \end{subsubsection}
+  \begin{subsubsection}{How many independent channels are present in the 2.4GHz
+    ISM IEEE 802.11 standard?}
+    Over the 2.4GHz spectrum, 14 channels are available, but only 3 are indipendent.
+  \end{subsubsection}
+  \begin{subsubsection}{What are the maximum transmission rates for 802.11b?
+    And for 802.11g? And for 802.11n?}
+    For the 802.11b standard the MTR is 11Mbps, for 802.11g is 54Mbps, while for 802.11n is up to
+    600Mbps.
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the steps a STA has to follow to join a WLAN}
+    To joind a WLAN, a STA has first to find an AP to connect to, either via probing requests or
+    listening to beacon frames. To join the network and access its services it has to be both
+    authenticated and associated. During the authentication process, the STA proves its identity to
+    AP, and this is done either via open system authetication or a shared key trough a
+    challenge-response authentication schema. During this process no confidentiality and integrity
+    services are provided. Association is the next step, during which the STA and the selected AP
+    exchanges the informations necessary to gain access to the network. If this step is successful,
+    the STA joins the network, and is able to exchange data.
+  \end{subsubsection}
+  \begin{subsubsection}{What is the difference between Authentication and
+      Association? Depict the sequence of frames observed when a STA
+    successfully connects to a WLAN.}
+    Authentication is the process of proving the identity of the STA to the AP or an authenticator
+    in general, and is a step necessary to perform associaciation to an AP. association is the
+    process of exchanging the necessary data to gain access to the network.
+    Let's suppose that the station discovers an AP trough a probe request, the sequence of exchanged
+    messages is: 
+    \begin{itemize}
+      \item Probe request 
+      \item Probe response 
+      \item Authentication request 
+      \item Authetication response 
+      \item Association request 
+      \item Association response 
+    \end{itemize}
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the goals of the beacon frames. Which type of
+    node can send such beacons?}
+    Beacons are basically advertisement frames that an AP sends in broadcast to inform of its
+    presence and the parameters necessary to connects to it, such as the SSID, the mac
+    address,\dots The standard allows only the APs in infrastructure mode to send those
+    periodically, which is an option set by default by the standard, but it can be disabled.
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the goals of the probe frames. Which type of
+    node can send such beacons?}
+    Probes frames are messages sent by a STA in broadcast to discover which AP are in range. An AP
+    which receives a probe request responds to it with a probe request with the informations
+    necessary to connect to it, such as the SSID, the mac address, \dots Probe requests are sent by
+    STAs, while probe requests are sent by the APs.
+  \end{subsubsection}
+  \begin{subsubsection}{What type of authentication mechanisms as supported by
+    802.11?}
+    The base version of 802.11 supports two authentication mechanisms:
+    \begin{itemize}
+      \item open system authentication: every autentication request is accepted
+      \item shared key authentication, which is performed via challenge-response autentication 
+    \end{itemize}
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the problem of the hidden terminals. Provide
+    some example to illustrate it.}
+    The problem of the hidden terminal arises when two nodes connected to the same AP cant hear each
+    other, but the signal is strong enough that two communications can collide at the AP, generating
+    errors. This happens because the channel is half-duplex, so only one node can send and receive
+    at the time, but because the two STAs cant hear ech other, they think that the channel is free,
+    and can transmit data at the same time. This can be due to the distance between the two(fading)
+    or an obstacle between them.
+  \end{subsubsection}
+  \begin{subsubsection}{Why a WLAN station cannot perform collision detection?
+      What are the implications of this? Why in in 802.3 (ethernet) it is
+    possible to detect collision instead?}
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the CSMA/CA protocol in the case RTS/CTS are
+    disabled}
+    CMSA/CA, or carrier senses multiple access with collision avoidance, is a multiple access
+    protocol for shared medium, which works as follows:
+    \begin{enumerate}
+      \item when a STA whant to transmit a packet, it listens to the channel, if its idle it tries
+        to transmit after a short period of time(Distributed inter frame space, or DIFS). If the
+        channel is sensed busy, it chooses a random binary exponential backoff value, which
+        decreses while the channel is sensed free.
+      \item when the counter reaches zero, the frame is transmitted when the channel is idle, and
+        the STA waits for an ACK
+      \item If the ACK is correctly received, alls good, otherwise it reenters the previous phase
+        with another random counter with higher value. 
+    \end{enumerate}
+  \end{subsubsection}
 
+  \begin{subsubsection}{Describe the CSMA/CA protocol in the case RTS/CTS are enabled.}
+    If the RTS/CTS mechanism is implemented, a STA that wants to transmitt, if the channel is sent
+    idle and the reservation time of a CTS message has expired, it can send a Request To Send
+    message to the access point, which is basically a request to reserve the channel for a certain
+    amount of time. The AP receives it, and proceeds to send in broadcast a Clear To Send message to
+    all the connected STA in range, which signals the other STAs to non send anything for the
+    specified time and allows the sender station to have exclusive access to the channel for the
+    time being. The RTS request is sent after a DIFS while between all other packets elapses a SIFS.
+  \end{subsubsection}
+  \begin{subsubsection}{Depict the time-space plot in which station A sends to station B a data
+    frame with the support of the AP in case RTS/CTS is enabled or is disabled.}
+    See figure \ref{fig:rts-cts}.
+  \end{subsubsection}
+  \begin{subsubsection}{Does the probability of collision depend on the propagation time? Does the
+    probability of collision depend on the transmission time? How?}
+    With propagation time we refer to the time that a packet needs to reach the receiver while
+    travelling a wireless channel. Of course it influences the probability of collision: if a packet
+    takes too long to reach a certain node in the network, it could assume thaht the channel is idle
+    and (assuming that no RTS/CTS mechanism is implemented and his EBT reaches zero and a DIFS has
+    elapsed) try to transmit one of its messages, generating a collision.\\
+    With transmission time we refer to the time needed to push the whole message on the channel. As
+    delay is cumulative, it will also influence the probability of collision for the same reasons as
+    before.
+  \end{subsubsection}
+  \begin{subsubsection}{Why does the receiver need to acknowledge the reception of a frame in
+    CSMA/CA? What could happen if the receiver does not transmit the ACK?}
+    In wireless links interface is high and the medium is not reliable at all, so a mechanism to
+    ensure that the packet has correctly reached the destination is necessary. If its not
+    implemented, a collision on a transmission could occur, and the packet would reach the
+    destination damaged, without any way to notify to the sender that a collision has likely
+    occurred.
+  \end{subsubsection}
+  \begin{subsubsection}{Why RTS/CTS can reduce the collision probability?}
+    Having a reservation mechanism instead of multiple access detection one reduces drastically the
+    probability of collision, because STA dont rely on a timer and to sense if the channel is idle,
+    but will actually wait for the specified time to elapse. Still some collisions are possible, for
+    example if two RST requests are sent at the same time, but are still much more unlikely.
+  \end{subsubsection}
+  \begin{subsubsection}{Why the control messages and the control part of a data frame must be
+      transmitted at the minimum data rate? What could happen if those messages were transmitted at
+    higher rates?}
+    Control frames, or in general control data is used, as the name suggest, to handle changes or
+    data that is important that reaches its destination. If this data would be transmitted at a
+    higher data rate, the probability of error would also increase. Furthermore, an higher data rate
+    implies a lower coverage of the signal, meaning that some STAs could receive a damaged message
+    due to collisions, or not receive it at all. To sum it up, it for reliability and coverage
+    reasons.
+  \end{subsubsection}
+  \begin{subsubsection}{Assume an AP would like to transmit a frame destined to all STAs in the WLAN
+      (broadcast message). Depict the sequence of messages one would observe on the channel. At what
+    rate would it be possible to transmit such a message? Which STA will send the ACK?}
+    The AP, after detecting that the channel is idle, to avoid collisions, sends the packet with the
+    broadcast address after a short preamble and waiting a DIFS. The transmission rate depends on
+    the capabilities of each STA, as well as the AP, but it will be sent at the highest common data
+    rate supported. The STAs that have received the packet correctly will then proceed to send back
+    an ACKL packet at the basic data rate.
+  \end{subsubsection}
+  \begin{subsubsection}{In a 802.11 frames, how many MAC addresses are present? Why?}
+    In a 802.11 frame, 4 address are present:
+    \begin{itemize}
+      \item the mac address of the sender
+      \item the mac address of the receiver
+      \item the mac address of the AP(or the source in general)
+      \item mac address of the destination
+    \end{itemize}
+    The first two are obviously needed to indicate the two ends of the communication. The third one
+    is needed because in infrastructure mode all the traffic must pass trough the AP, whilst the
+    latter one is used in ad-hoc mode, being the mac destination address.
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the 802.11 power management capabilities. How can a STA tell the AP
+      it is going to sleep and for how long? How can the AP tell the STA that it has some buffered
+    frames waiting to be sent?}
+    In mobile devices power is a precious energy, for this reason 802.11 implements a power saving
+    capabilities. A STA can notify the AP that its entering power saving mode by setting the
+    power-management bit in the header of a frame, setting a timer to wake up just before receiving 
+    a beacon frame from the AP. The STA will then enter the mode and the AP will start buffering the
+    frames destined to it, instead of forwarding them. The beacon frame will contain a list of
+    nodes with buffered frames, if no frame have as destination the STA, it re-enter PS mode,
+    otherwise it can explicitly request the buffered frames via a polling message to the AP.
+  \end{subsubsection}
+  \begin{subsubsection}{Define the goodput and compute the maximum efficiency one could expect in an
+    ethernet link where two nodes would like to exchange some traffic using UDP and IPv4.}
+    The goodput is the ratio between the useful data at the application layer and the total length
+    of the data received.\\
+    UDP has an header length of 8 bytes, while IP has a 20 byte header and the ETH header is 38
+    bytes long. The mtu of 1500 because of ETH. This means that the maximum efficiency is
+    $\dfrac{1500-8-20}{1500+38}=95.71\%$
+  \end{subsubsection}
+  \begin{subsubsection}{Define the goodput and compute the maximum efficiency one could expect in an
+    ethernet link where two nodes would like to exchange some traffic using TCP and IPv4.}
+    As per the previous exercise, the overhead is 20B of TCP, 20B IPv4, meaning that the maximum
+    efficiency is $\dfrac{1500-20-20}{1500+38}=94.93\%$
+  \end{subsubsection}
+  \begin{subsubsection}{Given the IPv4 header is 20 bytes long and the IPv6 header 40 bytes long,
+    how would reduce the efficiency of a TCP file transfer in case the MTU is 1500 Bytes long?}
+    As per previous exercise, $\dfrac{1500-20-40}{1500+38}=93.63\%$
+  \end{subsubsection}
+  \begin{subsubsection}{In the case of a half-duplex channel, why does the maximum goodput reduce?
+    Provide an example.}
+    In case of an half duplex channel, the goodput decreases, of course, due to awcknowledgments
+    mainly. In fact, either a packet with useful data is transmitted, of an ACK is, and no other
+    transmission is possible in the meanwhile. This means that the efficiency, in case of
+    TCP+IP+ETH, becomes $\dfrac{1460}{(1500+38)+(38+20+20)}=90.34\%$.
+
+  \end{subsubsection}
+  % \begin{subsubsection}{The plot in the figure represents the efficiency of different IEEE 802.11
+  %     versions versus the payload size (MSDU). Identify the maximum efficiency of a transmission in
+  %     which the application at the sender side generates 1000 UDP messages of 500 bytes each.
+  %   Consider an ideal scenario and a MTU of 1500 bytes.}
+  % \end{subsubsection}
+  \begin{subsubsection}{Consider a scenario in which a transmitter connected to an 802.11g (54Mb/s
+      maximum rate) network sends a 200MB long file to a receiver connected to the AP using a
+      100Mb/s ethernet link. What would be the maximum goodput one would expect? How long would it
+    take to complete the file transfer?}
+    Let's consider the bottomline efficiency of 802.11 to be 50\%, as explained during the lessions.
+    Let's also assume that no packets are aggregated and the whole stack is using IPv4 and TCP, the
+    efficiency for the wired portion of the link is 94.93\%. This means that the maximum achievable
+    efficiency is $\text{min(94.93, 50)=50\%}$, while the goodput is $\text{min}(50\%\cdot
+    54/2,94.93\%\cdot 100)=13.5Mbps$ as per the half duplex portion of the network. This means that to
+    transfer the whole packet it would take $\dfrac{1600}{13.5}= \approx 119s$. 
+  \end{subsubsection}
+  \begin{subsubsection}{Consider a scenario in which a transmitter connected to an 802.11n (300Mb/s
+      maximum rate) network sends a 200MB long file to a receiver connected to the AP using a
+      100Mb/s ethernet link. What would be the maximum goodput one would expect? How long would it
+    take to complete the file transfer?}
+  \end{subsubsection}
+  \begin{subsubsection}{Consider a scenario in which a transmitter connected to an 802.11n (300Mb/s
+      maximum rate) network sends a 200MB long file to a receiver connected to the AP using a
+      1000Mb/s ethernet link. What would be the maximum goodput one would expect? How long would it
+    take to complete the file transfer?}
+  \end{subsubsection}
+  \begin{subsubsection}{Consider a scenario in which a transmitter connected to an 802.11n (300Mb/s
+      maximum rate) network sends a 200MB long file to a receiver connected to the AP via the same
+      802.11n technology. What would be the maximum goodput one would expect? How long would it take
+    to complete the file transfer?}
+  \end{subsubsection}
+  
+  \begin{subsubsection}{Describe possible denial of services attacks that leverage the 802.11
+    authentication and association mechanisms. What type of messages would the attacker send? Which
+  information will the attacker need to mount such an attack?}
+    Authentication and association mechanisms of 802.11 can be exploited in a similar fashion, in
+    fact, as there are association and authentication frames, there are also deauthentication and
+    disassociation frames. This means means than an attacker can just send this kind of packets
+    while spoofing the address of the victim to perform a denial of service attack, because the STA
+    is unable to receive any data in this way, and have to either re-authenticate of associate
+    itself with the AP again.
+  \end{subsubsection}
+  \begin{subsubsection}{Describe possible countermeasures to the de-authentication attacks.}
+    A possible countermeasure against dAUTH attacks is based on the simple observation that users
+    don't usually deauthenticate themselves and continue to send packets. An AP could just wait a
+    small time interval before honouring a deAUTH request and keep listening if some packets keep
+    coming from the same sender in the meanwhile. If no frame arrives, the request is honoured,
+    otherwise it is dropped.\\ 
+    Another countermeasure is based on the SNR, in fact an AP could measure the SNR level of a dAUTH
+    request. If the legit traffic is used as a signature, if the request doesn't match it, it's just
+    dropped.
+  \end{subsubsection}
+  \begin{subsubsection}{Describe possible DoS attacks that leverage weaknesses of the CSMA-CA
+    mechanisms.}
+    CMSA/CA tries to detect if the channel is busy to avoid collisions: if its sensed busy, so
+    packet is send. A simple attack can exploit this schema by simply send enough packets so that
+    the channel is sensed busy often enough that no legit node is sending any packet ever. If i
+    recall correctly during the lectures it was stated that keeping the channel busy for one tenth
+    of the channel capacity was enough to keep the channel "down".
+  \end{subsubsection}
+  \begin{subsubsection}{Describe a possible attack that leverages the NAVigation information
+    provided in the 802.11 RTS/CTS mechanisms. Describe possible countermeasures to this attack.}
+  \end{subsubsection}
+    RTS/CTS mechanisms use 2 specia frames to reserve the channel for a given duration. Based on
+    this observation, a simple attack could be mounted by simply sending a RTS request with the
+    maximum length available(the reservation time field should be 16 bits long). By repeating this
+    requests as the timer elapses, one can keep the channel busy indefinitely, disrupting any trial
+    of legit communication, because no STA can transmit during the reserved period.\\
+    This attack could be leveraged by simply limiting the time period for a reservation, to be big
+    enough for legit communication.
+  \begin{subsubsection}{Describe possible attacks that leverage the power-saving protocol of
+    802.11.}
+    A STA enters power saving mode by sending a frame with the power saving bit set to inform the AP
+    that's "going to sleep". This will buffer the packets until it sends a request to forward them.
+    An attacker can spoof a packet with the bit set to the AP, which will buffer the packets instead
+    of sending them to the STA, effectively disrupting the communication. Another attack requires
+    the spoofing of the AP, in fact it is possible to the STA that there are no packets for it,
+    making it go to sleep.
+  \end{subsubsection}
+  \begin{subsubsection}{Why MAC authentication, IP filtering and SSID hiding are considered not
+    valid mechanisms to protect a WLAN network?}
+    Mac AUTH is useless because address can be spoofed, IP filtering is useless for the same reason
+    and SSID hiding is useless because, even if beacons frames are suppresed, the SSID is still sent
+    in clear in probe responses and association responses, which can be sniffed.
+  \end{subsubsection}
+  \begin{subsubsection}{Which are the security mechanisms WEP offers?}
+    WEP offer confidentiality via encryption(RC4), integrity via a checksum(CRC32) and access
+    control via shared password AUTH.
+  \end{subsubsection}
+  \begin{subsubsection}{Describe the shared key authentication mechanisms WEP supports. How can the
+      AP verify the shared password? How is the shared password used to generate the stream cipher
+    output?}
+  \end{subsubsection}
+  \begin{subsubsection}{Why is the shared key authentication deprecated?}
+  \end{subsubsection}
+\end{section}
