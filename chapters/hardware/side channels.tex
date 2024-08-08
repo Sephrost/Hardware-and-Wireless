@@ -228,8 +228,8 @@ the security and reliability measures that are required.
     Another approach to deal with side channel is to change the behaviour of some components, like
     the cache, in a way that doesn't change the outcome of the computation, but makes life harder
     for the attacker, eg: by introducing some delay on purpose.\\
-    This is the basic idea of the Janus cache. One bit is added to the cache, the \textit{ON_OFF
-    flag}, which is used to determine the behaviour of the cache line. If the flag is set, even if
+    This is the basic idea of the Janus cache. One bit is added to the cache, the \textit{ON\_OFF flag}
+    , which is used to determine the behaviour of the cache line. If the flag is set, even if
     the data is in the cache, the cache line cannot be accessed, functionally introducing a delay,
     because the data must be fetched from the memory.\\
 

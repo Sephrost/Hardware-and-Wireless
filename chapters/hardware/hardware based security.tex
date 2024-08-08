@@ -43,7 +43,7 @@ lowest level is compromised, the whole system is compromised. Usually, 3 levels 
     it is rarely used
   \item \textbf{Ring 3}, which is used by the applications and us the least privileged level
 \end{itemize}
-but there are also other lees that can be defined:
+but there are also other levels that can be defined:
 \begin{itemize}
   \item \textbf{Ring -1}, which is used by the hypervisor
   \item \textbf{Ring -2}, which is used by the \textbf{System Management Mode} (SMM) and is ussually
@@ -60,4 +60,11 @@ but there are also other lees that can be defined:
 In this schema, the relationship between the ring level and the privilege level is inverted, meaning
 that the higher the ring level, the lower the privilege level. This schema also guarantees extra
 layers of protection to the hardware, which is the most trusted component of the system, but it
-instrincaly means that each component trust the lower one.
+instrincaly means that each component trust the lower one.\\
+So far we have considered the processor to be secure, which means that we trust it, but the same is
+not true for the rest of the hardware, such as the memory or the bus. From those components, threats
+can arise, which are \textit{underestimated} when designing a secure processor architecture, part of
+those can't even be dealt with in a proper way, for example side channels.
+\begin{section}{TEE and TCB}
+
+\end{section}
