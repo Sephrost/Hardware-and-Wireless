@@ -1,13 +1,17 @@
-\chapter{Test Infrastructure based attacks}
-This kind of attacks can be performedjust after manifacturing, and thus before entering the market,
+\chapter{Test-Infrastructure based attacks}
+\begin{boxH}
+  \textbf{Test-Infrastructure based attacks} are a kind of \textbf{active attacks}, that are
+  performed on the test infrastructure of a device.
+\end{boxH}
+This kind of attacks can be performed just after manufacturing, and thus before entering the market,
 or after the device are sold and are still unused.
 Tests are mandatory on an IC to guarantee the quality of the product, but during them little of the
 power and resources are used, to guaranty that the test is being performed correctly. To perform the
 tests some tests facilities are introduced, but those can be exploited to performs some kinds of
-attacks. Those infrastructure are kept on the final chip, because they could be needed later on, and
-the user connection is kind of hidden because its on the board directly. They are also kept because
-they can be used to test if the system has been compromised. They are there to stay, and no access
-liitatios are put up in place.\\
+attacks, because they are not removed the final chip, because they could be needed later on.
+They are also kept because they can be used to test if the system has been compromised. They are
+there to stay, and no access limitations are put up in place.\\
+
 Among the plethora of test infrastructures:
 \begin{itemize}
   \item Scan chains
@@ -19,14 +23,29 @@ Among the plethora of test infrastructures:
 \end{itemize}
 In scan-based devices, the scan chains could provide a natural way to access the content of ALL the
 storage devices (flip-flops and registers) connected to a scan chain.\\
-One of the attacks is to attack the scan-chain directly,we force the scan ch
-\begin{section}{Insigth on teaming}
-  There are 3 kinds of teams in cybersec.
+Thus, potential scan chains can contain a secret (directly or indirectly):
+\begin{itemize}
+  \item Directly: the secret key itself
+  \item Indirectly: a value that is a function of the secret key (e.g., an intermediate value during
+    the encryption process)
+\end{itemize}
+\begin{boxH}
+  To sum it up, the goal of a \textbf{scan-based attack} is to retrieve embedded secret data by 
+  exploit observability and controllability offered by scan chains, by basically toggling the
+  circuit between functional and scan mode.
+\end{boxH}
+\begin{section}{Insight on teaming}
+  Test-infrastructure are relevant for the different teams in cybersec.
   \begin{subsection}{Red team}
     The red team is the one that attacks the system, and tries to find vulnerabilities in the system.
-    In this context 
+    In some architectures, scan chains could:
+    \begin{itemize}
+      \item Be hidden
+      \item Be accessible just via additional infrastructures, such as 1149.1 cells
+      \item Be managed via complex Scan compression Codec
+    \end{itemize}
+    In this context, to attack a scan chain, the red team has to:
     \begin{enumerate}
-      \item Identify the target FFs that contain the secret to be stolen
       \item Identify the scan chain SC to which the target FFs belong
       \item Identify the precise time instant T in which the target FFs contain the secret.
       \item Run the circuit in Normal mode until the time T
@@ -43,12 +62,15 @@ One of the attacks is to attack the scan-chain directly,we force the scan ch
     To protect the system from this kind of attacks, the blue team can use some countermeasures,
     like:
     \begin{itemize}
-      \item unbounding the chain, using a fuse in a way that the chain is unaccessible witout the
-        correct approach, because the fuse is blown and the chains became unaccessible
-      \item Add some noise to the scan chain
-      \item Add some fake FFs to the scan chain
-      \item Add some fake scan chains
-      \item Add some fake scan chain inputs
+      \item unbounding the chain, using a fuse in a way that the chain is inaccessible without the
+        correct approach, because the fuse is blown and the chains became inaccessible
+      \item replace scan chains with Built-In Self-Test (BIST) solutions. This allows to avoid
+        scan-based testing, while still allowing at-speed testing, but at the cost of a higher area 
+        overhead and a lower fault coverage and diagnostic resolution
+      \item introduce a secure test access mechanism, with is expensive (authN need to be
+        introduced) with no easy way to implement it
+      \item scan chain encryption, which is a way to encrypt the scan chain
+    \end{itemize}
 
   \end{subsection}
 \end{section}
